@@ -1,0 +1,75 @@
+#https://hugoloveit.com/zh-cn/theme-documentation-basics/#site-configuration
+defaultContentLanguage = "zh-cn"
+languageCode = "zh-CN"
+title = "lyer's blog"
+theme = "LoveIt"
+
+[params]
+  version = "0.2.X"
+  [params.footer]
+    enable = true
+    hugo = true
+    copyright = true
+    author = true
+    since = 2021
+    icp = ""
+    license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+    # 主页配置
+  
+  [params.home]
+    rss = 10
+    [params.home.profile]
+      enable = true
+      avatarURL = "https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg"
+      subtitle = "Hello，This is my personal blog"
+      typeit = true
+      social = true
+    [params.home.posts]
+      enable = true
+      paginate = 6
+
+  [params.social]
+      GitHub = "biningo"
+      Twitter = "biningo2"
+      Telegram = "icepan"
+      Email = "icepan@aliyun.com"
+      RSS = true
+
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "归档"
+    url = "/posts/"
+    weight = 1
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 2
+  [[menu.main]]
+    identifier = "categories"
+    name = "分类"
+    url = "/categories/"
+    weight = 3
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about"
+    weight = 4
+
+
+#语法高亮设置
+[markup]
+  [markup.highlight]
+    noClasses = false
+
+# 作者配置
+[author]
+  name = "lyer"
+  email = "icepan@aliyun.com"
+  link = "https://github.com/biningo"
+
+
+[Permalinks]
+  posts = ":year/:month/:day/:filename"
