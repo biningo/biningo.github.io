@@ -1,11 +1,9 @@
 ---
-title: 容器导论
+title: volume踩坑
 date: 2021-01-07
 categories: [Docker和容器]
 tags: [docker,容器]
 ---
-
-  
 
 ## 挂载volume的行为
 
@@ -25,7 +23,7 @@ tags: [docker,容器]
 - **docker cp命令先将容器内的数据copy到宿主机然后再进行挂载**
 - 在`docker-entrypoint.sh`等脚本中执行创建文件和文件夹等相关命令，**因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了**
 
-  <br/>
+  
 
 ## volume相关命令
 
@@ -43,13 +41,13 @@ docker volume preun #清空没有容器挂载中的volume stop中的容器的vol
 -v <xxx>:容器内路径:rw  #读写 在容器内能读写挂载文件 默认
 ```
 
-<br />
+  
 
 ## volume权限问题
 
 TODO
 
-<br/>
+  
 
 ## volume规则总结
 
@@ -58,7 +56,7 @@ TODO
 - 如果挂载一个没有创建的文件，则docker会自动创建
 - docker挂载路径容器和宿主机不支持 **相对路径**  ，都必须指定 **绝对路径**
 
-<br/>
+  
 
 ## 参考
 
