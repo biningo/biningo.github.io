@@ -34,7 +34,15 @@ theme = "LoveIt"
       Telegram = "icepan"
       Email = "icepan@aliyun.com"
       RSS = true
-
+  [params.page]
+    [params.page.comment]
+        enable = true
+        [params.page.comment.gitalk]
+          enable = true
+          owner = "biningo"
+          repo = "hugo-blog-gittalk"
+          clientId = "c8f473d59880800a7453"
+          clientSecret = "7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0"
 
 [menu]
   [[menu.main]]
