@@ -1,4 +1,21 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>操作系统 - 分类 - lyer's blog</title><link>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link><description>操作系统 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 23 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml"/><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>操作系统 - 分类 - lyer's blog</title><link>/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link><description>操作系统 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 28 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml"/><item><title>文件系统</title><link>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link><pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid><description>​
+​
+VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统 在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+​
+​
+1、super block 超级块 super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+文件系统中的数据块数 文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 空闲块数 空闲的inode节点数 &amp;hellip;&amp;hellip;. ​
+​
+2、inode节点区块 是一个数组结构，每个文件都有一个inode，linux用inode号来标识不同的文件，而不是通过文件名
+stat a.html #查看文件的inode信息 ls -i a.html #查看文件的inode ID df -i #查看各个分区的inode总数和使用量 -hi inode 节点主要包括了以下信息：
+文件的inode ID
+模式/权限（保护）
+所有者 ID、组 ID
+文件大小（字节数）、文件类型
+文件的硬链接数
+上次访问时间、最后修改时间、inode 上次修改时间
+文件的数据块block映射表（0-n逻辑数据块号分别映射到实际的数据块号）所以同一个文件的数据可以不连续的存放在不同的数据块中 单个inode结构图如下：</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
 磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
 磁头：盘面正反两面都可以使用，每个盘面都有一个磁头，用来读写这个盘面的数据
 磁道：盘面被物理划分为多个磁道
