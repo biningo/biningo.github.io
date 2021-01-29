@@ -1,21 +1,18 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>OS - 标签 - lyer's blog</title><link>/tags/os/</link><description>OS - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 28 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/os/" rel="self" type="application/rss+xml"/><item><title>文件系统</title><link>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link><pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid><description>​
-​
-VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>OS - 标签 - lyer's blog</title><link>/tags/os/</link><description>OS - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 28 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/os/" rel="self" type="application/rss+xml"/><item><title>文件系统</title><link>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link><pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid><description>VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
 为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统 在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+1、引导块
+存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在MBR或EFI系统上放置一个bootloader，该bootloader就会确定活动分区（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统
+2、super block 超级块
+super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 文件系统中的数据块数 空闲块数 空闲的inode节点数 &amp;hellip;&amp;hellip;. 操作系统在启动之后就会将super block从磁盘加载到内存，然后建立 super_block对象，该对象是常驻内存的
+3、空闲块位图和inode位图
+空闲区块位图： 管理整个分区中空闲的数据块，占用多个数据块block
+inode位图 ：管理整个分区中inode的使用和分配，占用多个数据块block
+4、inode节点区块
+是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
 ​
 ​
-1、super block 超级块 super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
-文件系统中的数据块数 文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 空闲块数 空闲的inode节点数 &amp;hellip;&amp;hellip;. ​
-​
-2、inode节点区块 是一个数组结构，每个文件都有一个inode，linux用inode号来标识不同的文件，而不是通过文件名
-stat a.html #查看文件的inode信息 ls -i a.html #查看文件的inode ID df -i #查看各个分区的inode总数和使用量 -hi inode 节点主要包括了以下信息：
-文件的inode ID
-模式/权限（保护）
-所有者 ID、组 ID
-文件大小（字节数）、文件类型
-文件的硬链接数
-上次访问时间、最后修改时间、inode 上次修改时间
-文件的数据块block映射表（0-n逻辑数据块号分别映射到实际的数据块号）所以同一个文件的数据可以不连续的存放在不同的数据块中 单个inode结构图如下：</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
+VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数 struct super_block { struct list_head s_list; // 指向所有超级块的链表 const struct super_operations *s_op; // 超级块相关操作的方法 struct dentry *s_root; // 目录挂载点 struct mutex s_lock; // 超级块信号量 int s_count; // 超级块引用计数 .</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
 磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
 磁头：盘面正反两面都可以使用，每个盘面都有一个磁头，用来读写这个盘面的数据
 磁道：盘面被物理划分为多个磁道
