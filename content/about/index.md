@@ -1,8 +1,8 @@
 ---
 title: 关于我
 date: 2021-01-07
-categories: [人生|杂谈|想法|日记]
-tags: [关于我]
+categories: [代码人生]
+tags: [杂谈,想法,人生]
 ---
 
 
