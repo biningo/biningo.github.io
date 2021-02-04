@@ -1,0 +1,93 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>打造自己的终端环境 - lyer's blog</title><meta name=Description content><meta property="og:title" content="打造自己的终端环境"><meta property="og:description" content="配置zsh  安装zsh  apt install zsh 安装oh-my-zsh  #https://github.com/ohmyzsh/ohmyzsh sh -c &#34;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&#34; 运行上面的sh之后，就会在家目录下配置.zshrc文件，当然也可以手动clone仓库代码到，然后按照oh-my-zsh模板文件进行配置.zshrc
+配置.zshrc  该文件的作用和.bashrc作用一样，为了不让之前.bashrc的命令失效，可以在.zshrc中source进来，下面展示主要配置
+#配置终端主题，不然会很丑 主题路径在.oh-my-zsh/themes 可以修改主题的样式 ZSH_THEME=&#34;robbyrussell&#34; #配置zsh插件 有些系统自带的插件则直接配置即可 #有些外部插件则需要下载(clone)到 .oh-my-zsh/custom/plugins路径下 然后需要在下面写上名字即可 plugins=( git zsh-syntax-highlighting #shell命令高亮插件 colored-man-pages #系统自带 zsh-autosuggestions #命令提示插件 ) ​
+配置tmux  安装tmux  apt install tmux 修改配置文件  tmux的配置文件在~/.tmux.conf
+个人觉得tmux默认的快捷键不符合自己，那么可以修改，下面展示我的配置文件
+#设置快捷键前缀 set -g prefix C-a #修改快捷键前缀 我习惯与ctrl+a unbind C-b # 解绑默认的 ctrl+b 前缀快捷键 bind C-a send-prefix # 绑定Ctrl+a为新的指令前缀 #绑定方向键 bind -r k select-pane -U # 绑定k为↑ bind -r j select-pane -D # 绑定j为↓ bind -r h select-pane -L # 绑定h为← bind -r l select-pane -R # 绑定l为→ #切换切割pane按键 分割窗口要用到 unbind '&#34;' #解绑默认的键 # 垂直方向新增面板，默认进入当前目录  bind ] splitw -v -c '#{pane_current_path}' unbind % # 水平方向新增面板，默认进入当前目录 bind [ splitw -h -c '#{pane_current_path}' ​"><meta property="og:type" content="article"><meta property="og:url" content="/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/"><meta property="article:published_time" content="2021-02-04T00:00:00+00:00"><meta property="article:modified_time" content="2021-02-04T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="打造自己的终端环境"><meta name=twitter:description content="配置zsh  安装zsh  apt install zsh 安装oh-my-zsh  #https://github.com/ohmyzsh/ohmyzsh sh -c &#34;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&#34; 运行上面的sh之后，就会在家目录下配置.zshrc文件，当然也可以手动clone仓库代码到，然后按照oh-my-zsh模板文件进行配置.zshrc
+配置.zshrc  该文件的作用和.bashrc作用一样，为了不让之前.bashrc的命令失效，可以在.zshrc中source进来，下面展示主要配置
+#配置终端主题，不然会很丑 主题路径在.oh-my-zsh/themes 可以修改主题的样式 ZSH_THEME=&#34;robbyrussell&#34; #配置zsh插件 有些系统自带的插件则直接配置即可 #有些外部插件则需要下载(clone)到 .oh-my-zsh/custom/plugins路径下 然后需要在下面写上名字即可 plugins=( git zsh-syntax-highlighting #shell命令高亮插件 colored-man-pages #系统自带 zsh-autosuggestions #命令提示插件 ) ​
+配置tmux  安装tmux  apt install tmux 修改配置文件  tmux的配置文件在~/.tmux.conf
+个人觉得tmux默认的快捷键不符合自己，那么可以修改，下面展示我的配置文件
+#设置快捷键前缀 set -g prefix C-a #修改快捷键前缀 我习惯与ctrl+a unbind C-b # 解绑默认的 ctrl+b 前缀快捷键 bind C-a send-prefix # 绑定Ctrl+a为新的指令前缀 #绑定方向键 bind -r k select-pane -U # 绑定k为↑ bind -r j select-pane -D # 绑定j为↓ bind -r h select-pane -L # 绑定h为← bind -r l select-pane -R # 绑定l为→ #切换切割pane按键 分割窗口要用到 unbind '&#34;' #解绑默认的键 # 垂直方向新增面板，默认进入当前目录  bind ] splitw -v -c '#{pane_current_path}' unbind % # 水平方向新增面板，默认进入当前目录 bind [ splitw -h -c '#{pane_current_path}' ​"><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/><link rel=prev href=/2021/02/02/cpu%E5%92%8C%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"打造自己的终端环境","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/02\/04\/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83\/"},"genre":"posts","keywords":"linux, 安装, 折腾, zsh, tmux, vim","wordcount":262,"url":"\/2021\/02\/04\/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83\/","datePublished":"2021-02-04T00:00:00+00:00","dateModified":"2021-02-04T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>归档 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/book>书单 </a><a class=menu-item href=/about>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/>归档</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/book>书单</a><a class=menu-item href=/about>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">打造自己的终端环境</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0/><i class="far fa-folder fa-fw"></i>折腾笔记</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-02-04>2021-02-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 262 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#配置zsh>配置zsh</a></li><li><a href=#配置tmux>配置tmux</a></li><li><a href=#配置vim>配置vim</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h2 id=配置zsh>配置zsh</h2><ol><li>安装<code>zsh</code></li></ol><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>apt install zsh
+</code></pre></div><ol start=2><li>安装<code>oh-my-zsh</code></li></ol><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#https://github.com/ohmyzsh/ohmyzsh</span>
+sh -c <span class=s2>&#34;</span><span class=k>$(</span>curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class=k>)</span><span class=s2>&#34;</span>
+</code></pre></div><p>运行上面的sh之后，就会在家目录下配置<code>.zshrc</code>文件，当然也可以手动<code>clone</code>仓库代码到，然后按照<code>oh-my-zsh</code>模板文件进行配置<code>.zshrc</code></p><ol start=3><li>配置<code>.zshrc</code></li></ol><p>该文件的作用和<code>.bashrc</code>作用一样，为了不让之前<code>.bashrc</code>的命令失效，可以在<code>.zshrc</code>中<code>source</code>进来，下面展示主要配置</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#配置终端主题，不然会很丑 主题路径在.oh-my-zsh/themes 可以修改主题的样式</span>
+<span class=nv>ZSH_THEME</span><span class=o>=</span><span class=s2>&#34;robbyrussell&#34;</span> 
+
+<span class=c1>#配置zsh插件 有些系统自带的插件则直接配置即可</span>
+<span class=c1>#有些外部插件则需要下载(clone)到 .oh-my-zsh/custom/plugins路径下  然后需要在下面写上名字即可</span>
+<span class=nv>plugins</span><span class=o>=(</span>
+    git
+    zsh-syntax-highlighting <span class=c1>#shell命令高亮插件</span>
+    colored-man-pages <span class=c1>#系统自带</span>
+    zsh-autosuggestions <span class=c1>#命令提示插件</span>
+ <span class=o>)</span>
+</code></pre></div><p>​</p><h2 id=配置tmux>配置tmux</h2><ol><li><strong>安装tmux</strong></li></ol><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>apt install tmux
+</code></pre></div><ol start=2><li><strong>修改配置文件</strong></li></ol><p><code>tmux</code>的配置文件在<code>~/.tmux.conf</code></p><p>个人觉得tmux默认的快捷键不符合自己，那么可以修改，下面展示我的配置文件</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#设置快捷键前缀</span>
+<span class=nb>set</span> -g prefix C-a <span class=c1>#修改快捷键前缀 我习惯与ctrl+a</span>
+unbind C-b <span class=c1># 解绑默认的 ctrl+b 前缀快捷键</span>
+<span class=nb>bind</span> C-a send-prefix <span class=c1># 绑定Ctrl+a为新的指令前缀</span>
+ 
+<span class=c1>#绑定方向键</span>
+<span class=nb>bind</span> -r k <span class=k>select</span>-pane -U <span class=c1># 绑定k为↑</span>
+<span class=nb>bind</span> -r j <span class=k>select</span>-pane -D <span class=c1># 绑定j为↓</span>
+<span class=nb>bind</span> -r h <span class=k>select</span>-pane -L <span class=c1># 绑定h为←</span>
+<span class=nb>bind</span> -r l <span class=k>select</span>-pane -R <span class=c1># 绑定l为→</span>
+ 
+<span class=c1>#切换切割pane按键 分割窗口要用到</span>
+unbind <span class=s1>&#39;&#34;&#39;</span> <span class=c1>#解绑默认的键</span>
+<span class=c1># 垂直方向新增面板，默认进入当前目录 </span>
+<span class=nb>bind</span> <span class=o>]</span> splitw -v -c <span class=s1>&#39;#{pane_current_path}&#39;</span> 
+unbind %
+<span class=c1># 水平方向新增面板，默认进入当前目录</span>
+<span class=nb>bind</span> <span class=o>[</span> splitw -h -c <span class=s1>&#39;#{pane_current_path}&#39;</span> 
+</code></pre></div><p>​</p><h2 id=配置vim>配置vim</h2><ol><li>安装vim8</li></ol><pre><code>apt install vim
+</code></pre><ol start=2><li><strong>安装插件管理器</strong><code>vim-plug</code></li></ol><p>vim插件管理器比较出名的有两个：<strong>vim-plug、Vundle</strong>，后者比较老了，<code>vim-plug</code>则比较轻量级，并且可以<strong>按需加载</strong>插件，可以加快vim启动的时间，所以我选择<code>vim-plug</code>来管理的我vim插件</p><p>首先安装<code>vim-plug</code></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/.vim/autoload/
+wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+</code></pre></div><p>然后需要在<code>.vimrc</code>中配置，下面只展示插件部分（参考了https://vimjc.com/vim-plug.html）：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>call plug#begin<span class=o>(</span><span class=s1>&#39;~/.vim/plugged&#39;</span><span class=o>)</span> <span class=c1>#指定插件下载路径</span>
+Plug <span class=s1>&#39;junegunn/vim-easy-align&#39;</span> <span class=c1>#https://github.com/junegunn/vim-easy-align</span>
+Plug <span class=s1>&#39;https://github.com/junegunn/vim-github-dashboard.git&#39;</span> <span class=c1>#也可以指定全名</span>
+Plug <span class=s1>&#39;SirVer/ultisnips&#39;</span> <span class=p>|</span> Plug <span class=s1>&#39;honza/vim-snippets&#39;</span> <span class=c1>#用 | 将两个vim插件写在同一行配置中</span>
+Plug <span class=s1>&#39;scrooloose/nerdtree&#39;</span>, <span class=o>{</span> <span class=s1>&#39;on&#39;</span>:  <span class=s1>&#39;NERDTreeToggle&#39;</span> <span class=o>}</span> <span class=c1>#使用 按需加载，表明只有在 NERDTreeToggle 命令被调用时, 对应的插件才会被加载</span>
+Plug <span class=s1>&#39;tpope/vim-fireplace&#39;</span>, <span class=o>{</span> <span class=s1>&#39;for&#39;</span>: <span class=s1>&#39;clojure&#39;</span> <span class=o>}</span> <span class=c1>#使用 按需加载，表明只有编辑 clojure 类型的文件时该插件才会被打开</span>
+Plug <span class=s1>&#39;rdnetto/YCM-Generator&#39;</span>, <span class=o>{</span> <span class=s1>&#39;branch&#39;</span>: <span class=s1>&#39;stable&#39;</span> <span class=o>}</span> <span class=c1>#显式指定使用YCM-Generator插件的 stable 分支</span>
+Plug <span class=s1>&#39;nsf/gocode&#39;</span>, <span class=o>{</span> <span class=s1>&#39;tag&#39;</span>: <span class=s1>&#39;v.20150303&#39;</span>, <span class=s1>&#39;rtp&#39;</span>: <span class=s1>&#39;vim&#39;</span> <span class=o>}</span> <span class=c1>#指定插件所用git标签，rtp描述了包含vim插件的子目录</span>
+Plug <span class=s1>&#39;~/my-prototype-plugin&#39;</span> <span class=c1>#指定了本地插件的路径</span>
+call plug#end<span class=o>()</span>
+</code></pre></div><p><code>vim-plug</code>的主要命令有：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>PlugInstall <span class=c1>#安装插件</span>
+PlugUpdate <span class=c1>#安装或更新vim插件</span>
+PlugClean <span class=c1>#卸装插件 只需要将配置删除 然后执行此命令即可删除插件 手动删除也可以</span>
+PlugUpgrade	<span class=c1>#更新vim-plug自身</span>
+PlugStatus	<span class=c1>#查看vim插件的状态</span>
+PlugDiff	<span class=c1>#对比上次PlugUpdate的更改</span>
+PlugSnapshot <span class=c1>#</span>
+</code></pre></div><ol start=3><li><code>.vimrc</code>配置文件</li></ol><p>下面展示一下我的<code>.vim</code>配置文件：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>set</span> number <span class=c1>#设置行号</span>
+<span class=nb>set</span> nowrap
+<span class=nb>set</span> nobackup
+<span class=nb>set</span> cursorcolumn
+hi CursorColumn <span class=nv>cterm</span><span class=o>=</span>NONE <span class=nv>ctermbg</span><span class=o>=</span><span class=m>240</span> <span class=nv>ctermfg</span><span class=o>=</span>green <span class=nv>guibg</span><span class=o>=</span>NONE <span class=nv>guifg</span><span class=o>=</span>NONE
+<span class=c1>#-------tab键长度修改为2个空格------</span>
+<span class=nb>set</span> <span class=nv>ts</span><span class=o>=</span><span class=m>2</span> 
+<span class=nb>set</span> <span class=nv>sw</span><span class=o>=</span><span class=m>2</span> 
+<span class=c1>#----------------</span>
+<span class=nb>set</span> relativenumber <span class=c1>#显示相对行号</span>
+<span class=nb>set</span> hlsearch
+<span class=nb>set</span> noerrorbells
+<span class=nb>set</span> autoindent 
+ 
+inoremap <span class=s1>&#39; &#39;&#39;&lt;ESC&gt;i
+</span><span class=s1>inoremap &#34; &#34;&#34;&lt;ESC&gt;i
+</span><span class=s1>inoremap ( ()&lt;ESC&gt;i
+</span><span class=s1>inoremap [ []&lt;ESC&gt;i
+</span><span class=s1>inoremap { {&lt;CR&gt;}&lt;ESC&gt;O
+</span><span class=s1> 
+</span><span class=s1> 
+</span><span class=s1>call plug#begin(&#39;</span>~/.vim/plugged<span class=s1>&#39;)
+</span><span class=s1> 
+</span><span class=s1>Plug &#39;</span>~/.vim/plugged/YouCompleteMe<span class=err>&#39;</span>
+ call plug#end<span class=o>()</span>
+
+</code></pre></div><p>​</p><h2 id=参考>参考</h2><ul><li><a href=https://vimjc.com/vim-plug.html>https://vimjc.com/vim-plug.html</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-02-04</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/%E5%AE%89%E8%A3%85/>安装</a>,&nbsp;<a href=/tags/%E6%8A%98%E8%85%BE/>折腾</a>,&nbsp;<a href=/tags/zsh/>zsh</a>,&nbsp;<a href=/tags/tmux/>tmux</a>,&nbsp;<a href=/tags/vim/>vim</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/02/02/cpu%E5%92%8C%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/ class=prev rel=prev title=CPU和汇编语言><i class="fas fa-angle-left fa-fw"></i>CPU和汇编语言</a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-02-04T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"打造自己的终端环境"}}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
