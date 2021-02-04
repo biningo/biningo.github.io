@@ -1,4 +1,48 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 31 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Python并发和GIL锁</title><link>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</link><pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</guid><description><![CDATA[GIL全局解释器锁 在单核时代，Python为了解决多个线程并发访问数据造成数据不安全问题，在语言层面就实现了一种机制，就是给一个进程中的多个并发线程设置一把锁，只有抢到锁的线程才可以在CPU上执行，没有锁的线程只能等待。这样就可以控制在同一时刻内对数据的访问只有一个线程（其实这也无法保证线程安全）所以这把锁就叫做 GIL锁
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 04 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>打造自己的终端环境</title><link>/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/</link><pubDate>Thu, 04 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/</guid><description><![CDATA[配置zsh  安装zsh  apt install zsh 安装oh-my-zsh  #https://github.com/ohmyzsh/ohmyzsh sh -c &#34;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&#34; 运行上面的sh之后，就会在家目录下配置.zshrc文件，当然也可以手动clone仓库代码到，然后按照oh-my-zsh模板文件进行配置.zshrc
+配置.zshrc  该文件的作用和.bashrc作用一样，为了不让之前.bashrc的命令失效，可以在.zshrc中source进来，下面展示主要配置
+#配置终端主题，不然会很丑 主题路径在.oh-my-zsh/themes 可以修改主题的样式 ZSH_THEME=&#34;robbyrussell&#34; #配置zsh插件 有些系统自带的插件则直接配置即可 #有些外部插件则需要下载(clone)到 .oh-my-zsh/custom/plugins路径下 然后需要在下面写上名字即可 plugins=( git zsh-syntax-highlighting #shell命令高亮插件 colored-man-pages #系统自带 zsh-autosuggestions #命令提示插件 ) ​
+配置tmux  安装tmux  apt install tmux 修改配置文件  tmux的配置文件在~/.tmux.conf
+个人觉得tmux默认的快捷键不符合自己，那么可以修改，下面展示我的配置文件
+#设置快捷键前缀 set -g prefix C-a #修改快捷键前缀 我习惯与ctrl+a unbind C-b # 解绑默认的 ctrl+b 前缀快捷键 bind C-a send-prefix # 绑定Ctrl+a为新的指令前缀 #绑定方向键 bind -r k select-pane -U # 绑定k为↑ bind -r j select-pane -D # 绑定j为↓ bind -r h select-pane -L # 绑定h为← bind -r l select-pane -R # 绑定l为→ #切换切割pane按键 分割窗口要用到 unbind &#39;&#34;&#39; #解绑默认的键 # 垂直方向新增面板，默认进入当前目录  bind ] splitw -v -c &#39;#{pane_current_path}&#39; unbind % # 水平方向新增面板，默认进入当前目录 bind [ splitw -h -c &#39;#{pane_current_path}&#39; ​]]></description></item><item><title>CPU和汇编语言</title><link>/2021/02/02/cpu%E5%92%8C%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</link><pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/02/cpu%E5%92%8C%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</guid><description><![CDATA[什么是CPU架构、指令集、汇编   指令集是人们发明出来的东西，指令就是CPU执行具体操作的一个代号，比如0000代表什么指令，0001代表什么指令，一条机器指令进过 指令译码器 之后就转化为响应的电路信号从而实现特定的操作
+  指令集决定了处理器的架构，因为处理器架构就是用硬件电路实现指令集
+CPU架构又叫微架构，就是由一些硬件电路构成来实现指令集所规定的操作
+  汇编语言是用人类看得懂的语言符号来描述指令集中的指令，基本一条汇编语句就对应了一条具体的指令，汇编的伪指令不对应CPU指令，只是用来帮助汇编器合理的生成机器代码和优化代码用的
+  ​
+CPU的前世今生 世界上最著名的CPU厂商有：
+ intel AMD（比intel晚出现） ARM  intel公司生产的CPU主要有：8086(16位)、8088、80386、i386(扩展到32位)、i486&hellip;.
+上面的CPU都是早期生产的CPU，现代的intel CPU主要有：酷睿&gt;奔腾&gt;赛扬（性能比较）
+​
+AMD公司生产的CPU主要有：锐龙&gt;AMD FX&gt;APU&gt;速龙&gt;闪龙 （性能比较）
+因为intel早期生产的CPU都是以86结尾的，所以intel的CPU就称为x86系列
+在16位CPU时代，intel的CPU采用了x86-16指令集，到了32位CPU时代intel采用了IA32指令集，所以采用IA32指令集的CPU也称为x86架构CPU（因为指令集决定了CPU底层电路设计和架构嘛）
+当初Intel因为产能不足，IBM要求增加第二供应商，于是Intel将x86指令集授权给了AMD等一众厂商，这也是为什么有AMD的存在，intel没有把CPU底层如何实现这些指令的CPU架构告诉AMD，AMD用授权的x86指令集设计了自己的CPU，所以intel上运行的软件也可以在AMD上运行
+在64位时代intel自己搞了IA64（和IA32不兼容，全新的指令集）并且重新设计了CPU架构，AMD搞了AMD64（基于IA32）最后IA64因为不兼容IA32而失败，AMD64就变成了现在的x86-64又叫amd64、x64。
+因为x86-64的授权在AMD，于是AMD与Intel达成交叉授权，AMD继续使用x86架构。这就是为什么现在市面上有AMD和Intel共存的原因，他们都是兼容x86-64架构
+x86指令集(IA32)（包括amd64）是属于 CISC 风格的指令集
+ RISC和CISC的区别可以看这篇文章：http://www.vsdiffer.com/risc-vs-cisc.html
+ ARM CPU采用ARM指令集，该指令集属于 RISC 风格（MIPS指令集也是采用此风格）
+ARM架构的CPU主要用在移动设备等小型设备，因为采用了RISC风格的指令集，所以 体积小、低功耗、低成本、高性能
+这里总结一下：
+ 指令集风格分为：RISC、CISC 著名的CPU指令集：IA32(x86)、amd64/x86_64(基于IA32,兼容IA32)、ARM、MIPS 著名的CPU厂商：intel、AMD、生产ARM CPU的相关厂商(ARM公司只是发明了指令集并授权给其他公司收专利费，并不生产CPU) RISC为代表的指令集：IA32(x86)、amd64/x86_64 CISC为代表的指令集：ARM、MIPS 现在RISC和CISC的界限变得模糊了，相互借鉴对方的优点  ​
+什么是大端小端 因为内存是以字节为编址的，但是很多数据类型都会占用多个字节，比如int类型占4字节，所以就会有两种排列方式，比如一个int类型的数0x10000002：
+ 高地址放高位，低地址放低位：0x02 ,0x00,0x00,0x01 这种就叫做小端模式 低地址放高位，高地址放低位：0x01,0x00,0x00,0x02 这种就叫做 大端模式  看一看到，大端模式是符合人类阅读习惯的，而小端模式是反的。他们的优缺点如下：
+小端模式优点：]]></description></item><item><title>信息的编码和表示</title><link>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</link><pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</guid><description><![CDATA[二进制算术运算 二进制的 加减乘除 运算和十进制相似，只不过二进制到2就需要进位，而十进制到10才需要进位而已，其他进制也都类似。
+CPU逻辑运算：&amp; | ^(异或) ~(取反) （由相应的与非门等电路组合而成）
+CPU算术运算： 加法、位移 （通过上面的逻辑运算实现）
+二进制的加减乘除都是通过 加法、位移 组合来实现的，CPU里面实现二进制的算术运算由相应的部件来实现：
+ 加法器（全加器） 实现加法 除法器、乘法器 实现乘除  1、二进制加减 二进制加法：01+01=10 第一位1+1=0然后需要进位并且需要链式进位，这和十进制一样，加法器基本原理就是：
+ 异或（不带进位的加法1+1=0 0+0=0） 与 （计算进位,只有1|1==1才会产生进位）如果有进位还必须保存进位参与下一次运算  二进制里面的减法是通过加法来运算的，减去一个数其实就是加上这个数的负数，计算机为了表示负数，会出现很多问题，原码、反码、补码就是为了解决负数问题的（稍后讨论）
+二进制加法规则：0+0=0 1+0=1 1+1=1
+二进制减法规则：0-0=0 1-0=1 0-1=1(需要向前借位) 1-1=0
+可以看到和十进制一样，只不过十进制有10种状态0-9而二进制只有0-1两种状态
+弄清楚二进制运算只需要转变以前10进制运算观念即可
+2、二进制乘除 二进制乘法比十进制还简单，运算规则和十进制一样，下面截取**《编码》**里的一张图片说明：
+第一排1101叫被被乘数，第二排1011叫乘数
+为了更直观感受，将每次乘下来的结果空白部分都补0：
+00001101 00011010 00000000 01101000 -------- 10001111 CPU乘法器：有3个寄存器组成：
+ A：保存被乘数 B：保存乘数 C：保存结果  下面展示完整流程（假设在8位机器上）：
+A：00001101 B：00001011 C：00000000
+ 1*00001101=00001101=&gt; A：00011010 B：00000101 C：00001101 1*00011010=00011010=&gt; A：00110100 B：00000010 C：00001101 0*00110100=00000000=&gt; A：01101000 B：00000001 C：01101000 1*01101000=01101000=&gt; A：11010000 B：00000000C：10001111  所以最终结果就是 10001111]]></description></item><item><title>Python并发和GIL锁</title><link>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</link><pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</guid><description><![CDATA[GIL全局解释器锁 在单核时代，Python为了解决多个线程并发访问数据造成数据不安全问题，在语言层面就实现了一种机制，就是给一个进程中的多个并发线程设置一把锁，只有抢到锁的线程才可以在CPU上执行，没有锁的线程只能等待。这样就可以控制在同一时刻内对数据的访问只有一个线程（其实这也无法保证线程安全）所以这把锁就叫做 GIL锁
 也就是说Python的多线程并发在单核时代可以有效控制线程安全问题，但是到了多核时代，即使有多个核，同一时刻也只能有一个线程在执行（因为同一个进程内的多个线程中只有一把GIL锁）
 比如现在有 a、b、c、d三个线程和1、2、3、4号CPU核，如果是其他语言，则在同一个时刻四个线程可以同时并发的跑在4个核上运行，但是Python因为有了一把GIL锁 现在a抢到锁了，那么b、c、d只能干巴巴的等待a主动释放锁才可以继续抢锁才有机会执行，即使有4个核也无法充分利用，所以语言层面上创建了4个线程但最终也相当于串行执行
 def my_task(): i = 0 for _ in range(10000000): i = i + 1 @metric def f1(): for t in range(2): t = threading.Thread(target=my_task) t.start() t.join() @metric def f2(): arr = [] for t in range(2): t = threading.Thread(target=my_task) t.start() arr.append(t) for t in arr: t.join() ​
