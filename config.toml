@@ -72,7 +72,8 @@ theme = "LoveIt"
     weight = 5
 	[[menu.main]]
 		identifier= "study"
-		url = "/study.md"
+		name = "study"
+		url = "/study"
 		weight = 6
 
 
