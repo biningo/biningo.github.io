@@ -46,30 +46,35 @@ theme = "LoveIt"
 
 [menu]
   [[menu.main]]
-    identifier = "posts"
-    name = "归档"
+    identifier = "archive"
+    name = "archive"
     url = "/posts/"
     weight = 1
   [[menu.main]]
     identifier = "tags"
-    name = "标签"
+    name = "tag"
     url = "/tags/"
     weight = 2
   [[menu.main]]
     identifier = "categories"
-    name = "分类"
+    name = "category"
     url = "/categories/"
     weight = 3
 	[[menu.main]]
 		identifier = "book"
-		name = "书单"
+		name = "book"
 		url = "/book"
 		weight = 4
   [[menu.main]]
     identifier = "about"
-    name = "关于"
+    name = "about"
     url = "/about"
     weight = 5
+	[[menu.main]]
+		identifier= "study"
+		url = "/study.md"
+		weight = 6
+
 
 
 #语法高亮设置
