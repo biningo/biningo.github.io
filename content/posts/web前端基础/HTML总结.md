@@ -187,11 +187,48 @@ meta还可以通过`http-equiv`用来覆盖 HTTP 回应的头信息字段，`con
 
 TODO
 
-​    
+​        
 
 ## 表单
 
-TODO
+表单元素主要看`input`标签        
+
+```html
+<input autofocus  type="text" disable> #禁用输入、自动聚焦、文本类型
+```
+
+type的类型主要有如下：
+
+| text                                              | 一个单行文本框，默认行为                       |
+| ------------------------------------------------- | ---------------------------------------------- |
+| password                                          | 隐藏字符的密码框                               |
+| search                                            | 搜索框，在某些浏览器键入内容会出现叉标记取消   |
+| submit、reset、button                             | 生成一个提交按钮、重置按钮、普通按钮           |
+| number、range                                     | 只能输入数值的框；只能输入在一个数值范围的框   |
+| checkbox、radio                                   | 复选框，用户勾选框；单选框，只能在几个中选一个 |
+| image、color                                      | 生成一个图片按钮，颜色代码按钮                 |
+| email、tel、url                                   | 生成一个检测电子邮件、号码、网址的文本框       |
+| date、month、time、week、datetime、datetime-local | 获取日期和时间                                 |
+| hidden                                            | 生成一个隐藏控件                               |
+| file                                              | 生成一个上传控件                               |
+
+```html
+<label>姓名：</label><input type="text" autofocus /><br>
+<label>性别：</label>男<input type="radio" name="sex" />&nbsp;女<input type="radio" name="sex" /><br>
+<label>年龄：</label><input type="number" /><br>
+<label>爱好：</label>
+<input type="checkbox"/>打篮球
+<input type="checkbox"/>踢足球
+<input type="checkbox"/>乒乓球
+<input type="checkbox"/>跑步
+<br>
+<label>出生日期：</label><input type="datetime"/><br>
+<label>备注：</label><textarea></textarea><br>
+<label>喜欢的颜色:</label><input type="color" /><br>
+<label>邮箱:</label><input type="email" /><br>
+<label>电话:</label><input type="tel" /><br>
+<label>头像上传:</label><input type="file" /><br>
+```
 
 ​    
 
@@ -259,7 +296,7 @@ TODO
 
 ## 参考
 
-https://juejin.cn/post/6868946515906265096
-
-​    
+- https://juejin.cn/post/6868946515906265096
+- https://www.bookstack.cn/books/html-tutorial
+- https://www.bookstack.cn/books/liyanhui-html-css    
 
