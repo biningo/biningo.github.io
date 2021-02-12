@@ -107,17 +107,7 @@ go list -m -versions github.com/gin-gonic/gin 查看某些模块的所有版本
 
 `mod`管理的相关命令
 
-```bash
-go mod download #下载go.mod声明的依赖库
-go mod init github.com/www/my #创建一个go.mod 相当于创建一个项目 my就是项目的名字 开源项目的话一般以github仓库名字命名
-go mod tidy #清理go.mod文件中冗余的依赖项
-go mod graph #打印模块依赖图
-go mod vendor #将依赖复制到vendor下
-```
-
-此处专门开辟一篇文章讲`mod`管理
-
-​        
+​            
 
 ## go run
 
@@ -131,9 +121,9 @@ go run main.go
 
 ## go test
 
-执行go测试相关的命令，此处另外开辟一篇文章专门将测试
+执行go测试相关的命令
 
-​    
+​        
 
 ## 其他命令
 
