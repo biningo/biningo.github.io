@@ -3,7 +3,6 @@ title: Go命令行和相关环境变量
 date: 2021-02-12
 categories: [编程语言]
 tags: [Go]
-draft: true
 ---
 
 ## go build
