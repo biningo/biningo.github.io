@@ -1,4 +1,11 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 08 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 12 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Go命令行</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C/</guid><description>go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 ​
+go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
+gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 ​
+go get 最重要的一个工具，用于获取go依赖，类似于pip、maven、npm等 go的包管理采用go mod的方式，每个项目都必须有一个go.mod依赖声明文件，里面列出了自己的项目依赖了哪些项目，以及依赖项目的版本信息，在项目下面执行go get [url]即可下载依赖并且将依赖项自动添加到go.mod文件中</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
 同时也会在所有用户的本地也会保存所有版本
 这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
 使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
@@ -88,11 +95,31 @@ A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B
    host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
 将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
  docker cp命令先将容器内的数据copy到宿主机然后再进行挂载 在docker-entrypoint.sh等脚本中执行创建文件和文件夹等相关命令，因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了  ​
-volume相关命令 docker volume ls #查看所有命名和匿名volume docker inspect &lt;volume-name&gt; #查看volume相关信息 docker volume create &lt;volume-name&gt; #创建volume docker volume rm &lt;volume-name&gt; #删除 docker volume preun #清空没有容器挂载中的volume stop中的容器的volume不会清空 #控制volume的读写权限 -v &lt;xxx&gt;:容器内路径:ro #只读 在容器内只能读挂载的文件  -v &lt;xxx&gt;:容器内路径:rw #读写 在容器内能读写挂载文件 默认 ​]]></description></item><item><title/><link>/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>作者</author><guid>/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/</guid><description>title: 我眼中的汇编 date: 2021-02-02 categories: [计组和计算机基础] tags: [基础,汇编,CPU] draft: true 汇编语言分类 汇编语言和具体的机器指令相互对应（这是汇编移植性差的原因），不同的CPU对应的机器指令集都不一样，因此汇编语言的种类也被分为两大派系：
-intel汇编 （语法简洁，符合人类阅读习惯，容易写） ATT&amp;amp;T汇编 （语法稍微复杂，和C语言配合丝滑，Linux内核中的汇编用此格式） 注意，上面只是汇编语言的风格，就和菜系一样，一个“川菜”，一个 ”粤菜“，具体的语法还和汇编器有关，有如下几个汇编器：
+volume相关命令 docker volume ls #查看所有命名和匿名volume docker inspect &lt;volume-name&gt; #查看volume相关信息 docker volume create &lt;volume-name&gt; #创建volume docker volume rm &lt;volume-name&gt; #删除 docker volume preun #清空没有容器挂载中的volume stop中的容器的volume不会清空 #控制volume的读写权限 -v &lt;xxx&gt;:容器内路径:ro #只读 在容器内只能读挂载的文件  -v &lt;xxx&gt;:容器内路径:rw #读写 在容器内能读写挂载文件 默认 ​]]></description></item><item><title>HTML总结</title><link>/2019/05/25/html%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate><author>作者</author><guid>/2019/05/25/html%E6%80%BB%E7%BB%93/</guid><description><![CDATA[head标签 head标签用于HTML文档头部，主要用于存放元数据、引入外部样式脚本等标签的容器，还可定义一些页面信息相关的内容，主要的子标签如下：
+  &lt;meta&gt;：设置网页的元数据,比如网页的字符集&hellip;..
+  &lt;link&gt;：引入外部资源，指定ref定义当前文档与被链接文档之间的关系
+指定type定义被链接的文档类型
+  &lt;title&gt;：设置网页标题
+  &lt;style&gt;：放置内嵌的样式表
+  &lt;script&gt;：引入外部js脚本
+  &lt;head&gt; &lt;meta charset=&#34;UTF-8&#34;&gt; &lt;title&gt;这是网页标题&lt;/title&gt; &lt;link rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href=&#34;theme.css&#34;&gt; &lt;link rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href=&#34;http://www.x.cn/a.css&#34;&gt; &lt;style&gt; a{color: red;} &lt;/style&gt; &lt;script src=&#34;https://static.sick.cn/respond.min.js&#34;&gt;&lt;/script&gt; //下面脚本会执行 &lt;script&gt; alert(&#34;hello,world&#34;) &lt;/script&gt; //定义了这行则所有绝对地址的url则都会以这个为基础 &lt;base href=&#34;https://www.google.com&#34;&gt; &lt;/head&gt; ​
+meta元数据 meta标签用于设置一些元数据，并且可以定义一些浏览器的缓存策略，还可以定义网页关键字用于搜索引擎爬虫的爬取
+&lt;!-- 定义网页文档的字符集 --&gt; &lt;meta charset=&#34;utf-8&#34; /&gt; &lt;!-- 网页作者 --&gt; &lt;meta name=&#34;author&#34; content=&#34;开源技术团队&#34;/&gt; &lt;!-- 网页地址 --&gt; &lt;meta name=&#34;website&#34; content=&#34;https://www.baidu.com&#34;/&gt; &lt;!-- 网页版权信息 --&gt; &lt;meta name=&#34;copyright&#34; content=&#34;2020-2021 demo.]]></description></item><item><title/><link>/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>作者</author><guid>/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/</guid><description>title: 我眼中的汇编 date: 2021-02-02 categories: [计组和计算机基础] tags: [基础,汇编,CPU] draft: true 汇编语言分类 汇编语言和具体的机器指令相互对应（这是汇编移植性差的原因），不同的CPU对应的机器指令集都不一样，因此汇编语言的种类也被分为两大派系：
+intel汇编(x86汇编) （语法简洁，符合人类阅读习惯，容易写） ATT&amp;amp;T汇编 （语法稍微复杂，和C语言配合丝滑，Linux内核中的汇编用此格式） 注意，上面只是汇编语言的风格，就和菜系一样，一个“川菜”，一个 ”粤菜“，具体的语法还和汇编器有关，有如下几个汇编器：
 masm：微软写的汇编器，支持16、32程序，主要用于windows平台，已经不再独立发布
 nasm：最流行的Linux平台汇编器，也可以在windows下使用，支持16、32、64位程序。和 nasm配合的链接器有：ld
 gas：属于GNU下的汇编器，用于汇编AT&amp;amp;T格式的汇编，和 C比较兼容
 汇编器只是将汇编语言翻译为对应平台CPU的机器指令，所以如果是在intel的CPU下，那么他们翻译出来的都是x86指令
 ​
-​</description></item></channel></rss>
+​
+什么是大端小端 在写汇编的时候要注意内存数据读取顺序
+因为内存是以字节为编址的，但是很多数据类型都会占用多个字节，比如int类型占4字节，所以就会有两种排列方式，比如一个int类型的数0x10000002：
+高地址放高位，低地址放低位：0x02 ,0x00,0x00,0x01 这种就叫做小端模式 低地址放高位，高地址放低位：0x01,0x00,0x00,0x02 这种就叫做 大端模式 看一看到，大端模式是符合人类阅读习惯的，而小端模式是反的。他们的优缺点如下：
+小端模式优点：
+内存的低地址处存放低字节，所以在强制转换数据时不需要调整字节的内容，直接将后面的截掉就行（比如把int的4字节强制转换成short的2字节时，就直接把int数据存储的前两个字节给short就行，因为其前两个字节刚好就是最低的两个字节，符合转换逻辑） CPU做数值运算时从内存中依顺序依次从低位到高位取数据进行运算，直到最后刷新最高位的符号位，这样的运算方式会更高效 大端模式优点：
+符号位在所表示的数据的内存的第一个字节中，便于快速判断数据的正负和大小 注意，不同的CPU识别的字节序不同，x86系列的CPU采用 小端模式，而 ARM都可以识别
+TCP/IP协议规定，网络字节序采用大端模式 如果是x86的CPU，发送数据的时候必须要将自己的主机字节序转换为网络字节序 即大端字节序，接收到的数据再转换为自己的主机字节序，底层会提供转换接口，直接调用即可：htons、htonl、ntohs、ntohl等
+注意：x86系列的CPU都采用小端存储
+​
+参考 大小端
+https://www.</description></item></channel></rss>
