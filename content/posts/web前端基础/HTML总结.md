@@ -3,7 +3,6 @@ title: HTML总结
 date: 2019-05-25
 categories: [web前端基础]
 tags: [HTML,前端]
-draft: true
 ---
 
 ## head标签
@@ -287,10 +286,16 @@ type的类型主要有如下：
 
 - 行内元素默认与其他元素在同一行，不产生换行
 - css属性`display: inline`为行内元素
+- **行内元素是没有长宽高的，同时无法设置内外边距和border**
 
 ```html
 <a>、<img>、<input>、<textarea>、<span>、select、small、strike、strong、sub sup、u、em、big、br、i
 ```
+
+**行内块元素：**
+
+- 同时拥有块属性和行内属性的一类元素
+- css属性`display:inline-block`
 
 ​    
 

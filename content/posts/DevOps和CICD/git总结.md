@@ -111,6 +111,7 @@ git branch -vv #查看本地和远程对应的分支
 git remote #查看远程仓库 -v则显示链接
 git remote add origin https://github.com/ajd/test #添加远程仓库 命名:origin
 git remote rm origin #删除远程仓库
+git remote set-url origin https://github.com/ajd/dsads #修改远程分支的url
 ```
 
 ```bash
@@ -174,6 +175,12 @@ s v5
 
 #3、将HEAD之后的2个(包括HEAD)合并为1个
 git rebase -i HEAD~2
+```
+
+但是上面rebase合并commit记录的时候需要找到待合并commit的前一个commit，那么第一次的commit如何合并呢，第一次commit是没有前一个commit的，他就是第一个，这种情况我们可以使用如下命令来将多个commit与第一个commit合并
+
+```bash
+git rebase -i --root
 ```
 
 ### 2、rebase分支变基
@@ -279,9 +286,9 @@ doc/**/*.pdf # 忽略所有的 .pdf 文件 在 doc/ directory 下的
 
 ​    
 
-## git规范
+## git commit规范
 
-commit message的格式如下：
+`commit message`的格式如下：
 
 ```http
 <type>(<scope>): <subject>
@@ -314,7 +321,21 @@ sync：同步主线或分支的 Bug
 - 中文/英文
 - 结尾不加句号或其他标点符号
 
-​    
+下面我们再来看看`git commit`的相关命令
+
+```bash
+git commit -m "xxxx"
+git commit --amend #修改最近一次的commit的信息
+git commit -am "xxx" #免去了 git add 操作，直接commit     
+```
+
+如果要修改`commit message`信息，可以通过上面的`rebase`命令来修改，只需要修改`message`部分即可
+
+```bash
+git rebase -i HEAD^^     
+```
+
+​     
 
 ## 参考
 
