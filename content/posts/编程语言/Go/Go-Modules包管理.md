@@ -1,5 +1,5 @@
 ---
-title: Go Modules包管理
+title: Go-Modules包管理
 date: 2021-02-12
 categories: [编程语言]
 tags: [Go]
@@ -53,7 +53,7 @@ exclude ithub.com/gin-gonic/gin v1.5.0
 
     由于网络问题，有些包无法下载，比如 `golang.org` 下的包，而这些包在 GitHub 都有镜像，此时就可以使用 GitHub 上的包来替换
 
-​    
+​         
 
 ## go.sum文件
 
@@ -113,7 +113,7 @@ go mod ventor
 
 ## go get命令
 
-`go get`命令主要用于下载依赖的代码，开启`go mod`之后（现在go版本已经默认开启了），所有的`go get`命令下载的依赖都会下载到`$GOPATH/pkg/mod`下，`go get`后面跟着 **模块的名字(一般模块的名字就是代码仓库的链接)**  然后`go`就会根据这个模块名字去自己的包管理库去寻找，该库记录了go项目的所有信息，包括项目的注释文档，包括代码仓库地址（一般是github）和模块的名字
+`go get`命令主要用于下载依赖的代码，开启`go mod`之后（现在go版本已经默认开启了），所有的`go get`命令下载的依赖都会下载到`$GOPATH/pkg/mod`下，`go get`后面跟着 **模块的名字(一般模块的名字就是代码仓库的链接)**  然后`go`就会根据这个模块名字去自己的包管理库去寻找，该库记录了go项目的所有信息，包括项目的注释文档，包括代码仓库地址（一般是github）和模块的名字，第一次如果库里没有则go会自动获取仓库的信息和代码加入到自己的库里
 
 ```bash
 go get github.com/gin-gonic/gin #拉取、编译安装 如果包以及依赖包存在则不会进行下载
