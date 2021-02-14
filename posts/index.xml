@@ -1,4 +1,14 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 12 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 14 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Go静态代码检查</title><link>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</guid><description>goimports goimports 是 Go 语言官方提供的工具，主要有如下几个作用：
+自动格式化 Go 语言代码 对所有引入的包进行管理，自动增删依赖的包引用、将依赖包按字母序排序并分类 goimports 就是等于 gofmt 加上依赖包管理
+用法和go fmt差不多，这里不再赘述，另外，在CI/CD中不应该加入这些检查，因为这是开发者的本职工作，应该由开发者来规范代码
+goimport -w . #格式化 并且修改原文件 ​
+go vet和golint 代码语法检查、代码风格检查，官方提供，没什么用
+​
+golangci-lint 强大的go开源静态代码分析，用于CI防止不规范代码合并，主要有几个用途：
+代码规范 代码风格统一 语法错误、冗余语法等 golangci-lint run ./... golangci-lint run dir1 dir2/... dir3/file1.go 具体见官网：https://golangci-lint.run/usage/performance
+​
+参考 https://www.jianshu.com/p/ca38dcdaf6bb
+https://supereagle.github.io/2019/10/03/golang-lint/</description></item><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
 GO111MODULE=&#34;on&#34; #默认是开启的 ​
 go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指定 module github.com/biningo/go-play //2、指定go版本 go 1.15 //3、指定依赖的库地址 &lt;url&gt; &lt;version&gt; 形式 require ( github.com/gin-gonic/gin v1.6.3 ) //4、replace 替换 require 中声明的依赖，使用另外的依赖及其版本号 不经常使用 replace github.com/gin-gonic/gin v1.6.3 =&gt; github.com/gin-gonic/gin v1.6.3 //5、exclude 排除某些版本 exclude ithub.com/gin-gonic/gin v1.5.0 模块名字主要有如下几个作用：
   作为模块的标识
@@ -7,16 +17,13 @@ go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指�
   开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
 go mod的replace命令主要用来替换原来的包，使用场景有如下几个
   单纯的替换包（用处不大）
-  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
-go build #会寻找当前目录下main入口文件然后进行编译 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 ​
-go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
-go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 ​
-go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go命令 go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
 gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
-gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 ​
-go get 拉取依赖并且编译安装代码的命令
-​
-go list 列出go.mod依赖了哪些库</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>Go文档</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 go get 拉取依赖并且编译安装代码的命令
+go list 列出go.mod依赖了哪些库
+go mod mod管理的相关命令</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>Go文档</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
 同时也会在所有用户的本地也会保存所有版本
 这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
 使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
@@ -101,9 +108,4 @@ A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名
 ​
 CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
 想象一下如果不验证公钥的正确性的话：
-A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item><item><title>docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[​
-挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
-   host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
-将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
- docker cp命令先将容器内的数据copy到宿主机然后再进行挂载 在docker-entrypoint.sh等脚本中执行创建文件和文件夹等相关命令，因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了  ​
-volume相关命令 docker volume ls #查看所有命名和匿名volume docker inspect &lt;volume-name&gt; #查看volume相关信息 docker volume create &lt;volume-name&gt; #创建volume docker volume rm &lt;volume-name&gt; #删除 docker volume preun #清空没有容器挂载中的volume stop中的容器的volume不会清空 #控制volume的读写权限 -v &lt;xxx&gt;:容器内路径:ro #只读 在容器内只能读挂载的文件  -v &lt;xxx&gt;:容器内路径:rw #读写 在容器内能读写挂载文件 默认 ​]]></description></item></channel></rss>
+A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item></channel></rss>
