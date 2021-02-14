@@ -60,21 +60,21 @@ theme = "LoveIt"
     name = "category"
     url = "/categories/"
     weight = 3
-	[[menu.main]]
-		identifier = "book"
-		name = "book"
-		url = "/book"
-		weight = 4
+  [[menu.main]]
+    identifier = "book"
+    name = "book"
+    url = "/book"
+    weight = 4
   [[menu.main]]
     identifier = "about"
     name = "about"
     url = "/about"
     weight = 5
-	[[menu.main]]
-		identifier= "study"
-		name = "study"
-		url = "/study"
-		weight = 6
+  [[menu.main]]
+    identifier= "study"
+    name = "study"
+    url = "/study"
+    weight = 6
 
 
 
