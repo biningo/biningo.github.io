@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>文件系统 - lyer&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="文件系统" />
+<meta property="og:description" content="VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+ 为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统  在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+1、引导块
+存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在MBR或EFI系统上放置一个bootloader，该bootloader就会确定活动分区（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统
+2、super block 超级块
+super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+ 文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 文件系统中的数据块数 空闲块数 空闲的inode节点数 &hellip;&hellip;.  操作系统在启动之后就会将super block从磁盘加载到内存，然后建立 super_block对象，该对象是常驻内存的
+3、空闲块位图和inode位图
+空闲区块位图： 管理整个分区中空闲的数据块，占用多个数据块block
+inode位图 ：管理整个分区中inode的使用和分配，占用多个数据块block
+4、inode节点区块
+是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
+​
+​
+VFS四大对象  super_block inode dentry file  1、super_block  包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数  struct super_block { struct list_head s_list; // 指向所有超级块的链表  const struct super_operations *s_op; // 超级块相关操作的方法  struct dentry *s_root; // 目录挂载点  struct mutex s_lock; // 超级块信号量  int s_count; // 超级块引用计数  ." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" />
+<meta property="article:published_time" content="2021-01-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-28T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="文件系统"/>
+<meta name="twitter:description" content="VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+ 为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统  在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+1、引导块
+存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在MBR或EFI系统上放置一个bootloader，该bootloader就会确定活动分区（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统
+2、super block 超级块
+super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+ 文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 文件系统中的数据块数 空闲块数 空闲的inode节点数 &hellip;&hellip;.  操作系统在启动之后就会将super block从磁盘加载到内存，然后建立 super_block对象，该对象是常驻内存的
+3、空闲块位图和inode位图
+空闲区块位图： 管理整个分区中空闲的数据块，占用多个数据块block
+inode位图 ：管理整个分区中inode的使用和分配，占用多个数据块block
+4、inode节点区块
+是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
+​
+​
+VFS四大对象  super_block inode dentry file  1、super_block  包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数  struct super_block { struct list_head s_list; // 指向所有超级块的链表  const struct super_operations *s_op; // 超级块相关操作的方法  struct dentry *s_root; // 目录挂载点  struct mutex s_lock; // 超级块信号量  int s_count; // 超级块引用计数  ."/>
+<meta name="application-name" content="lyer&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="lyer&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" /><link rel="prev" href="/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/" /><link rel="next" href="/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "文件系统",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2021\/01\/28\/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F\/"
+        },"genre": "posts","keywords": "Linux, OS","wordcount":  362 ,
+        "url": "\/2021\/01\/28\/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F\/","datePublished": "2021-01-28T00:00:00+00:00","dateModified": "2021-01-28T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "lyer"},"author": {
+                "@type": "Person",
+                "name": "lyer"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> archive </a><a class="menu-item" href="/tags/"> tag </a><a class="menu-item" href="/categories/"> category </a><a class="menu-item" href="/book"> book </a><a class="menu-item" href="/about"> about </a><a class="menu-item" href="/study"> study </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">archive</a><a class="menu-item" href="/tags/" title="">tag</a><a class="menu-item" href="/categories/" title="">category</a><a class="menu-item" href="/book" title="">book</a><a class="menu-item" href="/about" title="">about</a><a class="menu-item" href="/study" title="">study</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">文件系统</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://icepan.cloud" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>操作系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-28">2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 362 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#vfs虚拟文件系统">VFS虚拟文件系统</a></li>
+    <li><a href="#vfs四大对象">VFS四大对象</a>
+      <ul>
+        <li><a href="#1super_block">1、super_block</a></li>
+        <li><a href="#2inode">2、inode</a></li>
+        <li><a href="#3dentry">3、dentry</a></li>
+        <li><a href="#4file">4、file</a></li>
+      </ul>
+    </li>
+    <li><a href="#硬链接和软链接">硬链接和软链接</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="vfs虚拟文件系统">VFS虚拟文件系统</h2>
+<p>虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：</p>
+<ul>
+<li><strong>为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作</strong></li>
+<li><strong>为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统</strong></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/KVrP0Yk.png"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/KVrP0Yk.png, https://raw.githubusercontent.com/biningo/cdn/master/img/KVrP0Yk.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/KVrP0Yk.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/KVrP0Yk.png"
+        title="image-20181020173556821" /></p>
+<p>在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 <strong>分区格式化</strong> 格式化之后分区的主要结构如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/JV73ii.png"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/JV73ii.png, https://raw.githubusercontent.com/biningo/cdn/master/img/JV73ii.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/JV73ii.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/JV73ii.png"
+        title="img" /></p>
+<p>1、引导块</p>
+<p>存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在<strong>MBR</strong>或<strong>EFI系统</strong>上放置一个<code>bootloader</code>，该<code>bootloader</code>就会确定<strong>活动分区</strong>（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统</p>
+<p>2、super block 超级块</p>
+<p><code>super block</code>在索引导块后面，主要包含整个文件系统的一些基本元数据：</p>
+<ul>
+<li>文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：<code>8个扇区</code>  <code>4k</code>大小）</li>
+<li>文件系统中的数据块数</li>
+<li>空闲块数</li>
+<li>空闲的inode节点数</li>
+<li>&hellip;&hellip;.</li>
+</ul>
+<p>操作系统在启动之后就会将<code>super block</code>从磁盘加载到内存，然后建立 <strong>super_block对象</strong>，该对象是常驻内存的</p>
+<p>3、空闲块位图和inode位图</p>
+<p><strong>空闲区块位图</strong>： 管理整个分区中空闲的数据块，占用多个数据块<code>block</code></p>
+<p><strong>inode位图</strong> ：管理整个分区中<code>inode</code>的使用和分配，占用多个数据块<code>block</code></p>
+<p>4、inode节点区块</p>
+<p>是一个数组结构，存放整个文件系统的<code>inode</code>信息，每个<code>inode</code>就代表一个文件，<strong>inode节点个数</strong>代表该文件系统最多能创建多少个文件，<code>inode</code>节点存放的具体内容在下文<strong>inode对象</strong> 中说明</p>
+<p>​</p>
+<p>​</p>
+<h2 id="vfs四大对象">VFS四大对象</h2>
+<ul>
+<li>super_block</li>
+<li>inode</li>
+<li>dentry</li>
+<li>file</li>
+</ul>
+<h3 id="1super_block">1、super_block</h3>
+<ul>
+<li>包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数</li>
+<li>常驻内存</li>
+<li>每个分区都有一个<code>super_block</code>，多个<code>super_block</code>对象用链表链接，<code>df</code>命令读取的就是所有的<code>super_block</code>，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改<code>super_block</code></li>
+<li>每个<code>super_block</code>都有对应自己的操作函数</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">super_block</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">list_head</span>      <span class="n">s_list</span><span class="p">;</span>          <span class="c1">// 指向所有超级块的链表 
+</span><span class="c1"></span>    <span class="k">const</span> <span class="k">struct</span> <span class="n">super_operations</span>  <span class="o">*</span><span class="n">s_op</span><span class="p">;</span>  <span class="c1">// 超级块相关操作的方法
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">dentry</span>         <span class="o">*</span><span class="n">s_root</span><span class="p">;</span>         <span class="c1">// 目录挂载点
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">mutex</span>          <span class="n">s_lock</span><span class="p">;</span>    	   <span class="c1">// 超级块信号量
+</span><span class="c1"></span>    <span class="kt">int</span>                   <span class="n">s_count</span><span class="p">;</span>         <span class="c1">// 超级块引用计数
+</span><span class="c1"></span>    
+	<span class="p">......</span>
+        
+    <span class="k">struct</span> <span class="n">list_head</span>      <span class="n">s_inodes</span><span class="p">;</span>        <span class="c1">// inode链表
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">mtd_info</span>       <span class="o">*</span><span class="n">s_mtd</span><span class="p">;</span>          <span class="c1">// 存储磁盘信息
+</span><span class="c1"></span>    <span class="n">fmode_t</span>               <span class="n">s_mode</span><span class="p">;</span>          <span class="c1">// 安装权限
+</span><span class="c1"></span><span class="p">};</span>
+</code></pre></div><h3 id="2inode">2、inode</h3>
+<p>每个文件都有一个<code>inode</code>，linux用inode号来标识一个文件，而不是通过文件名</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">stat a.html <span class="c1">#查看文件的inode信息</span>
+ls -i a.html <span class="c1">#查看文件的inode ID</span>
+df -i <span class="c1">#查看各个分区的inode总数和使用量 -hi</span>
+</code></pre></div><p><strong>inode 节点主要包括了以下信息：</strong></p>
+<ul>
+<li>
+<p>文件的<code>inode ID</code></p>
+</li>
+<li>
+<p>文件权限信息</p>
+</li>
+<li>
+<p>所有者 ID、组 ID</p>
+</li>
+<li>
+<p>文件大小（字节数）、文件类型</p>
+</li>
+<li>
+<p>文件的硬链接数</p>
+</li>
+<li>
+<p>上次访问时间、最后修改时间、inode 上次修改时间</p>
+</li>
+<li>
+<p>文件的数据块block映射表（0-n逻辑数据块号分别映射到实际的数据块号）<strong>所以同一个文件的数据可以不连续的存放在不同的物理数据块中</strong> 单个inode结构图如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/640.png"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/640.png, https://raw.githubusercontent.com/biningo/cdn/master/img/640.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/640.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/640.png"
+        title="https://raw.githubusercontent.com/biningo/cdn/master/img/640.png" /></p>
+</li>
+</ul>
+<p>小文件直接映射到对应的数据块，大文件则可以使用二级、三级索引</p>
+<p><strong>打开文件的过程如下：</strong></p>
+<ul>
+<li>找到文件名对应的<code>inode ID</code></li>
+<li>通过<code>inode ID</code>获取该文件<code>inode</code>节点信息</li>
+<li>根据文件的<code>inode</code>信息获取逻辑数据块号和实际物理数据块block号的映射表，然后就可以读取磁盘数据了</li>
+</ul>
+<p><strong>目录(文件夹)其实也是一种文件：</strong></p>
+<p>目录文件的数据块存储的是 <strong>一项一项的文件信息</strong> ，每个项由 <strong>文件名、文件对应的inode ID</strong>组成，目录也有自己的<code>inode</code></p>
+<p>如果目录文件没有<code>r</code>或则<code>x</code>权限，也就是说无法读取目录文件的数据，也就无法读取目录下面的文件的<code>inode</code>信息了</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">inode</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">hlist_node</span> <span class="n">i_hash</span><span class="p">;</span>          			<span class="c1">// 散列表，用于快速查找inode
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">list_head</span>  <span class="n">i_list</span><span class="p">;</span>    				<span class="c1">// 索引节点链表 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">list_head</span>  <span class="n">i_sb_list</span><span class="p">;</span> 				<span class="c1">// 超级块链表超级块 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">list_head</span>  <span class="n">i_dentry</span><span class="p">;</span>  				<span class="c1">// 目录项链表 
+</span><span class="c1"></span>	
+    <span class="p">......</span>
+
+    <span class="n">uid_t</span>             <span class="n">i_uid</span><span class="p">;</span>     				<span class="c1">// 使用者id 
+</span><span class="c1"></span>    <span class="n">gid_t</span>              <span class="n">i_gid</span><span class="p">;</span>     				<span class="c1">// 使用组id 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">timespec</span>   <span class="n">i_atime</span><span class="p">;</span>   				<span class="c1">// 最后访问时间 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">timespec</span>   <span class="n">i_mtime</span><span class="p">;</span>   				<span class="c1">// 最后修改时间 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">timespec</span>   <span class="n">i_ctime</span><span class="p">;</span>    				<span class="c1">// 最后改变时间 
+</span><span class="c1"></span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">inode_operations</span>  <span class="o">*</span><span class="n">i_op</span><span class="p">;</span>       <span class="c1">// 索引节点操作函数 
+</span><span class="c1"></span>    <span class="k">const</span> <span class="k">struct</span> <span class="n">file_operations</span>   <span class="o">*</span><span class="n">i_fop</span><span class="p">;</span>      <span class="c1">// 缺省的索引节点操作 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">super_block</span>            <span class="o">*</span><span class="n">i_sb</span><span class="p">;</span>        <span class="c1">// 相关的超级块 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">address_space</span>          <span class="o">*</span><span class="n">i_mapping</span><span class="p">;</span>   <span class="c1">// 相关的地址映射 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">address_space</span>          <span class="n">i_data</span><span class="p">;</span>       <span class="c1">// 设备地址映射 
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span>                  <span class="n">i_flags</span><span class="p">;</span>      <span class="c1">// 文件系统标志 
+</span><span class="c1"></span>    <span class="kt">void</span>                          <span class="o">*</span><span class="n">i_private</span><span class="p">;</span>   <span class="c1">// fs 私有指针 
+</span><span class="c1"></span><span class="p">};</span>
+</code></pre></div><h3 id="3dentry">3、dentry</h3>
+<p><code>dentry</code>不会持久化到磁盘，是内核在内存中建立的，描述文件的逻辑属性，更确切的说是<strong>存在于内存的目录文件的缓存</strong>，为了提高查找性能而设计</p>
+<p><strong>不管是文件夹还是文件，都是属于目录项</strong>，所有的目录项在一起构成一颗庞大的目录树</p>
+<p>例如：要<code>open</code>一个文件<code>/home/lyer/tmp/a.txt</code>，那么<code>/</code>、<code>home</code>、<code>lyer</code>、<code>a.txt</code>都是一个目录项，VFS在查找的时候，根据一层一层的目录项找到对应的每个目录项的<code>inode</code>，那么沿着目录项进行操作就可以找到最终的文件。<code>/</code>根目录项对象会在内核启动之后创建，然后文件系统就会被自动挂载到<code>/</code>目录，然后就可以进行访问文件系统了，其他的文件系统想要被使用，也必须要挂载到其中一个目录下才可以被访问</p>
+<p><strong>如果没有目录项建立在内存中，那么每次查询路径都需要读取磁盘的数据，那么性能就会很低</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp, https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp"
+        title="https://raw.githubusercontent.com/biningo/cdn/master/img/640.webp" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">dentry</span> <span class="p">{</span>
+    <span class="n">atomic_t</span>      <span class="n">d_count</span><span class="p">;</span>         						<span class="c1">// 使用计数 
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span>  <span class="n">d_flags</span><span class="p">;</span>         						<span class="c1">// 目录项标识 
+</span><span class="c1"></span>    <span class="n">spinlock_t</span>    <span class="n">d_lock</span><span class="p">;</span>          						<span class="c1">// 单目录项锁 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">inode</span>  <span class="o">*</span><span class="n">d_inode</span><span class="p">;</span>        						<span class="c1">// 相关联的索引节点 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">hlist_node</span>  <span class="n">d_hash</span><span class="p">;</span>     						<span class="c1">// 散列表 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">dentry</span>      <span class="o">*</span><span class="n">d_parent</span><span class="p">;</span>  						<span class="c1">// 父目录的目录项对象 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">qstr</span>        <span class="n">d_name</span><span class="p">;</span>     						<span class="c1">// 目录项名称 我也就是文件或则目录的名字 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">list_head</span>   <span class="n">d_lru</span><span class="p">;</span>      						<span class="c1">// 未使用的链表
+</span><span class="c1"></span>
+    <span class="k">struct</span> <span class="n">list_head</span>   <span class="n">d_subdirs</span><span class="p">;</span>  						<span class="c1">// 子目录链表 
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">list_head</span>   <span class="n">d_alias</span><span class="p">;</span>    						<span class="c1">// 索引节点别名链表
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span>       <span class="n">d_time</span><span class="p">;</span>    						<span class="c1">// 重置时间 
+</span><span class="c1"></span>    <span class="k">const</span> <span class="k">struct</span> <span class="n">dentry_operations</span> <span class="o">*</span><span class="n">d_op</span><span class="p">;</span> 				<span class="c1">// 目录项操作相关函数 
+</span><span class="c1"></span>    
+    <span class="p">......</span>
+<span class="p">};</span>
+</code></pre></div><h3 id="4file">4、file</h3>
+<p>每个文件对象包含对应的<code>innode</code>和<code>dentry</code>对象</p>
+<ul>
+<li>调用<code>open</code>就是在内存中创建一个<strong>file对象</strong></li>
+<li><code>close</code>就是销毁内存中的 <strong>file对象</strong></li>
+<li>一个文件可能会被多个进程打开，于是就会有多个文件对象对应同一个文件</li>
+<li>文件对象之间通过链表链接</li>
+<li>进程会维护一个数组结构的文件打开表，数组下标就是<code>fd</code>文件描述符，每个数组元素指向一个<code>file</code>对象</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">file</span> <span class="p">{</span>
+    <span class="k">union</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="n">llist_node</span>  <span class="n">fu_llist</span><span class="p">;</span>      <span class="c1">// 文件对象链表
+</span><span class="c1"></span>        <span class="k">struct</span> <span class="n">rcu_head</span>    <span class="n">fu_rcuhead</span><span class="p">;</span>    <span class="c1">// 释放之后的RCU链表
+</span><span class="c1"></span>    <span class="p">}</span> <span class="n">f_u</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">path</span>            <span class="n">f_path</span><span class="p">;</span>        <span class="c1">// 包含的目录项
+</span><span class="c1"></span>    <span class="k">struct</span> <span class="n">inode</span>           <span class="o">*</span><span class="n">f_inode</span><span class="p">;</span>      <span class="c1">// 缓存值
+</span><span class="c1"></span>    <span class="k">const</span> <span class="k">struct</span> <span class="n">file_operations</span>  <span class="o">*</span><span class="n">f_op</span><span class="p">;</span>  <span class="c1">// 文件操作函数
+</span><span class="c1"></span>    <span class="n">spinlock_t</span>		<span class="n">f_lock</span><span class="p">;</span>               <span class="c1">// 锁
+</span><span class="c1"></span>
+    <span class="n">atomic_long_t</span>          <span class="n">f_count</span><span class="p">;</span>       <span class="c1">// 文件对象引用计数
+</span><span class="c1"></span>    
+    <span class="p">......</span>
+        
+    <span class="k">struct</span> <span class="n">address_space</span>   <span class="o">*</span><span class="n">f_mapping</span><span class="p">;</span>
+</code></pre></div><p>​</p>
+<p>​</p>
+<h2 id="硬链接和软链接">硬链接和软链接</h2>
+<p><strong>硬链接：</strong></p>
+<p>一般情况一个<code>inode</code>对应一个文件名，但是也可以多个文件名同时指向一个<code>inode</code>，对文件的修改都会生效，这就是 <strong>硬链接</strong></p>
+<p>硬链接直接在目录文件下增加一个目录项，然后将<code>inode ID</code>就是原文件的<code>inode ID</code>，只是目录项的文件名不一样。多个硬链接其实都是修改的同一个<code>inode</code>对应的文件，只有当<code>inode</code>表示的硬链接数变为0才会真正的删除文件</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ln 源文件 目标文件 <span class="c1">#创建硬链接</span>
+</code></pre></div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/666.webp"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/666.webp, https://raw.githubusercontent.com/biningo/cdn/master/img/666.webp 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/666.webp 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/666.webp"
+        title="图片" /></p>
+<p><strong>软链接：</strong></p>
+<p>软链与硬链接最大的不同就是：软连接相当于创建一个新文件，然后文件的数据块内容保存的就是原文件的<strong>路径+文件名</strong>，依赖于原文件，原文件删除之后软链接也无效了</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ln -s 源文文件或目录 目标文件或目录
+</code></pre></div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp, https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp"
+        title="https://raw.githubusercontent.com/biningo/cdn/master/img/700.webp" /></p>
+<p>​</p>
+<h2 id="参考">参考</h2>
+<p><a href="http://lionoggo.com/2015/12/05/%e4%bb%8eVFS%e7%9c%8b%e6%96%87%e4%bb%b6%e8%af%bb%e5%86%99/#%e8%b6%85%e7%ba%a7%e5%9d%97%e5%af%b9%e8%b1%a1" target="_blank" rel="noopener noreffer">http://lionoggo.com</a></p>
+<p><a href="https://www.eet-china.com/mp/a38145.html">https://www.eet-china.com/mp/a38145.html</a></p>
+<p><a href="https://mp.weixin.qq.com/s/qJdoXTv_XS_4ts9YuzMNIw">https://mp.weixin.qq.com/s/qJdoXTv_XS_4ts9YuzMNIw</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">linux</a>,&nbsp;<a href="/tags/os/">OS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/" class="prev" rel="prev" title="磁盘和分区"><i class="fas fa-angle-left fa-fw"></i>磁盘和分区</a>
+            <a href="/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/" class="next" rel="next" title="Python并发和GIL锁">Python并发和GIL锁<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://icepan.cloud" target="_blank">lyer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-01-28T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"文件系统"}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
