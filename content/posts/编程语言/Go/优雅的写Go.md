@@ -1,11 +1,13 @@
 ---
-title: Go静态代码检查
+title: 优雅的写Go
 date: 2021-02-14
 categories: [编程语言/Go]
 tags: [Go]
 ---
 
-## goimports
+## 静态代码检查工具
+
+### 1、goimports
 
 `goimports` 是 Go 语言官方提供的工具，主要有如下几个作用：
 
@@ -20,15 +22,11 @@ tags: [Go]
 goimport -w . #格式化 并且修改原文件
 ```
 
-​        
-
-## go vet和golint
+### 2、go vet和golint
 
 **代码语法检查、代码风格检查**，官方提供，没什么用
 
-​    
-
-## golangci-lint
+### 3、golangci-lint
 
 强大的go开源静态代码分析，用于`CI`防止不规范代码合并，主要有几个用途：
 
