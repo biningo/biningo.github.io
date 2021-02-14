@@ -1,4 +1,5 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 14 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Go静态代码检查</title><link>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</guid><description>goimports goimports 是 Go 语言官方提供的工具，主要有如下几个作用：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 14 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Go数组与slice</title><link>/2021/02/14/go%E6%95%B0%E7%BB%84%E4%B8%8Eslice/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/go%E6%95%B0%E7%BB%84%E4%B8%8Eslice/</guid><description>1、数组 值拷贝 a:=[...]int{1,2,3} a2:=a log.Println(a,a[0]) log.Println(a2,a2[0]) //也可以通过下标访问 a2[0] = 10 log.Println(a) //a[0]=1 指针传递 //通过指针访问数组 a:=[...]int{1,2,3} a2:=&amp;amp;a log.Println(a,a[0]) log.Println(a2,a2[0]) a2[0] = 10 log.Println(a) //a[0]=10 ​
+2、切片与数组 数组 array := [3]int{1,2,3} array := [...]int{1,2,3} 切片 array := []int{1,2,3} //len(array)=3 cap(array)=3 array := make([]int,2) //len(array)=2 cap(array)=2 arr := [5]int{1,2,3,4,5} array :=arr[1:3] //底层数组可见 会修改原数组 相当于原数组1-3的子数组指针 array[0]=99 //arr[1]=99 被修改了 log.Println(arr) //[1 99 3 4 5] ​</description></item><item><title>Go静态代码检查</title><link>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/go%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5/</guid><description>goimports goimports 是 Go 语言官方提供的工具，主要有如下几个作用：
 自动格式化 Go 语言代码 对所有引入的包进行管理，自动增删依赖的包引用、将依赖包按字母序排序并分类 goimports 就是等于 gofmt 加上依赖包管理
 用法和go fmt差不多，这里不再赘述，另外，在CI/CD中不应该加入这些检查，因为这是开发者的本职工作，应该由开发者来规范代码
 goimport -w . #格式化 并且修改原文件 ​
@@ -90,26 +91,4 @@ VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文
 LBA将CHS这种三维寻址方式转变为一维的线性寻址，它把硬盘所有的物理扇区(柱面号/盘面号/扇区号) 编号通过一定的规则转变为一维线性的编号，系统效率得到大大提高，避免了 烦琐的(磁头/柱面/扇区)的寻址方式。在访问硬盘时，由硬盘控制器再这种逻辑地址转换为实际硬盘的物理扇区地址
 ​
 ​
-磁盘分区 1、什么是磁盘分区 磁盘分区就是把一整块磁盘切割为几个部分，相当于 win的 C、E、D盘，Linux的/dev/sda1、/dev/sda2&amp;hellip; 可以把磁盘看做一块原木，分区就是在原木上做一个桌子、椅子</description></item><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>​
-对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密
-特点：
-不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
-​
-​
-非对称加密 非对称加密就是使用不同的密钥进行加密解密，比如使用 公钥 加密，使用 **私钥 **解密
-特点：
-安全，解决了 对称加密 密钥传输问题 加解密CPU消耗高，需要复杂的数学运算 所以一般使用非对称加密进行传输对称加密密钥，之后用对称加密进行通信
-相关算法：RSA、ECC
-​
-​
-信息摘要 摘要主要是为了 防止信息被篡改 ，又称为 信息指纹
-字符串、文件等内容经过 摘要算法(hash算法) 进行hash散列之后得到的一串固定长度的 hash字符串 这就是 信息摘要
-常见的hash算法有：MD5、SHA256
-​
-​
-数字签名 数字签名是一个非对称加密的方式，私钥签名，公钥解密
-A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名 这样摘要在传输过程中就不会被篡改 B：用 A公钥 对 数字签名 进行解密，得到摘要 ，然后再用相同的 信息摘要算法对消息体计算摘要，对比两个摘要是否相同就可以验证消息体是否被篡改 ​
-​
-CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
-想象一下如果不验证公钥的正确性的话：
-A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item></channel></rss>
+磁盘分区 1、什么是磁盘分区 磁盘分区就是把一整块磁盘切割为几个部分，相当于 win的 C、E、D盘，Linux的/dev/sda1、/dev/sda2&amp;hellip; 可以把磁盘看做一块原木，分区就是在原木上做一个桌子、椅子</description></item></channel></rss>
