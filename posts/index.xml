@@ -23,7 +23,11 @@ go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量�
 gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
 gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 go get 拉取依赖并且编译安装代码的命令
 go list 列出go.mod依赖了哪些库
-go mod mod管理的相关命令</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>Go文档</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+go mod mod管理的相关命令</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>godoc godoc -http=:8000 #开启本地文档服务器 ​
+Go文档注释规范 因为go的注释即文档，文档都是根据注释生成的，所以文档的详细性和合理性都必须要求注释必须符合一定的规范，这样才可以生成漂亮详细的文档
+文档主要有如下几部分组成:
+组成 作用 Overview 包含包的 import 语句和概要说明 Index 包含包中可见性为 public 的常量、类型、方法、函数的总目录及说明 Constants 项目所有的导出常量 Variables 显示所有全局变量 Functions 显示所有函数 Types 显示所有type Overview 用于整个项目的简单描述，是项目中一级目录下所有包头开始的注释内容的合并，一般将这些信息单独写在doc.go文件中，比如gin的doc.go下的内容为：
+/* Package gin implements a HTTP web framework called gin. See https://gin-gonic.com/ for more information about gin. */ package gin // import &amp;#34;github.</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
 同时也会在所有用户的本地也会保存所有版本
 这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
 使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
