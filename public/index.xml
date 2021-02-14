@@ -1,0 +1,109 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 12 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
+GO111MODULE=&#34;on&#34; #默认是开启的 ​
+go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指定 module github.com/biningo/go-play //2、指定go版本 go 1.15 //3、指定依赖的库地址 &lt;url&gt; &lt;version&gt; 形式 require ( github.com/gin-gonic/gin v1.6.3 ) //4、replace 替换 require 中声明的依赖，使用另外的依赖及其版本号 不经常使用 replace github.com/gin-gonic/gin v1.6.3 =&gt; github.com/gin-gonic/gin v1.6.3 //5、exclude 排除某些版本 exclude ithub.com/gin-gonic/gin v1.5.0 模块名字主要有如下几个作用：
+  作为模块的标识
+  作为模块的 import path
+当其他项目引用这个模块下的 package 时都会以该 import path 作为共同的前缀，自己的项目引用自己项目的包也必须是这个前缀，代表了这个项目，然后前缀下就可以根据路径来引入包了
+  开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
+go mod的replace命令主要用来替换原来的包，使用场景有如下几个
+  单纯的替换包（用处不大）
+  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 ​
+go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
+gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 ​
+go get 拉取依赖并且编译安装代码的命令
+​
+go list 列出go.mod依赖了哪些库</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>Go文档</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+同时也会在所有用户的本地也会保存所有版本
+这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
+使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
+在使用git的时候，时刻需要保持一个理念：
+  你的每次commit都是一个版本
+  提交版本的时候就会标注上 user.name、user.email 指示出这是谁提交的版本
+  只要是一个版本，那么在以后就都可以回滚到这个版本中
+  ​
+三大区域 工作区： 直接写代码，修改文件的地方
+暂存区： 将工作区的当前映象暂存起来以准备提交到版本库中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：
+ 我删除了a，并且add到暂存区 现在我添加了b，添加完之后就觉得还是a好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了a 最终我觉得就a了，不再修改了，于是就add+commit将最终的版本提交了  版本库： 存放最终的版本
+远程仓库： 供多人协作用，本地仓库的版本最终需要push到远程仓库，并且在push之前需要和远程仓库保持 同步 这要所有人才可以看到版本信息
+​
+三大区域变更 暂存区-&gt;工作区
+#1、将暂存区文件覆盖工作区 git restore &lt;file&gt; ... #2、取消暂存 git restore --staged &lt;file&gt;... #3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file git rm a #4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b git mv a b 版本库-&gt;工作区]]></description></item><item><title>打造自己的终端环境</title><link>/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/</link><pubDate>Thu, 04 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/</guid><description><![CDATA[配置zsh  安装zsh  apt install zsh 安装oh-my-zsh  #https://github.com/ohmyzsh/ohmyzsh sh -c &#34;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&#34; 运行上面的sh之后，就会在家目录下配置.zshrc文件，当然也可以手动clone仓库代码到，然后按照oh-my-zsh模板文件进行配置.zshrc
+配置.zshrc  该文件的作用和.bashrc作用一样，为了不让之前.bashrc的命令失效，可以在.zshrc中source进来，下面展示主要配置
+#配置终端主题，不然会很丑 主题路径在.oh-my-zsh/themes 可以修改主题的样式 ZSH_THEME=&#34;robbyrussell&#34; #配置zsh插件 有些系统自带的插件则直接配置即可 #有些外部插件则需要下载(clone)到 .oh-my-zsh/custom/plugins路径下 然后需要在下面写上名字即可 plugins=( git zsh-syntax-highlighting #shell命令高亮插件 colored-man-pages #系统自带 zsh-autosuggestions #命令提示插件 ) ​
+配置tmux  安装tmux  apt install tmux 修改配置文件  tmux的配置文件在~/.tmux.conf
+个人觉得tmux默认的快捷键不符合自己，那么可以修改，下面展示我的配置文件
+#设置快捷键前缀 set -g prefix C-a #修改快捷键前缀 我习惯与ctrl+a unbind C-b # 解绑默认的 ctrl+b 前缀快捷键 bind C-a send-prefix # 绑定Ctrl+a为新的指令前缀 #绑定方向键 bind -r k select-pane -U # 绑定k为↑ bind -r j select-pane -D # 绑定j为↓ bind -r h select-pane -L # 绑定h为← bind -r l select-pane -R # 绑定l为→ #切换切割pane按键 分割窗口要用到 unbind &#39;&#34;&#39; #解绑默认的键 # 垂直方向新增面板，默认进入当前目录  bind ] splitw -v -c &#39;#{pane_current_path}&#39; unbind % # 水平方向新增面板，默认进入当前目录 bind [ splitw -h -c &#39;#{pane_current_path}&#39; ​]]></description></item><item><title>Python并发和GIL锁</title><link>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</link><pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/31/python%E5%B9%B6%E5%8F%91%E5%92%8Cgil%E9%94%81/</guid><description><![CDATA[GIL全局解释器锁 在单核时代，Python为了解决多个线程并发访问数据造成数据不安全问题，在语言层面就实现了一种机制，就是给一个进程中的多个并发线程设置一把锁，只有抢到锁的线程才可以在CPU上执行，没有锁的线程只能等待。这样就可以控制在同一时刻内对数据的访问只有一个线程（其实这也无法保证线程安全）所以这把锁就叫做 GIL锁
+也就是说Python的多线程并发在单核时代可以有效控制线程安全问题，但是到了多核时代，即使有多个核，同一时刻也只能有一个线程在执行（因为同一个进程内的多个线程中只有一把GIL锁）
+比如现在有 a、b、c、d三个线程和1、2、3、4号CPU核，如果是其他语言，则在同一个时刻四个线程可以同时并发的跑在4个核上运行，但是Python因为有了一把GIL锁 现在a抢到锁了，那么b、c、d只能干巴巴的等待a主动释放锁才可以继续抢锁才有机会执行，即使有4个核也无法充分利用，所以语言层面上创建了4个线程但最终也相当于串行执行
+def my_task(): i = 0 for _ in range(10000000): i = i + 1 @metric def f1(): for t in range(2): t = threading.Thread(target=my_task) t.start() t.join() @metric def f2(): arr = [] for t in range(2): t = threading.Thread(target=my_task) t.start() arr.append(t) for t in arr: t.join() ​
+GIL锁真的安全吗？ GIL锁其实并非安全，线程在下面三种情况下回主动释放锁：
+ 不间断执行字节码&gt;1000 执行时间&gt;15ms IO操作  现在有一个全局变量count=0，假设t1线程拿到count准备count+=1的时候，t1的连续执行时间恰好&gt;15ms了或则执行的字节码&gt;1000了，此时t1就会主动释放锁，被t2抢到了，t2执行count+=1此时的count==1，后来t1再次执行的时候count=0，count+=1，count==1，正确的结果应该是count=2
+也就是说GIL锁并不能百分之百保证线程安全，只有在循环比较短，执行代码比较少的情况下才可以百分之百保证线程安全
+count=0 def add_cpu(max_num): global count for i in range(max_num): count+=1 def f5(max_num): arr = [] for t in range(10): t = threading.]]></description></item><item><title>文件系统</title><link>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link><pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid><description>VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统 在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+1、引导块
+存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在MBR或EFI系统上放置一个bootloader，该bootloader就会确定活动分区（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统
+2、super block 超级块
+super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 文件系统中的数据块数 空闲块数 空闲的inode节点数 &amp;hellip;&amp;hellip;. 操作系统在启动之后就会将super block从磁盘加载到内存，然后建立 super_block对象，该对象是常驻内存的
+3、空闲块位图和inode位图
+空闲区块位图： 管理整个分区中空闲的数据块，占用多个数据块block
+inode位图 ：管理整个分区中inode的使用和分配，占用多个数据块block
+4、inode节点区块
+是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
+​
+​
+VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数 struct super_block { struct list_head s_list; // 指向所有超级块的链表 const struct super_operations *s_op; // 超级块相关操作的方法 struct dentry *s_root; // 目录挂载点 struct mutex s_lock; // 超级块信号量 int s_count; // 超级块引用计数 .</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
+磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
+磁头：盘面正反两面都可以使用，每个盘面都有一个磁头，用来读写这个盘面的数据
+磁道：盘面被物理划分为多个磁道
+扇区：每个磁道会被划分为多个固定512byte大小的扇区（现在也有4k扇区），扇区是磁盘数据存储的最小单位。整个磁盘0盘面0磁道第一个1扇区最重要，记录了整个磁盘的分区信息和操作系统启动程序，计算机启动之后首先加载第一个扇区的信息到内存
+柱面：每个盘面的同一个磁道组成柱面，磁盘的读写顺序就是按照柱面来的，写入时按顺序先写满一个柱面（一个盘面的磁道数据写满后再激活下一个盘面的磁头）然后再移动磁头臂写另外一个柱面，读数据也是按照这个顺序读
+磁盘在出厂前需要进行低级格式化：就是给磁盘划分磁道、扇区。这些属于硬件层面，OS无法控制
+​
+​
+磁盘寻址方式 早期所有磁道的扇区个数一样，采用CHS方式寻址，这种划分方式外磁道颗粒稀疏，存储密度小，造成空间浪费
+现在的磁盘外磁道的扇区个数大于内道，存储密度都一样了，采用LBA寻址
+1、CHS寻址 CHS寻址方式的容量由CHS三个参数决定：(柱面,磁头,扇区)
+早期磁盘的每个磁道的扇区数一样多 ，整体磁盘大小也很小。所以在设计时用了24位地址来确定一个扇区：10+8+6
+柱面数最大为1024(用 10 个二进制位存储)。从0开始编号（一个盘面最多能划1024个磁道）
+磁头数最大为256 (用 8 个二进制位存储)。从0开始编号，(最多有256个盘面)
+一个盘面中的扇区数最大数 64(用 6个二进制位存储)
+最大寻址空间：1024*256*64*512byte=8414461440 byte = 8G+
+2、LBA寻址 现代机械磁盘容量变大，主要有如下几个改变：
+磁盘面的磁颗粒更高密+磁头更稳定更细(影响C柱面数) 磁盘面的磁颗粒均匀分布（影响S扇区数） 磁盘增加磁盘盘面（影响H盘面数） 同时采用 LBA逻辑块地址寻址，线性地址，给每个扇区一个编号(0-最后一个扇区号)
+LBA将CHS这种三维寻址方式转变为一维的线性寻址，它把硬盘所有的物理扇区(柱面号/盘面号/扇区号) 编号通过一定的规则转变为一维线性的编号，系统效率得到大大提高，避免了 烦琐的(磁头/柱面/扇区)的寻址方式。在访问硬盘时，由硬盘控制器再这种逻辑地址转换为实际硬盘的物理扇区地址
+​
+​
+磁盘分区 1、什么是磁盘分区 磁盘分区就是把一整块磁盘切割为几个部分，相当于 win的 C、E、D盘，Linux的/dev/sda1、/dev/sda2&amp;hellip; 可以把磁盘看做一块原木，分区就是在原木上做一个桌子、椅子</description></item><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>​
+对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密
+特点：
+不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
+​
+​
+非对称加密 非对称加密就是使用不同的密钥进行加密解密，比如使用 公钥 加密，使用 **私钥 **解密
+特点：
+安全，解决了 对称加密 密钥传输问题 加解密CPU消耗高，需要复杂的数学运算 所以一般使用非对称加密进行传输对称加密密钥，之后用对称加密进行通信
+相关算法：RSA、ECC
+​
+​
+信息摘要 摘要主要是为了 防止信息被篡改 ，又称为 信息指纹
+字符串、文件等内容经过 摘要算法(hash算法) 进行hash散列之后得到的一串固定长度的 hash字符串 这就是 信息摘要
+常见的hash算法有：MD5、SHA256
+​
+​
+数字签名 数字签名是一个非对称加密的方式，私钥签名，公钥解密
+A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名 这样摘要在传输过程中就不会被篡改 B：用 A公钥 对 数字签名 进行解密，得到摘要 ，然后再用相同的 信息摘要算法对消息体计算摘要，对比两个摘要是否相同就可以验证消息体是否被篡改 ​
+​
+CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
+想象一下如果不验证公钥的正确性的话：
+A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item><item><title>docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[​
+挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
+   host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
+将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
+ docker cp命令先将容器内的数据copy到宿主机然后再进行挂载 在docker-entrypoint.sh等脚本中执行创建文件和文件夹等相关命令，因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了  ​
+volume相关命令 docker volume ls #查看所有命名和匿名volume docker inspect &lt;volume-name&gt; #查看volume相关信息 docker volume create &lt;volume-name&gt; #创建volume docker volume rm &lt;volume-name&gt; #删除 docker volume preun #清空没有容器挂载中的volume stop中的容器的volume不会清空 #控制volume的读写权限 -v &lt;xxx&gt;:容器内路径:ro #只读 在容器内只能读挂载的文件  -v &lt;xxx&gt;:容器内路径:rw #读写 在容器内能读写挂载文件 默认 ​]]></description></item></channel></rss>

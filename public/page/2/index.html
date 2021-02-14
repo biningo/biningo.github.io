@@ -1,0 +1,92 @@
+<!doctype html><html lang=zh-cn><head><meta name=generator content="Hugo 0.80.0"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>lyer's blog</title><meta name=Description content><meta property="og:title" content="lyer's blog"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/"><meta property="og:updated_time" content="2021-02-12T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="lyer's blog"><meta name=twitter:description content><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/><link rel=alternate href=/index.xml type=application/rss+xml title="lyer's blog"><link rel=feed href=/index.xml type=application/rss+xml title="lyer's blog"><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","url":"\/","inLanguage":"zh-CN","author":{"@type":"Person","name":"lyer"},"name":"lyer's blog"}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class="page home" posts><div class=home-profile><div class=home-avatar><a href=/posts/ title=archive><img class=lazyload src=/svg/loading.min.svg data-src=https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg data-srcset="https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg, https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg 1.5x, https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg 2x" data-sizes=auto alt=https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg title=https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg></a></div><h2 class=home-subtitle><div id=id-1 class=typeit></div></h2><div class=links><a href=https://github.com/biningo title=GitHub target=_blank rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href=https://twitter.com/biningo2 title=Twitter target=_blank rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a><a href=https://t.me/icepan title=Telegram target=_blank rel="noopener noreffer me"><i class="fab fa-telegram-plane fa-fw"></i></a><a href=mailto:icepan@aliyun.com title=Email rel=me><i class="far fa-envelope fa-fw"></i></a><a href=/index.xml title=RSS target=_blank rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div></div><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/>文件系统</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-01-28>2021-01-28</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/><i class="far fa-folder fa-fw"></i>操作系统</a></span></div><div class=content>VFS虚拟文件系统 虚拟文件系统就是给文件系统的实现提供一个接口，好处有下面几个：
+为用户进程提供一组操作文件/目录/其他对象的统一方法，方便操作 为下层文件系统的具体实现提供统一的接口，让操作系统能适配多个文件系统 在每个分区上必须安装文件系统，这样操作系统才可以操作磁盘和文件，不然操作系统是无法使用磁盘的，在分区上安装文件系统其实就是增加一些文件系统对磁盘的管理数据，同时将分区划分为一个个数据块，安装文件系统的过程就叫 分区格式化 格式化之后分区的主要结构如下：
+1、引导块
+存放引导操作系统启动的代码程序，每个分区都有一个引导块，这样可以实现多系统，只需要在MBR或EFI系统上放置一个bootloader，该bootloader就会确定活动分区（通常由用户在启动界面选择启动哪个系统），然后就会跳转到响应的 活动分区中的引导块中加载引导块中的代码到内存进行执行，然后就会加载该活动分区中的操作系统
+2、super block 超级块
+super block在索引导块后面，主要包含整个文件系统的一些基本元数据：
+文件系统设置的数据块大小（一个数据块通常占据整数个扇区比如：8个扇区 4k大小） 文件系统中的数据块数 空闲块数 空闲的inode节点数 &mldr;&mldr;. 操作系统在启动之后就会将super block从磁盘加载到内存，然后建立 super_block对象，该对象是常驻内存的
+3、空闲块位图和inode位图
+空闲区块位图： 管理整个分区中空闲的数据块，占用多个数据块block
+inode位图 ：管理整个分区中inode的使用和分配，占用多个数据块block
+4、inode节点区块
+是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
+​
+​
+VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数 struct super_block { struct list_head s_list; // 指向所有超级块的链表 const struct super_operations *s_op; // 超级块相关操作的方法 struct dentry *s_root; // 目录挂载点 struct mutex s_lock; // 超级块信号量 int s_count; // 超级块引用计数 .</div><div class=post-footer><a href=/2021/01/28/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/os/>OS</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/>磁盘和分区</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-01-23>2021-01-23</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/><i class="far fa-folder fa-fw"></i>操作系统</a></span></div><div class=content>​
+磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
+磁头：盘面正反两面都可以使用，每个盘面都有一个磁头，用来读写这个盘面的数据
+磁道：盘面被物理划分为多个磁道
+扇区：每个磁道会被划分为多个固定512byte大小的扇区（现在也有4k扇区），扇区是磁盘数据存储的最小单位。整个磁盘0盘面0磁道第一个1扇区最重要，记录了整个磁盘的分区信息和操作系统启动程序，计算机启动之后首先加载第一个扇区的信息到内存
+柱面：每个盘面的同一个磁道组成柱面，磁盘的读写顺序就是按照柱面来的，写入时按顺序先写满一个柱面（一个盘面的磁道数据写满后再激活下一个盘面的磁头）然后再移动磁头臂写另外一个柱面，读数据也是按照这个顺序读
+磁盘在出厂前需要进行低级格式化：就是给磁盘划分磁道、扇区。这些属于硬件层面，OS无法控制
+​
+​
+磁盘寻址方式 早期所有磁道的扇区个数一样，采用CHS方式寻址，这种划分方式外磁道颗粒稀疏，存储密度小，造成空间浪费
+现在的磁盘外磁道的扇区个数大于内道，存储密度都一样了，采用LBA寻址
+1、CHS寻址 CHS寻址方式的容量由CHS三个参数决定：(柱面,磁头,扇区)
+早期磁盘的每个磁道的扇区数一样多 ，整体磁盘大小也很小。所以在设计时用了24位地址来确定一个扇区：10+8+6
+柱面数最大为1024(用 10 个二进制位存储)。从0开始编号（一个盘面最多能划1024个磁道）
+磁头数最大为256 (用 8 个二进制位存储)。从0开始编号，(最多有256个盘面)
+一个盘面中的扇区数最大数 64(用 6个二进制位存储)
+最大寻址空间：1024*256*64*512byte=8414461440 byte = 8G+
+2、LBA寻址 现代机械磁盘容量变大，主要有如下几个改变：
+磁盘面的磁颗粒更高密+磁头更稳定更细(影响C柱面数) 磁盘面的磁颗粒均匀分布（影响S扇区数） 磁盘增加磁盘盘面（影响H盘面数） 同时采用 LBA逻辑块地址寻址，线性地址，给每个扇区一个编号(0-最后一个扇区号)
+LBA将CHS这种三维寻址方式转变为一维的线性寻址，它把硬盘所有的物理扇区(柱面号/盘面号/扇区号) 编号通过一定的规则转变为一维线性的编号，系统效率得到大大提高，避免了 烦琐的(磁头/柱面/扇区)的寻址方式。在访问硬盘时，由硬盘控制器再这种逻辑地址转换为实际硬盘的物理扇区地址
+​
+​
+磁盘分区 1、什么是磁盘分区 磁盘分区就是把一整块磁盘切割为几个部分，相当于 win的 C、E、D盘，Linux的/dev/sda1、/dev/sda2&mldr; 可以把磁盘看做一块原木，分区就是在原木上做一个桌子、椅子</div><div class=post-footer><a href=/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/os/>OS</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/>SSL-TSL-HTTPS和CA证书</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-01-14>2021-01-14</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/><i class="far fa-folder fa-fw"></i>网络安全</a></span></div><div class=content>​
+对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密
+特点：
+不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
+​
+​
+非对称加密 非对称加密就是使用不同的密钥进行加密解密，比如使用 公钥 加密，使用 **私钥 **解密
+特点：
+安全，解决了 对称加密 密钥传输问题 加解密CPU消耗高，需要复杂的数学运算 所以一般使用非对称加密进行传输对称加密密钥，之后用对称加密进行通信
+相关算法：RSA、ECC
+​
+​
+信息摘要 摘要主要是为了 防止信息被篡改 ，又称为 信息指纹
+字符串、文件等内容经过 摘要算法(hash算法) 进行hash散列之后得到的一串固定长度的 hash字符串 这就是 信息摘要
+常见的hash算法有：MD5、SHA256
+​
+​
+数字签名 数字签名是一个非对称加密的方式，私钥签名，公钥解密
+A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名 这样摘要在传输过程中就不会被篡改 B：用 A公钥 对 数字签名 进行解密，得到摘要 ，然后再用相同的 信息摘要算法对消息体计算摘要，对比两个摘要是否相同就可以验证消息体是否被篡改 ​
+​
+CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
+想象一下如果不验证公钥的正确性的话：
+A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</div><div class=post-footer><a href=/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ssl%5Ctls/>SSL\TLS</a>,&nbsp;<a href=/tags/https/>HTTPS</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/>docker的volumes踩坑</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-01-07>2021-01-07</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/><i class="far fa-folder fa-fw"></i>Docker和容器</a></span></div><div class=content>​
+挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
+host container mount result 文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空） 文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容） ​
+将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
+docker cp命令先将容器内的数据copy到宿主机然后再进行挂载 在docker-entrypoint.sh等脚本中执行创建文件和文件夹等相关命令，因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了 ​
+volume相关命令 docker volume ls #查看所有命名和匿名volume docker inspect &lt;volume-name> #查看volume相关信息 docker volume create &lt;volume-name> #创建volume docker volume rm &lt;volume-name> #删除 docker volume preun #清空没有容器挂载中的volume stop中的容器的volume不会清空 #控制volume的读写权限 -v &lt;xxx>:容器内路径:ro #只读 在容器内只能读挂载的文件 -v &lt;xxx>:容器内路径:rw #读写 在容器内能读写挂载文件 默认 ​</div><div class=post-footer><a href=/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/docker/>docker</a>,&nbsp;<a href=/tags/%E5%AE%B9%E5%99%A8/>容器</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2019/05/25/html%E6%80%BB%E7%BB%93/>HTML总结</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2019-05-25>2019-05-25</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/web%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/><i class="far fa-folder fa-fw"></i>web前端基础</a></span></div><div class=content>head标签 head标签用于HTML文档头部，主要用于存放元数据、引入外部样式脚本等标签的容器，还可定义一些页面信息相关的内容，主要的子标签如下：
+&lt;meta>：设置网页的元数据,比如网页的字符集&mldr;..
+&lt;link>：引入外部资源，指定ref定义当前文档与被链接文档之间的关系
+指定type定义被链接的文档类型
+&lt;title>：设置网页标题
+&lt;style>：放置内嵌的样式表
+&lt;script>：引入外部js脚本
+&lt;head> &lt;meta charset="UTF-8"> &lt;title>这是网页标题&lt;/title> &lt;link rel="stylesheet" type="text/css" href="theme.css"> &lt;link rel="stylesheet" type="text/css" href="http://www.x.cn/a.css"> &lt;style> a{color: red;} &lt;/style> &lt;script src="https://static.sick.cn/respond.min.js">&lt;/script> //下面脚本会执行 &lt;script> alert("hello,world") &lt;/script> //定义了这行则所有绝对地址的url则都会以这个为基础 &lt;base href="https://www.google.com"> &lt;/head> ​
+meta元数据 meta标签用于设置一些元数据，并且可以定义一些浏览器的缓存策略，还可以定义网页关键字用于搜索引擎爬虫的爬取
+&lt;!-- 定义网页文档的字符集 --> &lt;meta charset="utf-8" /> &lt;!-- 网页作者 --> &lt;meta name="author" content="开源技术团队"/> &lt;!-- 网页地址 --> &lt;meta name="website" content="https://www.baidu.com"/> &lt;!-- 网页版权信息 --> &lt;meta name="copyright" content="2020-2021 demo.</div><div class=post-footer><a href=/2019/05/25/html%E6%80%BB%E7%BB%93/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/html/>HTML</a>,&nbsp;<a href=/tags/%E5%89%8D%E7%AB%AF/>前端</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/></a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=0001-01-01>0001-01-01</time></span></div><div class=content>title: 我眼中的汇编 date: 2021-02-02 categories: [计组和计算机基础] tags: [基础,汇编,CPU] draft: true 汇编语言分类 汇编语言和具体的机器指令相互对应（这是汇编移植性差的原因），不同的CPU对应的机器指令集都不一样，因此汇编语言的种类也被分为两大派系：
+intel汇编(x86汇编) （语法简洁，符合人类阅读习惯，容易写） ATT&T汇编 （语法稍微复杂，和C语言配合丝滑，Linux内核中的汇编用此格式） 注意，上面只是汇编语言的风格，就和菜系一样，一个“川菜”，一个 ”粤菜“，具体的语法还和汇编器有关，有如下几个汇编器：
+masm：微软写的汇编器，支持16、32程序，主要用于windows平台，已经不再独立发布
+nasm：最流行的Linux平台汇编器，也可以在windows下使用，支持16、32、64位程序。和 nasm配合的链接器有：ld
+gas：属于GNU下的汇编器，用于汇编AT&T格式的汇编，和 C比较兼容
+汇编器只是将汇编语言翻译为对应平台CPU的机器指令，所以如果是在intel的CPU下，那么他们翻译出来的都是x86指令
+​
+​
+什么是大端小端 在写汇编的时候要注意内存数据读取顺序
+因为内存是以字节为编址的，但是很多数据类型都会占用多个字节，比如int类型占4字节，所以就会有两种排列方式，比如一个int类型的数0x10000002：
+高地址放高位，低地址放低位：0x02 ,0x00,0x00,0x01 这种就叫做小端模式 低地址放高位，高地址放低位：0x01,0x00,0x00,0x02 这种就叫做 大端模式 看一看到，大端模式是符合人类阅读习惯的，而小端模式是反的。他们的优缺点如下：
+小端模式优点：
+内存的低地址处存放低字节，所以在强制转换数据时不需要调整字节的内容，直接将后面的截掉就行（比如把int的4字节强制转换成short的2字节时，就直接把int数据存储的前两个字节给short就行，因为其前两个字节刚好就是最低的两个字节，符合转换逻辑） CPU做数值运算时从内存中依顺序依次从低位到高位取数据进行运算，直到最后刷新最高位的符号位，这样的运算方式会更高效 大端模式优点：
+符号位在所表示的数据的内存的第一个字节中，便于快速判断数据的正负和大小 注意，不同的CPU识别的字节序不同，x86系列的CPU采用 小端模式，而 ARM都可以识别
+TCP/IP协议规定，网络字节序采用大端模式 如果是x86的CPU，发送数据的时候必须要将自己的主机字节序转换为网络字节序 即大端字节序，接收到的数据再转换为自己的主机字节序，底层会提供转换接口，直接调用即可：htons、htonl、ntohs、ntohl等
+注意：x86系列的CPU都采用小端存储
+​
+参考 大小端
+https://www.</div><div class=post-footer><a href=/1/01/01/%E6%88%91%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96/>阅读全文</a></div></article><ul class=pagination><li class=page-item><span class=page-link><a href=/>1</a></span></li><li class="page-item active"><span class=page-link><a href=/page/2/>2</a></span></li></ul></div></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"data":{"id-1":"Hello，This is my personal blog"},"typeit":{"cursorChar":null,"cursorSpeed":null,"data":{"id-1":["id-1"]},"duration":null,"speed":null}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

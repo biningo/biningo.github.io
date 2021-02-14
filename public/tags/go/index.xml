@@ -1,0 +1,19 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 12 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
+GO111MODULE=&#34;on&#34; #默认是开启的 ​
+go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指定 module github.com/biningo/go-play //2、指定go版本 go 1.15 //3、指定依赖的库地址 &lt;url&gt; &lt;version&gt; 形式 require ( github.com/gin-gonic/gin v1.6.3 ) //4、replace 替换 require 中声明的依赖，使用另外的依赖及其版本号 不经常使用 replace github.com/gin-gonic/gin v1.6.3 =&gt; github.com/gin-gonic/gin v1.6.3 //5、exclude 排除某些版本 exclude ithub.com/gin-gonic/gin v1.5.0 模块名字主要有如下几个作用：
+  作为模块的标识
+  作为模块的 import path
+当其他项目引用这个模块下的 package 时都会以该 import path 作为共同的前缀，自己的项目引用自己项目的包也必须是这个前缀，代表了这个项目，然后前缀下就可以根据路径来引入包了
+  开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
+go mod的replace命令主要用来替换原来的包，使用场景有如下几个
+  单纯的替换包（用处不大）
+  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 ​
+go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
+gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 ​
+go get 拉取依赖并且编译安装代码的命令
+​
+go list 列出go.mod依赖了哪些库</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>Go文档</description></item></channel></rss>
