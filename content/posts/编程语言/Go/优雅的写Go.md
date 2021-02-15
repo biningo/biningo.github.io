@@ -43,6 +43,12 @@ golangci-lint run dir1 dir2/... dir3/file1.go
 
 ​    
 
+## go代码报告评分平台
+
+https://goreportcard.com
+
+​        
+
 ## 参考
 
 https://www.jianshu.com/p/ca38dcdaf6bb
