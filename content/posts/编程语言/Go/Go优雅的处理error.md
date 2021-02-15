@@ -152,7 +152,47 @@ errors.Is(e3, e4), e3 == e4) // true true
 
 ​    
 
+## panic和recover
+
+关于`panic`和`recover`，我们必须注意
+
+- `panic` 只会触发当前 Goroutine 的 `defer`；
+- `recover` 只有在 `defer` 中调用才会生效；
+- `panic` 允许在 `defer` 中嵌套多次调用
+
+```go
+defer func() {
+    e := recover() //panic传入什么 这里就接受什么
+    err := e.(error) //都是interface类型
+    log.Println(err)
+}()
+//....
+panic(errors.New("panic error"))
+//....
+```
+
+`panic`只会在当前`goroutinue`中生效，下面只会打印`"goroutine"`就引发`panic`结束进程了，并不会执行`"main"`：
+
+```go
+func main() {
+    defer func(){
+        log.Println("main")
+        recover()
+    }
+	go func() {
+		defer log.Println("goroutine")
+		panic("panic")
+	}()
+	time.Sleep(time.Second)
+}
+```
+
+
+
+
+
 ## 参考
 
 - https://coolshell.cn/articles/21140.html
 - https://www.flysnow.org/2019/09/06/go1.13-error-wrapping.html
+- https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover
