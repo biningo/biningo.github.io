@@ -82,7 +82,7 @@ font: 50px 楷体  /*必须保留 size family 其他都可以省略 并且循序
 text-decoration: underline; /*下划线*/
 text-decoration: none; /*无任何线*/
 text-align: center; /*文本水平对齐方式*/
-line-height: 100px; /*设置行高 行高：文本默认高度+上下边距平均分*/
+line-height: 100px; /*设置行高 行高：文本默认高度+行高值-文本高度的上下边距平均分*/
 ```
 
 > 可以根据`line-height`来设置文本的垂直居中方式：
@@ -112,7 +112,7 @@ background: rgba(0,0,0,0.3) /*最后一个rgb设置透明度*/
 background: rgba(0,0,0,.3) /*省略0.3的0*/
 ```
 
-
+​     
 
 ## display
 
