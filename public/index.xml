@@ -1,4 +1,21 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 15 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 18 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>堆</title><link>/2021/02/18/%E5%A0%86/</link><pubDate>Thu, 18 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/18/%E5%A0%86/</guid><description>TODO</description></item><item><title>快速排序</title><link>/2021/02/18/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</link><pubDate>Thu, 18 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/18/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</guid><description>TODO</description></item><item><title>十大排序算法</title><link>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</guid><description>冒泡排序 稳定排序 最好时间复杂度: O(n) 基本有序状态，进行1次冒泡 最坏时间复杂度: O(n^2) 逆序状态，需要进行n次冒泡 平均时间复杂度: O(n^2) 空间复杂度: O(1) func BubbleSort(arr []int) { flag := true for i := 0; i &amp;lt; len(arr); i++ { for j := 0; j &amp;lt; len(arr)-i-1; j++ { if arr[j] &amp;gt; arr[j+1] { flag = false arr[j], arr[j+1] = arr[j+1], arr[j] } } if flag { break } } } ​
+选择排序 不稳定排序 比如 5 8 5 2 9 两个相同的5会发生位置交换 最好时间复杂度: O(n^2) 最坏时间复杂度: O(n^2) 平均时间复杂度: O(n^2) 空间复杂度: O(1) 每次选择剩余排序区间中最小(大)的元素放入排序好的区间的最后一个位置中</description></item><item><title>装饰者模式</title><link>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description><![CDATA[装饰者模式 Decorator Pattern 装饰者模式，动态的透明的增加一些另外的功能而不需要改变原来的代码，拥有更好的灵活性和可扩展性
+从名字中也可以看出，装饰者模式就是给一个对象加上一层装饰，穿上一件衣服，装饰者在我解除的技术里面在函数式语言中的应用比较广泛，就是在装饰函数里传入一个目标函数，装饰函数同样返回一个目标函数，但是返回的函数是进过装饰了的
+​
+在Java中的应用和实现 实现案例 下面先来看一个 Shape 自己实现的案例:
+Shape顶层接口:
+public interface Shape { String display(); } Circle和Rectangle具体实现
+public class Circle implements Shape{ private String name; public Circle(){ this.name = &#34;Circle&#34;; } public String display() { return this.name; } } ------------------------------------------------ public class Rectangle implements Shape { private String name; public Rectangle() { this.name = &#34;Rectangle&#34;; } public String display() { return this.name; } } 所有装饰器的顶层抽象对象，这里通过构造方法和set方法可以传入被装饰对象
+public abstract class ShapeDecorator implements Shape { protected Shape shape; public ShapeDecorator(){} public ShapeDecorator(Shape shape) { this.]]></description></item><item><title>MySql配置文件</title><link>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</guid><description><![CDATA[配置文件 MySql配置文件的作用就是给mysqld服务器进程提供启动参数，设置一些变量，也可以通过命令行方式设置参数，但是这样太麻烦了而且不是永久的，所以一般都将这些参数写在配置文件中，mysqld进程启动的时候会按照如下方式去寻找配置文件:
+$ mysql --help | grep my.cnf /etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf  /etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf  可以指定配置文件路径:
+$ mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件 $ mysqld --defaults-extra-file=/my.cnf #添加额外的配置文件路径加入默认的搜索路径，也就是说其他路径包括这个也会被搜索到 另外注意：命令行参数优先级高于配置文件，搜索路径前面的配置高于后面的，并且有些命令行参数是只属于命令行的，不属于配置文件，配置文件都可以用命令行替代
+​
+系统变量 1、系统变量的查看 系统变量一般通过SHOW VARIABLES LIKE xxx来查看，下面展示常用的系统变量
+SHOW ENGINES #系统支持的存储引擎 SHOW CHARACTER SET #支持的字符集 SHOW VARIABLES LIKE &#39;default_storage_engine&#39; #默认使用的搜索引擎 SHOW VARIABLES LIKE &#39;max_connections&#39; #运行的同时连接数 SHOW VARIABLES LIKE &#39;time_zone&#39; #数据库使用的时区 默认为SYSTEM和操作系统保持一致  在配置文件的变量可以用-线链接，而这些变量保存在数据库中则是以_链接
+系统变量有作用的范围之分，有下面几个范围:
+ GLOBAL 全局所有用户 SESSION 特指当前一个用户，一般客户端可以通过连接字符串添加参数来设置这些变量比如设置 时区、字符集 等，这属于单个连接的客户端  查询的时候可以指定范围，不指定则默认是SESSION
+SHOW GLOBAL VARIABLES LIKE &#39;default_%&#39; 还有一种 状态系统变量，由系统运行时产生，用于记录服务器相关状态的，比如当前正在连接的客户端个数等]]></description></item><item><title>SQL总结</title><link>/2021/02/16/sql%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/sql%E6%80%BB%E7%BB%93/</guid><description><![CDATA[表操作 建表
+CREATE TABLE test ( ) ENGINE = InnoDB #设置表的存储引擎  DEFAULT CHARSET = utf8 #设置表的字符集、  COLLATE=utf8_bin #设置字符集比较规则 drop table if exists category,article,tag,article_tag; CREATE TABLE IF NOT EXISTS category ( id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50) NOT NULL, UNIQUE uq_title (title) ) ENGINE = InnoDB CHARACTER SET = utf8; CREATE TABLE article ( id INT AUTO_INCREMENT, title VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, author VARCHAR(20) NOT NULL, status ENUM (&#39;published&#39;,&#39;auditing&#39;,&#39;draft&#39;,&#39;deleted&#39;) NOT NULL, cid INT NOT NULL, PRIMARY KEY pk_id (id), FOREIGN KEY fk_cid (cid) REFERENCES category (id) ON DELETE CASCADE, UNIQUE uq_title (title) COMMENT &#39;会自动创建唯一索引&#39; ) ENGINE = InnoDB CHARACTER SET = utf8mb4; CREATE TABLE tag ( id INT PRIMARY KEY AUTO_INCREMENT, title varchar(20) NOT NULL, UNIQUE uq_title (title) ); CREATE TABLE article_tag ( id INT PRIMARY KEY AUTO_INCREMENT, tid INT NOT NULL, aid INT NOT NULL, FOREIGN KEY fk_tid (tid) REFERENCES tag (id), FOREIGN KEY fk_aid (aid) REFERENCES article (id), UNIQUE uq_tid_aid (tid, aid) ); 展示建表语句]]></description></item><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
 errors.go wrap.go go的error也就是通过创建一个 错误提示的字符串 的方式，然后通过返回值来返回这个错误，基本每个函数的返回值都标配一个error对象以及函数本身的返回值：
 函数本身返回值 error对象 最简单的创建错误的方式就是通过errors.New来创建：
 func f() error{ return errors.New(&amp;#34;error&amp;#34;) } 下面来看下errors.go的源码，不过10行左右
@@ -24,43 +41,4 @@ $ npm install picgo -g $ vim $HOME/.picgo/config.json #配置文件路径 2、�
 picgo u ~$PATH/aaaa.png #上传之后就会返回URL链接地址 ​
 hugo静态博客 我采用的是 hugo+github page+github action 来实现自动化部署，我只需要在本地写完博客执行一下push发布上去即可实现部署，非常方便，具体可以参照我的仓库的action：https://github.com/biningo/biningo.github.io
 因为push前需要先和github仓库rebase，命令比较多所以我写成一个脚本每次执行这个脚本即可，博客发布脚本：
-#因为 hugo生成页面的actions会生成public页面，所以和本地不一样了，需要先rebase，然后再push才能push成功，每次push就会触发action生成页面 git fetch origin master git rebase origin/master git push ]]></description></item><item><title>Go数组与slice</title><link>/2021/02/14/go%E6%95%B0%E7%BB%84%E4%B8%8Eslice/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/go%E6%95%B0%E7%BB%84%E4%B8%8Eslice/</guid><description>1、数组 值拷贝 a:=[...]int{1,2,3} a2:=a log.Println(a,a[0]) log.Println(a2,a2[0]) //也可以通过下标访问 a2[0] = 10 log.Println(a) //a[0]=1 指针传递 //通过指针访问数组 a:=[...]int{1,2,3} a2:=&amp;amp;a log.Println(a,a[0]) log.Println(a2,a2[0]) a2[0] = 10 log.Println(a) //a[0]=10 ​
-2、切片与数组 数组 array := [3]int{1,2,3} array := [...]int{1,2,3} 切片 array := []int{1,2,3} //len(array)=3 cap(array)=3 array := make([]int,2) //len(array)=2 cap(array)=2 arr := [5]int{1,2,3,4,5} array :=arr[1:3] //底层数组可见 会修改原数组 相当于原数组1-3的子数组指针 array[0]=99 //arr[1]=99 被修改了 log.Println(arr) //[1 99 3 4 5] ​</description></item><item><title>优雅的写Go</title><link>/2021/02/14/%E4%BC%98%E9%9B%85%E7%9A%84%E5%86%99go/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/14/%E4%BC%98%E9%9B%85%E7%9A%84%E5%86%99go/</guid><description>静态代码检查工具 1、goimports goimports 是 Go 语言官方提供的工具，主要有如下几个作用：
-自动格式化 Go 语言代码 对所有引入的包进行管理，自动增删依赖的包引用、将依赖包按字母序排序并分类 goimports 就是等于 gofmt 加上依赖包管理
-用法和go fmt差不多，这里不再赘述，另外，在CI/CD中不应该加入这些检查，因为这是开发者的本职工作，应该由开发者来规范代码
-goimport -w . #格式化 并且修改原文件 2、go vet和golint 代码语法检查、代码风格检查，官方提供，没什么用
-3、golangci-lint 强大的go开源静态代码分析，用于CI防止不规范代码合并，主要有几个用途：
-代码规范 代码风格统一 语法错误、冗余语法等 golangci-lint run ./... golangci-lint run dir1 dir2/... dir3/file1.go 具体见官网：https://golangci-lint.run/usage/performance
-​
-go代码报告评分平台 https://goreportcard.com
-​
-参考 https://www.jianshu.com/p/ca38dcdaf6bb
-https://supereagle.github.io/2019/10/03/golang-lint/</description></item><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
-GO111MODULE=&#34;on&#34; #默认是开启的 ​
-go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指定 module github.com/biningo/go-play //2、指定go版本 go 1.15 //3、指定依赖的库地址 &lt;url&gt; &lt;version&gt; 形式 require ( github.com/gin-gonic/gin v1.6.3 ) //4、replace 替换 require 中声明的依赖，使用另外的依赖及其版本号 不经常使用 replace github.com/gin-gonic/gin v1.6.3 =&gt; github.com/gin-gonic/gin v1.6.3 //5、exclude 排除某些版本 exclude ithub.com/gin-gonic/gin v1.5.0 模块名字主要有如下几个作用：
-  作为模块的标识
-  作为模块的 import path
-当其他项目引用这个模块下的 package 时都会以该 import path 作为共同的前缀，自己的项目引用自己项目的包也必须是这个前缀，代表了这个项目，然后前缀下就可以根据路径来引入包了
-  开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
-go mod的replace命令主要用来替换原来的包，使用场景有如下几个
-  单纯的替换包（用处不大）
-  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go命令 go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
-go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
-go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
-gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
-gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 go get 拉取依赖并且编译安装代码的命令
-go list 列出go.mod依赖了哪些库
-go mod mod管理的相关命令</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>godoc godoc -http=:8000 #开启本地文档服务器 ​
-Go文档注释规范 因为go的注释即文档，文档都是根据注释生成的，所以文档的详细性和合理性都必须要求注释必须符合一定的规范，这样才可以生成漂亮详细的文档
-文档主要有如下几部分组成:
-组成 作用 Overview 包含包的 import 语句和概要说明 Index 包含包中可见性为 public 的常量、类型、方法、函数的总目录及说明 Constants 项目所有的导出常量 Variables 显示所有全局变量 Functions 显示所有函数 Types 显示所有type Overview 用于整个项目的简单描述，是项目中一级目录下所有包头开始的注释内容的合并，一般将这些信息单独写在doc.go文件中，比如gin的doc.go下的内容为：
-/* Package gin implements a HTTP web framework called gin. See https://gin-gonic.com/ for more information about gin. */ package gin // import &amp;#34;github.</description></item><item><title>Go的defer</title><link>/2021/02/12/go%E7%9A%84defer/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E7%9A%84defer/</guid><description>1、defer执行时机 for i:=1;i&amp;lt;10;i++{ defer log.Println(i) } 上面那段简单的代码基本就可以说明多个defer时的执行顺序了
-当代码中出现defer时，会将defer要执行的函数压人栈，然后等函数执行完毕再执行defer栈中的内容
-go1.13以前用堆分配，加入到链表中，再尾递归调用，go1.13在栈上分配，如果defer过多则还是会在堆上用链表来管理
-go1.14则做了进一步优化，defer的开销基本很小了
-​
-2、defer的估值时刻 defer分为进入阶段和退出阶段 ，defer延迟的只是函数体的执行，并不延迟函数的初始化
-//defer初始化值和位置有关 推迟执行的仅仅是函数体 j:=10 defer func(jj int) { log.Printf(&amp;#34;j=%d jj=%d\n&amp;#34;,j,jj) //j=99 j=10 }(j) j=99 ​
-3、防止defer内存泄漏 下面这段代码会严重占用内存栈，造成短暂内存泄漏，有大量的文件句柄没有被释放
-//内存泄漏 func writeManyFiles(files []os.File) error { for _, file := range files { defer file.Close() } return nil } 用函数包裹之后每循环一个就关闭一个文件句柄
-//防止内存泄漏 func writeManyFiles(files []os.File) error { for _, file := range files { if err:= func() error { f, err := os.</description></item></channel></rss>
+#因为 hugo生成页面的actions会生成public页面，所以和本地不一样了，需要先rebase，然后再push才能push成功，每次push就会触发action生成页面 git fetch origin master git rebase origin/master git push ]]></description></item></channel></rss>
