@@ -13,12 +13,12 @@ tags: [书单]
 
 ## 中间件
 
-- 
+- 深入理解Kafka核心设计与实践原理
 
 ## MySql
 
 - **高性能MySql**
-- **MySql技术内幕：innodb存储引擎**
+- MySql技术内幕：innodb存储引擎
 - **MySQL 是怎样运行的：从根儿上理解 MySQL(第7章)**
 
 ## Linux
