@@ -169,9 +169,45 @@ go test -bench=. -cpu=1,2,3,4,5 #指定多个P 则每个P都会跑一遍
 
 基准测试用于测试性能，以 `Benchmark`开头，`t`的函数和单元测试一样，执行`go test`是不进行基准测试的，需要指定`-bench`
 
+```go
+func BenchmarkAdd(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Add(i, i)
+	}
+}
+```
+
 ```bash
         `P的个数`	   `b.N的次数`  `单次执行测试函数的平均耗时`
 BenchmarkAdd-8    	    1501	    669240 ns/op
+```
+
+下面是一个 **斐波那契数列** 计算的测试案例
+
+```go    
+func benchmarkFib(b *testing.B, n int) {
+    for i := 0; i < b.N; i++ {
+        Fib(n)
+    }
+}
+//可以写多个性能测试函数
+func BenchmarkFib1(b *testing.B)  { benchmarkFib(b, 1) }
+func BenchmarkFib2(b *testing.B)  { benchmarkFib(b, 2) }
+func BenchmarkFib3(b *testing.B)  { benchmarkFib(b, 3) }
+func BenchmarkFib10(b *testing.B) { benchmarkFib(b, 10) }
+func BenchmarkFib20(b *testing.B) { benchmarkFib(b, 20) }
+func BenchmarkFib40(b *testing.B) { benchmarkFib(b, 40) }
+```
+
+```go
+BenchmarkFib1-8         1000000000               2.03 ns/op
+BenchmarkFib2-8         300000000                5.39 ns/op
+BenchmarkFib3-8         200000000                9.71 ns/op
+BenchmarkFib10-8         5000000               325 ns/op
+BenchmarkFib20-8           30000             42460 ns/op
+BenchmarkFib40-8               2         638524980 ns/op
+PASS
+ok      ./fib 12.944s
 ```
 
 ​    
@@ -179,3 +215,5 @@ BenchmarkAdd-8    	    1501	    669240 ns/op
 ## 参考
 
 https://brantou.github.io/2017/05/24/go-cover-story
+
+https://www.bookstack.cn/read/topgoer/b817b5a24fda9eed.md#brmnys
