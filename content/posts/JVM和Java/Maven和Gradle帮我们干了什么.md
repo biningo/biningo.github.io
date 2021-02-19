@@ -6,6 +6,8 @@ tags: [JVM,Java,Maven,Gradle]
 draft: true
 ---
 
+> **更新中....**
+
 ## 徒手编译java代码
 
 以前我们都是用 **IDEA** 点击运行项目就跑起来了，甚至有些人完全不知道Java代码的编译过程，下面我们来徒手编译一波java代码，主要使用了`javac`编译工具
@@ -23,7 +25,7 @@ public class MyNumber {
         return a + b;
     }
 }
-
+--------------------------------------------
 package cloud.lyer;
 public class App {
     public static void main(String[] args) {
@@ -33,7 +35,7 @@ public class App {
 }
 ```
 
-注意，**包名必须和路径名字一样**，因为`javac`编译会根据 编译的当前路径开始，根据包名到对应的目录下去寻找文件进行编译为`.class`字节码
+注意，编译的时候 **包名必须和路径名字一样**
 
 ```bash
 $ javac cloud/lyer/*.java #之后就会在对应目录下生成class文件
@@ -80,7 +82,7 @@ $ jar cvf App.jar ./cloud #c:创建 v:详细信息 f:指定新创建的文件名
 $ java -cp App.jar cloud.lyer.App #-cp指定classpath java就会到此路径下去寻找字节码文件
 ```
 
-也可以在jar包里的 `META-INF/MANIFEST.MF` 中的`Main-Class`，这样的话就可以直接运行jar包了，**注意MF文件不能有空行**
+也可以配置jar包里的 `META-INF/MANIFEST.MF` 中的`Main-Class`，这样的话就可以直接运行jar包了，**注意MF文件不能有空行**
 
 ```bash
 Manifest-Version: 1.0

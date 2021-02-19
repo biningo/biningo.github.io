@@ -5,6 +5,8 @@ categories: [Mysql]
 tags: [数据库,MySql] 
 ---
 
+> **更新中......**
+
 ## 表操作
 
 建表
@@ -66,31 +68,24 @@ CREATE TABLE article_tag
 
 ```mysql
 SHOW CREATE TABLE test #展示test表的建表语句
-DESC test
+DESC test #展示字段信息
 ```
 
 修改表
 
 ```mysql
-ALTER TABLE test ENGINE=MyISAM
+ALTER TABLE test ENGINE=MyISAM #修改存储引擎
 ```
+
+​        
+
+## explain
+
+查看查询语句相信信息
 
 ​    
 
-## 常见系统变量
-
-
-
-​    
-
-## 内置函数和变量
-
-```mysql
-#获取当前时间
-SELECT NOW()
-SELECT CURRENT_DATE
-----------------------
-```
+## 内置函数
 
 ​    
 
