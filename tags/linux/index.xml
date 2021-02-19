@@ -26,8 +26,7 @@ inode位图 ：管理整个分区中inode的使用和分配，占用多个数据
 是一个数组结构，存放整个文件系统的inode信息，每个inode就代表一个文件，inode节点个数代表该文件系统最多能创建多少个文件，inode节点存放的具体内容在下文inode对象 中说明
 ​
 ​
-VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数 struct super_block { struct list_head s_list; // 指向所有超级块的链表 const struct super_operations *s_op; // 超级块相关操作的方法 struct dentry *s_root; // 目录挂载点 struct mutex s_lock; // 超级块信号量 int s_count; // 超级块引用计数 .</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>​
-磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
+VFS四大对象 super_block inode dentry file 1、super_block 包含了整个文件系统的重要信息：inode个数、数据块大小、数据块个数 常驻内存 每个分区都有一个super_block，多个super_block对象用链表链接，df命令读取的就是所有的super_block，因为常驻内存所以读取数度非常快，所有对文件系统的修改都要修改super_block 每个super_block都有对应自己的操作函数 struct super_block { struct list_head s_list; // 指向所有超级块的链表 const struct super_operations *s_op; // 超级块相关操作的方法 struct dentry *s_root; // 目录挂载点 struct mutex s_lock; // 超级块信号量 int s_count; // 超级块引用计数 .</description></item><item><title>磁盘和分区</title><link>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</link><pubDate>Sat, 23 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/23/%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</guid><description>磁盘物理结构 盘面：一个机械磁盘有好几个盘面组成，中间有转轴
 磁头：盘面正反两面都可以使用，每个盘面都有一个磁头，用来读写这个盘面的数据
 磁道：盘面被物理划分为多个磁道
 扇区：每个磁道会被划分为多个固定512byte大小的扇区（现在也有4k扇区），扇区是磁盘数据存储的最小单位。整个磁盘0盘面0磁道第一个1扇区最重要，记录了整个磁盘的分区信息和操作系统启动程序，计算机启动之后首先加载第一个扇区的信息到内存
