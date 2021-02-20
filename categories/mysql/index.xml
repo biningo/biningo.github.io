@@ -1,4 +1,24 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Mysql - 分类 - lyer's blog</title><link>/categories/mysql/</link><description>Mysql - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mysql/" rel="self" type="application/rss+xml"/><item><title>MySql约束</title><link>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</guid><description><![CDATA[约束分类 约束就是给字段设置一定的规则，约束这个字段 主要有如下几类约束
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Mysql - 分类 - lyer's blog</title><link>/categories/mysql/</link><description>Mysql - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mysql/" rel="self" type="application/rss+xml"/><item><title>MySql字符集</title><link>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</guid><description>更新中&amp;hellip;
+事务四大特性ACID 原子性 Atomicity
+事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
+一致性 Consistency
+同一个事务中所有操作要么全部成功，要么全部失败
+隔离性 Isolation
+每个事务都是隔离的，互相不影响，一共有4个隔离级别
+持久性 Durability
+事务一旦提交，它对数据库中的数据的改变就应该是永久性的，不能回滚
+​
+四大隔离级别 1、读未提交 Read Uncommitted
+一个事务还没提交时，它做的变更对他事务可见
+2、读已提交 Read Committed Oracle默认的隔离级别
+一个事务只有提交时候它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况
+3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
+一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读、幻读问题
+4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
+​
+事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
+A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
+时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item><item><title>MySql约束</title><link>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</guid><description><![CDATA[约束分类 约束就是给字段设置一定的规则，约束这个字段 主要有如下几类约束
  主键约束 外键约束 非空约束 唯一约束 默认值约束 检查约束  ​
 主键约束 主键约束是非空的，最好使用 AUTO_INCREMENT来自动增加防止重复，并且能用int就不要用 bigint ，因为这和索引有关系，主键数据越小越好 如果一张表没有设置主键，那么Mysql就会拿一个非空约束字段当做主键，如果都没有则会自己生成一个RowID的列作主键
 CREATE TABLE tb( id int PRIMARY KEY AUTO_INCREMENT ) CREATE TABLE tb( id int AUTO_INCREMENT, name varchar(20), PRIMARY KEY pk(id) ) #添加主键约束 ALTER TABLE 表名 ADD CONSTRAINT 约束名 PRIMARY KEY(列名); #删除主键约束 ALTER TABLE 表名 DROP PRIMARY KEY 约束名; ​
@@ -35,5 +55,4 @@ $ mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件 $ mysqld --
 SHOW VARIABLES LIKE &#39;default_storage_engine&#39; #默认使用的搜索引擎 在配置文件的变量可以用-线链接，而这些变量保存在数据库中则是以_链接
 2、系统变量作用范围 系统变量有作用的范围之分，有下面几个范围:
  GLOBAL 全局所有用户 SESSION 特指当前一个用户，一般客户端可以通过连接字符串添加参数来设置这些变量比如设置 时区、字符集 等，这属于单个连接的客户端  查询的时候可以指定范围，不指定则默认是SESSION]]></description></item><item><title>SQL总结</title><link>/2021/02/16/sql%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/sql%E6%80%BB%E7%BB%93/</guid><description><![CDATA[更新中&hellip;&hellip;
- 表操作 建表
-CREATE TABLE test ( ) ENGINE = InnoDB #设置表的存储引擎  DEFAULT CHARSET = utf8 #设置表的字符集、  COLLATE=utf8_bin #设置字符集比较规则 drop table if exists category,article,tag,article_tag; CREATE TABLE IF NOT EXISTS category ( id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50) NOT NULL, UNIQUE uq_title (title) ) ENGINE = InnoDB CHARACTER SET = utf8; CREATE TABLE article ( id INT AUTO_INCREMENT, title VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, author VARCHAR(20) NOT NULL, status ENUM (&#39;published&#39;,&#39;auditing&#39;,&#39;draft&#39;,&#39;deleted&#39;) NOT NULL, cid INT NOT NULL, PRIMARY KEY pk_id (id), FOREIGN KEY fk_cid (cid) REFERENCES category (id) ON DELETE CASCADE, UNIQUE uq_title (title) COMMENT &#39;会自动创建唯一索引&#39; ) ENGINE = InnoDB CHARACTER SET = utf8mb4; CREATE TABLE tag ( id INT PRIMARY KEY AUTO_INCREMENT, title varchar(20) NOT NULL, UNIQUE uq_title (title) ); CREATE TABLE article_tag ( id INT PRIMARY KEY AUTO_INCREMENT, tid INT NOT NULL, aid INT NOT NULL, FOREIGN KEY fk_tid (tid) REFERENCES tag (id), FOREIGN KEY fk_aid (aid) REFERENCES article (id), UNIQUE uq_tid_aid (tid, aid) ); 展示建表语句]]></description></item></channel></rss>
+ 表操作 CREATE TABLE test ( ) ENGINE = InnoDB #设置表的存储引擎  DEFAULT CHARSET = utf8 #设置表的字符集、  COLLATE=utf8_bin #设置字符集比较规则 DROP TABLE IF EXISTS category,article,tag,article_tag; #删除表 CREATE TABLE IF NOT EXISTS category ( id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50) NOT NULL, UNIQUE uq_title (title) ) ENGINE = InnoDB CHARACTER SET = utf8; CREATE TABLE article ( id INT AUTO_INCREMENT, title VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, author VARCHAR(20) NOT NULL, status ENUM (&#39;published&#39;,&#39;auditing&#39;,&#39;draft&#39;,&#39;deleted&#39;) NOT NULL, cid INT NOT NULL, PRIMARY KEY pk_id (id), FOREIGN KEY fk_cid (cid) REFERENCES category (id) ON DELETE CASCADE, UNIQUE uq_title (title) COMMENT &#39;会自动创建唯一索引&#39; ) ENGINE = InnoDB CHARACTER SET = utf8mb4; CREATE TABLE tag ( id INT PRIMARY KEY AUTO_INCREMENT, title varchar(20) NOT NULL, UNIQUE uq_title (title) ); CREATE TABLE article_tag ( id INT PRIMARY KEY AUTO_INCREMENT, tid INT NOT NULL, aid INT NOT NULL, FOREIGN KEY fk_tid (tid) REFERENCES tag (id), FOREIGN KEY fk_aid (aid) REFERENCES article (id), UNIQUE uq_tid_aid (tid, aid) ); #展示建表语句 SHOW CREATE TABLE test #展示test表的建表语句 DESC test #展示字段信息 #修改表 ALTER TABLE test ENGINE=MyISAM #修改存储引擎 ​]]></description></item></channel></rss>
