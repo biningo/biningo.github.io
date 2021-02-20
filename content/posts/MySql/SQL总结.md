@@ -9,8 +9,6 @@ tags: [数据库,MySql]
 
 ## 表操作
 
-建表
-
 ```mysql
 CREATE TABLE test
 (
@@ -20,7 +18,7 @@ CREATE TABLE test
 ```
 
 ```mysql
-drop table if exists category,article,tag,article_tag;
+DROP TABLE IF EXISTS category,article,tag,article_tag; #删除表
 CREATE TABLE IF NOT EXISTS category
 (
     id    INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,20 +62,61 @@ CREATE TABLE article_tag
 );
 ```
 
-展示建表语句
-
 ```mysql
+#展示建表语句
 SHOW CREATE TABLE test #展示test表的建表语句
 DESC test #展示字段信息
-```
-
-修改表
-
-```mysql
+#修改表
 ALTER TABLE test ENGINE=MyISAM #修改存储引擎
 ```
 
 ​        
+
+## 索引
+
+```mysql
+#查看索引
+SHOW INDEX FROM tb
+
+#建表指定索引
+CREATE TABLE tb(
+    name varchar(200) NOT NULL ,
+    index idx_name(name) #建表时就指定索引
+)
+
+#通过CREATE来创建索引
+CREATE INDEX index_name ON table_name (column_list)
+CREATE UNIQUE INDEX index_name ON table_name (column_list)
+#通过ALTER来创建索引
+ALTER TABLE table_name ADD INDEX index_name (column_list) #普通索引
+ALTER TABLE table_name ADD UNIQUE (column_list) #唯一索引
+ALTER TABLE table_name ADD PRIMARY KEY (column_list) #主键索引
+
+#删除索引
+DROP INDEX index_name ON talbe_name
+ALTER TABLE table_name DROP INDEX index_name
+ALTER TABLE table_name DROP PRIMARY KEY #删除主键可以不指定索引名字 因为主键只有一个
+```
+
+​    
+
+## 约束
+
+请参考 **Mysql约束** 这篇文章
+
+​    
+
+## 事务
+
+```mysql
+SHOW VARIABLES LIKE '%AUTOCOMMIT%';
+SET AUTOCOMMIT = 0; #取消事务自动提交 on|off
+begin;
+commit;
+rollback;
+```
+
+​    
 
 ## explain
 
@@ -87,7 +126,7 @@ ALTER TABLE test ENGINE=MyISAM #修改存储引擎
 
 ## 内置函数
 
-​    
+TODO
 
 ## 参考
 

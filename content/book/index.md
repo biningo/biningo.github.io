@@ -44,3 +44,7 @@ tags: [书单]
 - 重构
 - 人月神话
 
+## 推荐电子书获取平台
+
+[https://github.com/itdevbooks/pdf](https://github.com/itdevbooks/pdf)
+
