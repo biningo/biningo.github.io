@@ -77,6 +77,8 @@ unbind %
 bind [ splitw -h -c '#{pane_current_path}' 
 ```
 
+tmux的基本命令这里分享一个链接，可以速查一些相关的命令: https://gist.github.com/ryerh/14b7c24dfd623ef8edc7
+
 ​    
 
 ## 配置vim

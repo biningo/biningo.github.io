@@ -46,5 +46,5 @@ tags: [书单]
 
 ## 推荐电子书获取平台
 
-[https://github.com/itdevbooks/pdf](https://github.com/itdevbooks/pdf)
-
+[https://github.com/itdevbooks/pdf](https://github.com/itdevbooks/pdf) 电子书下载仓库
+[https://github.com/dyweb/papers-notebook](https://github.com/dyweb/papers-notebook) 国外论文集合仓库

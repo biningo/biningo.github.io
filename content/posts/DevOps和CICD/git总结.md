@@ -371,3 +371,4 @@ git clone --recurse-submodules https://github.com/chaconinc/MainProject
 - https://juejin.cn/post/6864753221894668302
 - http://www.ruanyifeng.com/blog/2015/12/git-workflow.html
 - https://www.infoq.cn/article/fvrazhpyeljg9jsyddas
+- https://github.com/521xueweihan/git-tips

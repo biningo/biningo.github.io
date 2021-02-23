@@ -1,5 +1,5 @@
 ---
-title: MySql字符集
+title: MySql事务
 date: 2021-02-19
 categories: [Mysql]
 tags: [数据库,MySql] 

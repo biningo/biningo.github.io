@@ -21,7 +21,7 @@ theme = "LoveIt"
     [params.home.profile]
       enable = true
       avatarURL = "https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg"
-      subtitle = "Hello，This is my personal blog"
+      subtitle = "lyer,一个爱折腾的萌新,vim党"
       typeit = true
       social = true
     [params.home.posts]
