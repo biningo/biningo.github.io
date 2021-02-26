@@ -21,7 +21,7 @@ theme = "LoveIt"
     [params.home.profile]
       enable = true
       avatarURL = "https://pic4.zhimg.com/v2-e263475646652726731e13e44b5d2479_im.jpg"
-      subtitle = "lyer,一个爱折腾的萌新,vim党"
+      subtitle = "我叫lyer,Gopher,vim党,重度依赖jetbrains IDE"
       typeit = true
       social = true
     [params.home.posts]
