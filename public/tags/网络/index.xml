@@ -1,0 +1,6 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 标签 - lyer's blog</title><link>/tags/%E7%BD%91%E7%BB%9C/</link><description>网络 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>DNS协议</title><link>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</link><pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</guid><description>DNS作用 解析域名为IP (网络上只能通过IP通讯) 负载均衡 (一个域名绑定多个IP,采用轮询方式访问多个IP) 灵活配置IP (当要更换IP时直接换IP,依旧不影响原来域名的访问) ​
+DNS记录类型 下面列出常见的记录类型
+类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 ​
+DNS查询过程 ​
+dig命令 该命令是dns查询工具，类似的工具还有nslookup
+dig cname www.baidu.com #查询www.baidu.com的CNAME跳转到那个URL dig ns baidu.com #查询哪个DNS服务器记录了这个域名解析地址 dig baidu.com #查询baidu.com的IP地址(A记录) dig +shore baidu.com #返回简短信息 dig +trace +additional baidu.com #返回复杂的追踪信息 dig @8.8.8.8 baidu.com #指定DNS服务器去查询 dig @8.</description></item></channel></rss>
