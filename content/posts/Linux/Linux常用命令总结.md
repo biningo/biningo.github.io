@@ -78,11 +78,40 @@ systemctl list-unit-files #列出所有守护进程的信息
 
 ## 网络相关
 
-`utw` (centos下为`firewall`，ubuntu下为utw)    防火墙
+### utw
+
+`utw` (centos下为`firewall`，ubuntu下为`utw`)    ubuntu下防火墙iptables工具
+
+默认的配置文件`/etc/default/ufw `
 
 ```bash
-systemctl start utw
+#注意 没有出现在iptables中的一律不允许访问
+ufw enable/disable
+ufw status
+
+#日志文件储存在 /var/logs/ufw
+ufw logging on/off #启用关闭日志
+ufw logging low|medium|high #设置日志级别
+
+ufw allow 1000 #开放1000短端口
+ufw deny 1000 #关闭1000端口 有数据包直接丢弃 无响应
+ufw reject 1000 #关闭1000端口 有数据包接受则返回一个拒接包
+ufw delete  reject 1000 #删除规则
+
+ufw allow ssh #允许指定端口号或则对应的服务名 这里和22一样
+ufw allow 80/tcp #还可以指定TCP或则UDP 只允许80端口上的TCP包
+ufw allow http/tcp
+
+ufw allow from 192.168.1.1 #允许指定IP连接到任何端口
+ufw allow from 192.168.1.0/24 #允许特定子网连接到任何端口
+ufw allow from 192.168.1.1 to any port 8080 #允许指定IP连接到8080端口 tcp/udp都可
+ufw allow from 192.168.1.1 to any port 8080 proto udp #指定协议UDP
+
+ufw status numbered #列出每个规则的序号 可以按照序号进行删除
+ufw delete 1
 ```
+
+### netstat/ss
 
 `netstat` 监控网络状况
 
@@ -109,13 +138,20 @@ ss -ntl #查看TCP连接情况
 ss -s #查看网络统计信息
 ```
 
+### dig
+
 `dig` 域名查询工具
 
 ```bash
 dig @8.8.8.8 baidu.com #指定向8.8.8.8DNS服务器查询
+dig @8.8.8.8 -p 53 baidu.com #还可以指定查询服务器的端口 默认是53
 dig +trace baidu.com #显示整个DNS查询过程
+dig +trace +additional baidu.com #显示更详细的信息
 dig +short baidu.com #简化查询结果 只显示查询得到的IP
-dig ns baidu.com #查看那些DNS服务器负责管理这个域名
+
+dig ns baidu.com #查看这个域名的ns记录
+dig a baidu.com #查看A记录
+dig cname baidu.com
 ```
 
 ​    
