@@ -1,4 +1,9 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 23 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Linux常用命令总结</title><link>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description><![CDATA[持续跟新&hellip;..
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>DNS协议</title><link>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</link><pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</guid><description>DNS作用 解析域名为IP (网络上只能通过IP通讯) 负载均衡 (一个域名绑定多个IP,采用轮询方式访问多个IP) 灵活配置IP (当要更换IP时直接换IP,依旧不影响原来域名的访问) ​
+DNS记录类型 下面列出常见的记录类型
+类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 ​
+DNS查询过程 ​
+dig命令 该命令是dns查询工具，类似的工具还有nslookup
+dig cname www.baidu.com #查询www.baidu.com的CNAME跳转到那个URL dig ns baidu.com #查询哪个DNS服务器记录了这个域名解析地址 dig baidu.com #查询baidu.com的IP地址(A记录) dig +shore baidu.com #返回简短信息 dig +trace +additional baidu.com #返回复杂的追踪信息 dig @8.8.8.8 baidu.com #指定DNS服务器去查询 dig @8.</description></item><item><title>Linux常用命令总结</title><link>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description><![CDATA[持续跟新&hellip;..
  进程相关 进程的信息都在/proc下
 ps 显示系统进程
 ps -ef ps -aux ps -ef | grep sshd &amp; jobs fg bg nohub
@@ -71,19 +76,4 @@ SHOW COLLATION #显示所有比较规则 SHOW COLLATION LIKE &#39;%utf8%&#39; ut
 utf8mb4默认是utf8mb4_0900_ai_ci
  以ci结尾的比较规则都是忽略大小写的
  ​
-字符集和比较规则应用范围 分别有3个应用范围:]]></description></item><item><title>MySql配置文件</title><link>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</guid><description><![CDATA[更新中&hellip;&hellip;
- 配置文件 MySql配置文件的作用就是给mysqld服务器进程提供启动参数，设置一些变量，也可以通过命令行方式设置参数，但是这样太麻烦了而且不是永久的，所以一般都将这些参数写在配置文件中，mysqld进程启动的时候会按照如下方式去寻找配置文件:
-$ mysql --help | grep my.cnf /etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf  /etc/my.cnf /etc/mysql/my.cnf $MYSQL_HOME/my.cnf ~/.my.cnf  可以指定配置文件路径:
-$ mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件 $ mysqld --defaults-extra-file=/my.cnf #添加额外的配置文件路径加入默认的搜索路径，也就是说其他路径包括这个也会被搜索到 另外注意：命令行参数优先级高于配置文件，搜索路径前面的配置高于后面的，并且有些命令行参数是只属于命令行的，不属于配置文件，配置文件都可以用命令行替代
-配置文件分为如下几组:
-[server] ... [mysqld] ... [mysqld_safe] [client] [mysql] [mysqladmin] ​
-[mysqld]配置 TODO
-[server]配置 TODO
-[client]配置 TODO
-[mysql]配置 TODO
-[mysqld_safe]配置 TODO
-[mysqladmin]配置 TODO
-系统变量 1、系统变量的查看 系统变量一般通过SHOW VARIABLES LIKE xxx来查看，下面展示常用的系统变量
-SHOW VARIABLES LIKE &#39;default_storage_engine&#39; #默认使用的搜索引擎 在配置文件的变量可以用-线链接，而这些变量保存在数据库中则是以_链接
-2、系统变量作用范围 系统变量有作用的范围之分，有下面几个范围:
- GLOBAL 全局所有用户 SESSION 特指当前一个用户，一般客户端可以通过连接字符串添加参数来设置这些变量比如设置 时区、字符集 等，这属于单个连接的客户端  查询的时候可以指定范围，不指定则默认是SESSION]]></description></item></channel></rss>
+字符集和比较规则应用范围 分别有3个应用范围:]]></description></item></channel></rss>
