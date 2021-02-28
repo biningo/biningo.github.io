@@ -1,14 +1,17 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>DNS协议</title><link>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</link><pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</guid><description>DNS作用 解析域名为IP (网络上只能通过IP通讯) 负载均衡 (一个域名绑定多个IP,采用轮询方式访问多个IP) 灵活配置IP (当要更换IP时直接换IP,依旧不影响原来域名的访问) ​
 DNS记录类型 下面列出常见的记录类型
-类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 ​
+类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 SRV 用于服务发现和负载均衡 ​
 DNS查询过程 ​
+本地接受到DNS查询返回的报文之后就会调用操作系统的DNS报文解析程序glibc/musl来解析报文获取IP地址，其配置文件为/etc/resolv.conf
+本地还有/etc/hosts文件也可以记录IP和域名的映射关系，查询DNS服务器之前会先查询这个文件以及本地DNS缓存
+​
 dig命令 该命令是dns查询工具，类似的工具还有nslookup
-dig cname www.baidu.com #查询www.baidu.com的CNAME跳转到那个URL dig ns baidu.com #查询哪个DNS服务器记录了这个域名解析地址 dig baidu.com #查询baidu.com的IP地址(A记录) dig +shore baidu.com #返回简短信息 dig +trace +additional baidu.com #返回复杂的追踪信息 dig @8.8.8.8 baidu.com #指定DNS服务器去查询 dig @8.</description></item><item><title>Linux常用命令总结</title><link>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description><![CDATA[持续跟新&hellip;..
+dig cname www.baidu.com #查询www.baidu.com的CNAME跳转到那个URL dig ns baidu.com #查询哪个DNS服务器记录了这个域名解析地址 dig baidu.com #查询baidu.com的IP地址(A记录) dig +shore baidu.com #返回简短信息 dig +trace +additional baidu.</description></item><item><title>Linux常用命令总结</title><link>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description><![CDATA[持续跟新&hellip;..
  进程相关 进程的信息都在/proc下
-ps 显示系统进程
-ps -ef ps -aux ps -ef | grep sshd &amp; jobs fg bg nohub
-./exe &amp; #后台运行 ./exe &gt; log.txt 2&gt;&amp;1 &amp; #0:标准输入 1:标准输出 2:标准错误 2&gt;&amp;1是将标准出错重定向到标准输出 最终结果就是`标准输出`和`错误`都被重定向到`log.txt`中 etcd &gt; /dev/null 2&gt;&amp;1 &amp; #后台运行 同时输出日志重定向到垃圾桶 nohup etcd &gt; /dev/null 2&gt;&amp;1 &amp; #以守护进程方式运行 不会随着终端退出而退出 jobs #查看后台运行中的进程 #ctrl+z暂停任务 ctrl+c终止任务 fg 1 #将后台任务放到前台执行 bg 1 #将一个暂停的任务放在后台执行 kill killall
-kill -9 1111 #强制终止 killall 1111 #杀死进程 以及所有子进程 pstree 显示进程树]]></description></item><item><title>vim使用教程</title><link>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 21 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</guid><description>光标移动(命令模式)
+ps ps 显示系统进程
+ps -ef ps -aux ps -ef | grep sshd jobs fg bg &amp; nohub &amp; jobs fg bg nohub
+./exe &amp; #后台运行 ./exe &gt; log.txt 2&gt;&amp;1 &amp; #0:标准输入 1:标准输出 2:标准错误 2&gt;&amp;1是将标准出错重定向到标准输出 最终结果就是`标准输出`和`错误`都被重定向到`log.txt`中 etcd &gt; /dev/null 2&gt;&amp;1 &amp; #后台运行 同时输出日志重定向到垃圾桶 nohup etcd &gt; /dev/null 2&gt;&amp;1 &amp; #以守护进程方式运行 不会随着终端退出而退出 jobs #查看后台运行中的进程 #ctrl+z暂停任务 ctrl+c终止任务 fg 1 #将后台任务放到前台执行 bg 1 #将一个暂停的任务放在后台执行 kill kill killall
+kill -9 1111 #强制终止 killall 1111 #杀死进程 以及所有子进程 pstree pstree 显示进程树]]></description></item><item><title>vim使用教程</title><link>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 21 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</guid><description>光标移动(命令模式)
 n+空格 #在当前行中移动n个字符 n+Enter #移动到距离当前行后n行 H/M/L #移动到屏幕第一行/中间行/最后一行 gg/G/nG #移动到当前文件第一行/最后一行/第n行 w/nw #向前 移动1个单词/移动n个单词 b/nb #向后 移动1个单词/移动n个单词 文本编辑删除复制粘贴(命令模式)
 a/A/i #在 光标后/行末/光标前 插入文本 o/O(字母O) #在光标下/上方新开一行 x/X #命令模式下删除光标后/前的单个字符 r/R #替换字符/复写模式,连续替换 d0/d$ #删除到 行首/行尾 dgg/dG #删除到 文件头/文件尾 dd/ndd #删除该行/删除该行下的n行 yy/nyy #复制该行/n行 p/P #当前行下/上面粘贴 u/ctrl+r #撤销上次操作/撤销反悔,重做上次撤销 文档检索
 /search_text #在文档后面的部分搜索 ?search_text #在文档前面的部分搜索 n/N #往前/后移动检索到的关键字 :noh #取消检索的高亮 :%s/abc/aaa #检索第一个 “abc” 字符串并将其替换成“aaa” :%s/abc/aaa/g #检索并将所有的“abc”,替换为“aaa” :%s/original/replacement/gc #替换前先询问 可视模式
