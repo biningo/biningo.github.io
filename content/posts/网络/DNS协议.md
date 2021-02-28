@@ -23,6 +23,7 @@ tags: [网络]
 | AAAA  | IPV6的地址记录                                               |
 | NS    | DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 |
 | CNAME | 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 |
+| SRV   | 用于服务发现和负载均衡                                       |
 
 ​      
 
@@ -31,6 +32,12 @@ tags: [网络]
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img/image-20200615110750393.png)
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img/image-20200614203436848.png)
+
+​    
+
+本地接受到DNS查询返回的报文之后就会调用操作系统的DNS报文解析程序`glibc/musl`来解析报文获取IP地址，其配置文件为`/etc/resolv.conf`
+
+本地还有`/etc/hosts`文件也可以记录IP和域名的映射关系，查询DNS服务器之前会先查询这个文件以及本地DNS缓存
 
 ​    
 
@@ -46,6 +53,7 @@ dig +shore baidu.com #返回简短信息
 dig +trace +additional baidu.com #返回复杂的追踪信息
 dig @8.8.8.8 baidu.com #指定DNS服务器去查询
 dig @8.8.8.8 -p 53 baidu.com #还可以指定查询服务器的端口 默认是53
+dig +x 111.111.111.111 #反向解析
 ```
 
 ​    
@@ -88,3 +96,5 @@ https://draveness.me/whys-the-design-dns-udp-tcp
 http://jaminzhang.github.io/dns/DNS-Message-Format (DNS数据包解析)
 
 https://www.cnblogs.com/dongkuo/p/6714071.html (DNS服务器实现)
+
+https://www.cnblogs.com/kirito-c/p/12076274.html (CoreDNS和k8s)

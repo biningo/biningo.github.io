@@ -11,6 +11,8 @@ tags: [Linux]
 
 进程的信息都在`/proc`下
 
+### ps
+
 `ps` 显示系统进程
 
 ```bash
@@ -18,6 +20,8 @@ ps -ef
 ps -aux
 ps -ef | grep sshd
 ```
+
+### jobs fg bg & nohub 
 
 `&`  `jobs` `fg` `bg` `nohub`
 
@@ -33,6 +37,8 @@ fg 1 #将后台任务放到前台执行
 bg 1 #将一个暂停的任务放在后台执行
 ```
 
+### kill
+
 `kill`  `killall` 
 
 ```bash
@@ -40,12 +46,16 @@ kill -9 1111 #强制终止
 killall 1111 #杀死进程 以及所有子进程
 ```
 
+### pstree
+
 `pstree`  显示进程树
 
 ```bash
 pstree -p 111 #显示进程PID
 pstree -u 111 #显示进程UID
 ```
+
+### systemctl
 
 `systemctl`(推荐)、service 系统服务
 
@@ -62,6 +72,8 @@ systemctl is-enabled docker
 
 systemctl list-unit-files #列出所有守护进程的信息
 ```
+
+### top
 
 `top`
 
@@ -148,7 +160,7 @@ dig @8.8.8.8 -p 53 baidu.com #还可以指定查询服务器的端口 默认是5
 dig +trace baidu.com #显示整个DNS查询过程
 dig +trace +additional baidu.com #显示更详细的信息
 dig +short baidu.com #简化查询结果 只显示查询得到的IP
-
+dig +x 111.111.111.111 #反向解析
 dig ns baidu.com #查看这个域名的ns记录
 dig a baidu.com #查看A记录
 dig cname baidu.com
@@ -247,9 +259,19 @@ tail -2 id.txt  #显示后2行
 
 ​    
 
-## sed文本处理工具
+## sed和awk
 
-TODO
+`stream editor` sed流编辑器，核心是 **正则**
+
+https://coolshell.cn/articles/9104.html
+
+`awk` 流编辑器，的核心是**格式化**
+
+https://coolshell.cn/articles/9070.html
+
+https://www.ruanyifeng.com/blog/2018/11/awk.html
+
+​    
 
 ## 用户和用户组管理
 
@@ -377,3 +399,16 @@ sync #将内存数据同步到磁盘 关机前都要执行这个命令
 last #查看关机和启动的日志
 ```
 
+bash快捷键
+
+```bash
+ctrl+r #查找历史命令
+```
+
+​    
+
+## 参考
+
+https://coolshell.cn/articles/8883.html 【应该知道的LINUX技巧】
+
+https://coolshell.cn/articles/7829.html 【28个UNIX/LINUX的命令行神器】
