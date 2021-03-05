@@ -168,6 +168,15 @@ dig cname baidu.com
 
 ​    
 
+## ip
+
+```bash
+ip addr #查看本机IP地址 和ifconfig功能一样
+
+```
+
+​    
+
 ## 文本处理
 
 `Here文档`

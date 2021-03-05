@@ -30,14 +30,16 @@ tags: [书单]
 - **操作系统真象还原**
 - **CSAPP**
 - 现代操作系统
+- 操作系统导论
 - `汇编语言-王爽 （8086）`
 - x86汇编语言：从实模式到保护模式
-
 - `编码：隐匿在计算机软硬件背后的语言`
+- 计算机组成(结构化方法)
 
 ## 网络
 
 - **TCP/IP详解**
+- **图解HTTP协议**
 
 ## 其它
 
@@ -54,8 +56,3 @@ tags: [书单]
 ## 云原生
 
 - **Docker实战(第二版)**
-
-## 推荐电子书获取平台
-
-[https://github.com/itdevbooks/pdf](https://github.com/itdevbooks/pdf) 电子书下载仓库
-[https://github.com/dyweb/papers-notebook](https://github.com/dyweb/papers-notebook) 国外论文集合仓库
