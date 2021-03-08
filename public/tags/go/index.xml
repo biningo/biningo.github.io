@@ -1,4 +1,13 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 15 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 08 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基本类型 byte和rune
+byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
+uintptr、int、uint
+uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
+同理int、uint等也是相似的，随本机类型而定，64位机器则是int64
+type自定义类型
+type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值
+类型 默认值 bool false int、float64等数值类型 0 string &amp;quot;&amp;quot; 整数类型的表示
+d1:=0x10F //16进制 int64 d2:=0b111 //二进制 int64 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示
+//[float64] d1:= .32 //0.32 d2:= 2. //2.</description></item><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
 errors.go wrap.go go的error也就是通过创建一个 错误提示的字符串 的方式，然后通过返回值来返回这个错误，基本每个函数的返回值都标配一个error对象以及函数本身的返回值：
 函数本身返回值 error对象 最简单的创建错误的方式就是通过errors.New来创建：
 func f() error{ return errors.New(&amp;#34;error&amp;#34;) } 下面来看下errors.go的源码，不过10行左右
