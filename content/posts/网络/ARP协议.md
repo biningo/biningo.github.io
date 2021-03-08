@@ -4,7 +4,6 @@ date: 2021-03-03
 categories: [网络]
 tags: [网络协议]
 draft: true
-
 ---
 
 ## 什么是ARP协议
@@ -43,7 +42,7 @@ ARP响应
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img1/arp3.png)
 
-另外还需要注意在以太网的MAC帧的`Type`字段需要设置为`0x0806`标识数据报是ARP数据报，同时MAC帧的目的的MAC地址是`ff:ff:ff:ff:ff:ff`，这是一个MAC广播地址
+另外还需要注意在以太网MAC帧的`Type`字段需要设置为`0x0806`标识数据报是ARP数据报，同时MAC帧的目的的MAC地址是`ff:ff:ff:ff:ff:ff`，这是一个MAC广播地址
 
 ​    
 
