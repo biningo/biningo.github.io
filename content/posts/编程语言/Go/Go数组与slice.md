@@ -48,7 +48,7 @@ array := []int{1,2,3} //len(array)=3 cap(array)=3
 array := make([]int,2) //len(array)=2 cap(array)=2
 
 arr := [5]int{1,2,3,4,5}
-array :=arr[1:3] //底层数组可见 会修改原数组 相当于原数组1-3的子数组指针
+array :=arr[1:3] //底层数组可见 会修改原数组 相当于原数组1-3的子数组指针 并且cap为1之后的剩余数组容量 这里为 cap(array)=5-1=4  len(array)=3-1=2 相当于arr[1:3:]
 array[0]=99 //arr[1]=99 被修改了
 log.Println(arr) //[1 99 3 4 5]
 ```
