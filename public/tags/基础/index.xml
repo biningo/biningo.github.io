@@ -1,0 +1,8 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>基础 - 标签 - lyer's blog</title><link>/tags/%E5%9F%BA%E7%A1%80/</link><description>基础 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 17 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%9F%BA%E7%A1%80/" rel="self" type="application/rss+xml"/><item><title>装饰者模式</title><link>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description><![CDATA[跟新中&hellip;.
+ 装饰者模式 Decorator Pattern 装饰者模式，动态的透明的增加一些另外的功能而不需要改变原来的代码，拥有更好的灵活性和可扩展性
+从名字中也可以看出，装饰者模式就是给一个对象加上一层装饰，穿上一件衣服，装饰者在我解除的技术里面在函数式语言中的应用比较广泛，就是在装饰函数里传入一个目标函数，装饰函数同样返回一个目标函数，但是返回的函数是进过装饰了的
+​
+在Java中的应用和实现 实现案例 下面先来看一个 Shape 自己实现的案例:
+Shape顶层接口:
+public interface Shape { String display(); } Circle和Rectangle具体实现
+public class Circle implements Shape{ private String name; public Circle(){ this.name = &#34;Circle&#34;; } public String display() { return this.name; } } ------------------------------------------------ public class Rectangle implements Shape { private String name; public Rectangle() { this.name = &#34;Rectangle&#34;; } public String display() { return this.name; } } 所有装饰器的顶层抽象对象，这里通过构造方法和set方法可以传入被装饰对象]]></description></item></channel></rss>

@@ -1,0 +1,35 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络安全 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link><description>网络安全 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 02 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml"/><item><title>Base64编码</title><link>/2021/03/02/base64%E7%BC%96%E7%A0%81/</link><pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/02/base64%E7%BC%96%E7%A0%81/</guid><description>什么是Base64编码 将二进制数据转化为64个可打印ASCII码的一种编码方式，这64个可打印字符分别为:
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/= 注意，最后一个=不算，=当做Base64编码的结尾标志
+总结：基于 64 个可打印字符来表示二进制数据的表示方法
+​
+Base64编码原理 将待转换的字符串每3个字节分为一组，每个字节占 8 个二进制位，那么共有24个二进制位
+将第（1）步得到的每 24 个二进制位分为每 6 个一组（因为2^6=64），则每 3 个字节可分为 4 组
+在每组前面添加两个 0 ，补齐1字节，每组由 6 个二进制位变为 8 个二进制位，总共 32 个二进制位，即四个字节 （3字节变4字节，所以经过Base64编码的都会变大）
+6个二进制位转化为十进制然后检索下表，根据 Base64编码对照表（见下表）获得对应的值
+​
+为什么么需要Base64编码 方便网络传输 Base64的那64个字符只包含最基础的字符，所以在各种环境进行传输的时候，极大地减少了出现莫名其妙的问题的概率 简单的隐藏可见内容 （Base64只是一种编码方式，不能用来加密信息） 将二进制数据转化为可打印字符 ​
+Base64优缺点 缺点:
+Base64会增加字节数 Base64编码不是加密算法 优点:
+Base64能简单隐藏内容 Base64算法简单可逆，不会消耗太多CPU，不影响效率 Base64能将所有数据转化为可打印数据 减少网络传输出现的编解码错误 ​
+Base64的使用场景 网上留言自己的联系方式等私密信息，可以使用Base64加密一下，这样就不会直接泄露自己的信息，只有真正需要的人才会拿去解密，可以过滤一部分人 包含一些特殊字符的字符串等可以先用Base64编码一下防止被转义 http请求，在解析参数时是根据?</description></item><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密
+特点：
+不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
+​
+​
+非对称加密 非对称加密就是使用不同的密钥进行加密解密，比如使用 公钥 加密，使用 **私钥 **解密
+特点：
+安全，解决了 对称加密 密钥传输问题 加解密CPU消耗高，需要复杂的数学运算 所以一般使用非对称加密进行传输对称加密密钥，之后用对称加密进行通信
+相关算法：RSA、ECC
+​
+​
+信息摘要 摘要主要是为了 防止信息被篡改 ，又称为 信息指纹
+字符串、文件等内容经过 摘要算法(hash算法) 进行hash散列之后得到的一串固定长度的 hash字符串 这就是 信息摘要
+常见的hash算法有：MD5、SHA256
+​
+​
+数字签名 数字签名是一个非对称加密的方式，私钥签名，公钥解密
+A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名 这样摘要在传输过程中就不会被篡改 B：用 A公钥 对 数字签名 进行解密，得到摘要 ，然后再用相同的 信息摘要算法对消息体计算摘要，对比两个摘要是否相同就可以验证消息体是否被篡改 ​
+​
+CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
+想象一下如果不验证公钥的正确性的话：
+A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item></channel></rss>

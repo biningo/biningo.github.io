@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>HTTPS - 标签 - lyer's blog</title><link>/tags/https/</link><description>HTTPS - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/https/" rel="self" type="application/rss+xml"/><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密
+特点：
+不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
+​
+​
+非对称加密 非对称加密就是使用不同的密钥进行加密解密，比如使用 公钥 加密，使用 **私钥 **解密
+特点：
+安全，解决了 对称加密 密钥传输问题 加解密CPU消耗高，需要复杂的数学运算 所以一般使用非对称加密进行传输对称加密密钥，之后用对称加密进行通信
+相关算法：RSA、ECC
+​
+​
+信息摘要 摘要主要是为了 防止信息被篡改 ，又称为 信息指纹
+字符串、文件等内容经过 摘要算法(hash算法) 进行hash散列之后得到的一串固定长度的 hash字符串 这就是 信息摘要
+常见的hash算法有：MD5、SHA256
+​
+​
+数字签名 数字签名是一个非对称加密的方式，私钥签名，公钥解密
+A：用自己的A私钥对 摘要 进行加密，加密后的就叫 数字签名 这样摘要在传输过程中就不会被篡改 B：用 A公钥 对 数字签名 进行解密，得到摘要 ，然后再用相同的 信息摘要算法对消息体计算摘要，对比两个摘要是否相同就可以验证消息体是否被篡改 ​
+​
+CA证书 CA证书 CA证书类似于身份证，用来证明公钥的正确性，证明对方发来的公钥是否属于对方，就比如公安局给公民发放身份证来证明这个人就是你
+想象一下如果不验证公钥的正确性的话：
+A给B发送自己的公钥时被中间人 C劫持并替换为C的公钥发给B B以为是A的公钥，则继续用C的公钥通信， 那么C就可以劫持所有B给A发送的消息 为了验证发来的公钥是否被劫持，是否属于对方，那么就需要一个第三方权威机构颁发一个CA证书来证明身份</description></item></channel></rss>
