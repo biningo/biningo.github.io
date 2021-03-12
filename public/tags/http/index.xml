@@ -1,0 +1,9 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>HTTP - 标签 - lyer's blog</title><link>/tags/http/</link><description>HTTP - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 08 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/http/" rel="self" type="application/rss+xml"/><item><title>HTTP协议</title><link>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</guid><description>请求和响应报文 请求报文第一行必须指定 请求的方法、资源路径、HTTP协议版本
+紧接着就是请求头信息
+然后还需要一个空行
+紧接着如果有请求体的话就是请求体，注意如果没有请求体也必须加一个空行
+GET /note/ef1b6cee.html HTTP/1.1 Host: www.ru23.com Connection: keep-alive Cache-Control: max-age=0 Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) ....各个请求头 &amp;lt;空行&amp;gt; 响应报文第一行必须指定 HTTP协议版本、状态码、状态码的字符串简短描述
+紧接着就是响应头信息
+然后还需要一个空行
+如果有响应体的化就需要一个响应体，没有的话空行也是必须的
+HTTP/1.1 200 OK Server: nginx/1.16.1 Date: Sun, 04 Oct 2020 02:27:01 GMT Last-Modified: Sun, 30 Aug 2020 14:12:42 GMT Content-Type: text/html Content-Length: 40846 Accept-Ranges: bytes &amp;lt;!</description></item></channel></rss>
