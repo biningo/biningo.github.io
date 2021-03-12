@@ -3,7 +3,6 @@ title: HTTP协议
 date: 2021-03-08
 categories: [网络]
 tags: [HTTP]
-draft: true
 ---
 
 ## 请求和响应报文
@@ -54,6 +53,20 @@ Accept-Ranges: bytes
     </body>
 </html>
 ```
+
+​        
+
+## URL编码
+
+如果在浏览器中输入的URL含有特殊字符或则非`ASCII`比如中午，浏览器则会进行转义编码操作，编码方法就是将非ASCII或则特殊字符转化为 **16进制**，然后在前面加一个`%` 
+
+比如中文的话则会工具UTF8编码的二进制转化为16进制然后加一个`%`，比如:
+
+```bash
+%E9%93%B6%E6%B2%B3
+```
+
+如果我们收到一个URL编码的query参数，那么可以用上述方法进行解码
 
 ​    
 
@@ -143,7 +156,9 @@ Accept-Ranges: bytes
 
 客户端和内容协商的请求头都以 `Accept-`开头，服务器响应内容协商的相关头部都以`Content-`开头
 
-`Accept` 允许的响应MINE类型 `Content-Type`服务器响应的MINE类型，一般服务器的编码会在Cotent-Type头部指定，浏览器会根据chartset指定的编码来进行解码
+`Accept` 允许的响应MINE类型
+
+ `Content-Type`服务器响应的MINE类型，一般服务器的编码会在Cotent-Type头部指定，浏览器会根据`chartset`指定的编码来进行解码，默认都是UTF-8编码，所以如果Content-Type指定的charset和传递数据的编码方式不一致的话就会产生乱码
 
 ```bash
 #q表示质量因子 也就是权重
@@ -165,12 +180,6 @@ Accept-Encoding: gzip, deflate, br
 Content-Encoding: gzip
 ```
 
-`Accept-Charset` 允许的编码，一般都为`UTF-8` 所以此头被遗弃，默认UTF-8，一般服务器的编码会在Cotent-Type头部指定，浏览器会根据chartset指定的编码来进行解码，此Header已经被遗弃了
-
-```bash
-Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
-```
-
 `Accept-Language` 允许的语言 `Content-Language`服务器响应的语言
 
 ```bash
@@ -187,10 +196,10 @@ Content-Language: zh-CN
 Content-Length: 1000 #byte
 ```
 
-`Vary` 列出了服务器参考了哪些字段来进行判断需要返回的数据的
+`Vary` 列出了服务器参考了哪些Header字段来进行内容协商
 
 ```bash
-Vary: Accept-Encoding,User-Agent,Accept
+Vary: Accept-Encoding,Accept
 ```
 
 常见的的 **MINE** 类型如下:
@@ -204,9 +213,23 @@ Vary: Accept-Encoding,User-Agent,Accept
 
 ​    
 
-## HTTP请求上下文
+## HTTP头部字段和常见头部
 
-请求上下文就是一些描述请求的Context的信息，主要有如下几个头部字段需要注意:
+| 类型     | 含义                                                     |
+| -------- | -------------------------------------------------------- |
+| 通用字段 | 在请求头和响应头里都可以出现                             |
+| 请求字段 | 仅能出现在请求头里，进一步说明请求信息或者额外的附加条件 |
+| 响应字段 | 仅能出现在响应头里，补充说明响应报文的信息               |
+| 实体字段 | 属于通用字段，但专门描述 body 的额外信息                 |
+
+头部字段是不区分大小写的，比如`Host`和`host`是一样的，但是一般建议使用大写，并且我们不仅仅可以使用HTTP规范的头部，还自定义头部字段，自定义头部需要注意以下几个规则:
+
+- 头部字段名字不允许出现空格，可以允许 `-` 来分割不同的单词，但是不允许使用 `_` 下划线，比如`User-Name`是合法的，`User_Name`就是非法的
+- 字段名后面必须紧接着`:`，不能有空格
+- 头部字段顺序没有意义，可以随意排列
+- 有些头部字段可以重复设置例如 `Set-Cookie`，有些则只能设置一个比如`Host`
+
+**下面来看一些常见头部**:
 
 `User-Agent` 客户端类型，浏览器类型，浏览器内核版本信息，操作系统类型等
 
@@ -219,6 +242,8 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Geck
 ```bash
 Host: v.qq.com
 ```
+
+> nginx中配置的`server_name`需要和HTTP头部的`Host`字段相匹配这样才可以访问，如果不匹配则会走默认的server_name，这样可以实现一台主机多个域名
 
 `Date` 表示报文创建的时间，**GMT** 格式
 
@@ -241,17 +266,10 @@ Server: nginx
 `Allow` 服务器运行的请求类型
 
 ```bash
-Allow: GET,POST,OPTIONS
+Allow: GET,POST,OPTIONS      
 ```
 
-`Accept-Ranges` 告诉客户端，服务器是否允许范围请求
-
-```bash
-Accept-Ranges:bytes
-Accept-Ranges:none #表示不允许
-```
-
-​      
+​    
 
 ## Body压缩
 
@@ -291,13 +309,13 @@ Cookie是浏览器的特性，在移动端APP中使用HTTP协议请求后端服�
 HTTP/1.1 200 ok
 ...
 Set-Cookie: username=lyer;Max-Age=1000
-Set-Cookie: age=18;Expires=Fri,07-Jun-19:00 GMT;HttpOnly;Secure
+Set-Cookie: age=18;Expires=Fri,07-Jun-19:00 GMT;HttpOnly;Secure;Domain=www.google.com;Path=/;SameSite=Strict
 ...
 ```
 
 - `Expires` 失效的具体时间
 
-- `Max-Age` 需要保存的秒数，设置为 **<=0** 表示不保存，可以用此来主动让浏览器删除Cookie，优先级高于Expires
+- `Max-Age` 需要保存的秒数，设置为 **<=0** 表示不保存，可以用此来主动让浏览器删除Cookie，优先级高于`Expires`
 
 - `Domain`和`Path`  指定了哪些域名和路径能使用这个Cookie，浏览器在发送 Cookie 前会将请求的Host和URL与Cookie的相关属性进行对比，如果满足条件才会在请求头里发送 Cookie
 
@@ -307,9 +325,11 @@ Set-Cookie: age=18;Expires=Fri,07-Jun-19:00 GMT;HttpOnly;Secure
 
 - `Secure` 表示此Cookie只能在HTTPS下才能发送到服务器
 
-> **注意: Cookie的大小最大限制为4k**
+- `SameSite`  
 
-另外Session也是通过Cookie来实现的，服务器会设置一个`SessionID`到Cookie中，这样没次客户端就会带上这个`SessionID`，服务器就可以根据SessionID再去数据库查询用户的状态信息
+**注意: Cookie的大小最大限制为4k**
+
+另外`Session`也是通过Cookie来实现的，服务器会设置一个`SessionID`到Cookie中，这样没次客户端就会带上这个SessionID，服务器就可以根据SessionID再去数据库查询用户的状态信息，这样就实现免登入了，同时SessionID应该设置一个过期时间
 
 > **第三方Cookie**
 
@@ -343,9 +363,9 @@ Content-Disposition: attachment; filename="filename.jpg"
 
 ## Chunk传输
 
-每个HTTP响应报文都必须在Header中指定`Content-Length`，此长度就是`Body`的长度，浏览器会根据这个头部去解析读取Body的数据，如果这个长度小于Body，那么就无法完全读取Body的数据，如果大于Body的数据那么就会报错，如果不指定`Content-Length`那么，则必须指定另外一个头部`Transfer-Coding:chunked`，否则浏览器就会一直处于Pending状态等待
+每个HTTP响应报文都必须在Header中指定`Content-Length`，此长度就是`Body`的长度，浏览器会根据这个头部去解析读取Body的数据，如果这个长度小于Body，那么就无法完全读取Body的数据，如果大于Body的数据那么就会报错，如果不指定`Content-Length`那么，则必须指定另外一个头部`Transfer-Coding:chunked`，在遇到结束chunk传输的结束标记之前浏览器就会一直处于Pending状态等待服务器传输分块的数据，注意这些分块的数据不需要头部，但是每个分块都会标识该块的数据长度
 
-`Transfer-Coding:chunked`表示响应的报文Body长度是不确定的，数据是动态生成的，无法计算出来，`Body`数据分块，直到遇到结束符浏览器就可以拼接之前接受到的分块Body，有了`Transfer-Coding:chunked` 之后浏览器就会忽略`Content-Length`头部
+`Transfer-Coding:chunked` 还可以表示响应的报文Body长度是不确定的，数据是动态生成的，无法计算出来，`Body`数据分块，直到遇到结束符浏览器就可以拼接之前接受到的分块Body，有了`Transfer-Coding:chunked` 之后浏览器就会忽略`Content-Length`头部
 
 分块传输的结构如下:
 
@@ -398,7 +418,7 @@ HTTP的范围请求可以将一个数据分为好几段来请求，或则只请�
 
 范围请求需要我们自己在服务器和客户端实现，需要设置几个请求头，然后实现相关的处理逻辑
 
-`Accept-Range` 表示服务器是否支持范围请求，属于 **响应头部**
+`Accept-Range` 表示服务器是否支持范围请求，属于 **响应头部** 如果值为`none`或则没有这个响应头部则表示服务器不支持范围请求
 
 ```bash
 Accept-Range: none #不支持
@@ -450,8 +470,14 @@ Content-Range: bytes 20-29/96
 范围请求下载文件步骤如下:
 
 - 先发送`HEAD`请求查看服务器是否支持范围请求
-- 请求指定范围数据，如果超过了数据的范围，则服务器返回`416`
-- 客户端拼装数据
+- 请求指定范围数据，如果超过了数据的范围，则服务器返回`416` 
+- 如果条件符合，则服务器读取`Range`信息计算数据的偏移量读取读取文件片段并且在相应头部需要设置`Content-Range` 来标识这个数据属于哪一个范围
+
+基于HTTP范围请求的规范和Header，就可以实现 **断点续传、视频拖拽、多段并发下载** 
+
+- 客户端发送一个HEAD请求查看服务器是否支持范围请求，并且获取数据的总体大小
+- 开N个线程，并且使用Range分段，然后并发下载
+- 下载失败只需要重新下载失败的那一块数据即可，不需要全部再重新下载
 
 ​        
 
@@ -506,7 +532,28 @@ Content-Type: image/png
 
 ## HTTP长连接keep-alive
 
-TODO    
+`Connection` 默认值是`keep-alive`
+
+```bash
+Connection:close #立即关闭此次TCP连接 即不支持长链接
+```
+
+TODO 
+
+## HTTP队首阻塞
+
+HTTP是 **请求-应答** 模式，如果同时发送多个请求那么当浏览器收到多个应答的时候就无法辨别那个应答属于哪个请求，所以HTTP协议必须是一收一发的
+
+**所以每个请求需要加入一个请求队列，只有等前面请求的应答收到之后此请求才可以发送**
+
+如果队首有请求一致阻塞了，那么后面所有的请求都必须等待，这就是 **队首阻塞问题**
+
+为了解决队首阻塞问题造成的速度慢，有如下几个方法:
+
+- 浏览器多开几个线程并发进行请求后端服务器资源，此方法问题就是后端服务器接收到的并发数量巨大: **用户数*并发请求线程数** 造成服务器压力太大，所以一般浏览器只会开`6~8`个线程左右的进行并发请求
+- **域名分片** 也就是给一台机器一个服务多开几个域名，这样分别将用户的请求负载均衡到各个域名上去请求同一台机器，这样并发也上去了
+
+​    
 
 ## HTTP代理
 
@@ -590,8 +637,8 @@ google.com/b.html google.com/c.html #同源
 
 跨域过程如下:
 
-- 客户端进行跨域之前都会发送一个 **OPTIONS** 请求通知服务器 “我要跨域了，告诉我允许跨域那些访问” 
-- OPTIONS请求会带上一些客户端信息，比如`Origin`  然后服务器会进行检查和权限严重等操作
+- 客户端进行跨域之前都会发送一个 **GET或则OPTIONS** 请求通知服务器 “我要跨域了，告诉我允许跨域那些访问” 
+- OPTIONS或则GET请求会带上一些客户端信息，比如`Origin`  然后服务器会进行检查和权限严重等操作
 - 如果服务器检查通过则设置允许跨域相关头部告诉浏览器允许跨域
 
 下面请看一些跨域相关的请求头
@@ -662,3 +709,4 @@ func Cors() gin.HandlerFunc {
 
 - https://www.cnblogs.com/lightsong/p/4172979.html 【第三方Cookie】
 - https://www.bwangel.me/2018/11/01/http-chunked 【Chunked分块传输】
+- https://github.com/mojocn/flash/blob/master/main.go 【断点续传】
