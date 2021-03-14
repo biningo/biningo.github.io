@@ -1,4 +1,13 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 11 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>IP协议</title><link>/2021/03/11/%E7%BD%91%E7%BB%9C%E5%B1%82%E5%92%8Cip%E5%8D%8F%E8%AE%AE/</link><pubDate>Thu, 11 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/11/%E7%BD%91%E7%BB%9C%E5%B1%82%E5%92%8Cip%E5%8D%8F%E8%AE%AE/</guid><description>TODO</description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 12 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>HashMap源码分析</title><link>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link><pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid><description><![CDATA[为什么对象需要同时重写equals和hashcode Object对象有两个重要的方法: equals hashcode
+public boolean equals(Object obj) { return this == obj; //默认直接比较是否是同一个引用 } @HotSpotIntrinsicCandidate public native int hashCode(); equals 默认是直接比较是否是同一个引用
+hashCode 则不同机器实现不一样，一般是用变量的内存地址来进行计算hash值的
+如果一个对象要放入 HashSet 或则 HashMap 的话，需要遵循下列原则，否则就会出现不可预期的错误(HashSet是用HashMap来实现的，所以只需要讨论HashMap即可):
+ 如果一个类重写了equals()方法，则必须重写hashCode()方法。2个对象的equals()方法返回true的话，其hashCode()必须返回相同的值
+ 为什么需要重写 hashCode() 方法呢?
+这个很好理解，因为HashMap查找和放入一个 kv 必须计算出key的hash值，然后选择合适的位置放入value，其实就是直接调用key的hashCode()方法计算hash值，下次查找就是直接根据hash值来直接索引到value(这里还需要考虑Hash碰撞问题)，这样就实现了O(1)速度的查找，HashMap是典型的空间换时间的例子
+如果我们不重写hashCode()方法，则会调用父类Object的hashCode方法，该方法是根据值得内存地址计算得出的，也就是说我们不重写的话，那么两个我们认为值相同的key对象计算出的hash值就会不一样，这样就会导致错误，比如HashSet无法进行去重等，下面的Student没有重写hashCode方法
+public static void main(String[] args) { HashSet&lt;Student&gt; set = new HashSet&lt;&gt;(); Student s1 = new Student(&#34;one&#34;); Student s2 = new Student(&#34;one&#34;); set.add(s1); set.add(s2); System.out.println(set.size()); //2 【错误】这里应该为1 } 已经重写了hashCode()，为什么还需要重写equals()方法？
+虽然我们重写了hashCode() 方法，但是还是无法得出正确的结果，因为hash值可能会发生 hash碰撞 ，也就是两个不同值得对象计算出的hash值一样，这个时候就会用 拉链法 等算法来解决碰撞，所以如果只比较hashCode就认为两个对象是相等的这显然是不合理的，所以 HashMap 在添加和取对象的时候不仅仅会比较hashCode，还会比较equals方法，如果两个都相等才判断为同一个对象]]></description></item><item><title>IP协议</title><link>/2021/03/11/%E7%BD%91%E7%BB%9C%E5%B1%82%E5%92%8Cip%E5%8D%8F%E8%AE%AE/</link><pubDate>Thu, 11 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/11/%E7%BD%91%E7%BB%9C%E5%B1%82%E5%92%8Cip%E5%8D%8F%E8%AE%AE/</guid><description>TODO</description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
 uintptr、int、uint uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
 同理int、uint等也是相似的，随本机类型而定，64位机器则是int64
 type自定义类型 type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值 类型 默认值 bool false int、float64等数值类型 0 string &amp;quot;&amp;quot; 整数类型的表示 d1:=0x10F //16进制 int64 d2:=0b111 //二进制 int64 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示 //[float64] d1:= .32 //0.32 d2:= 2. //2.0 d3:=2.3e3 //2300 d4:=2.3e-3 //0.0023 字符串的``反引号 s:=`1111 2222 3333` //反引号不会进行转义 常量const和itoa const定义的一组变量可以设置相同的值</description></item><item><title>HTTP协议</title><link>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</guid><description>请求和响应报文 请求报文第一行必须指定 请求的方法、资源路径、HTTP协议版本
@@ -55,24 +64,4 @@ n+空格 #在当前行中移动n个字符 n+Enter #移动到距离当前行后n�
 a/A/i #在 光标后/行末/光标前 插入文本 o/O(字母O) #在光标下/上方新开一行 x/X #命令模式下删除光标后/前的单个字符 r/R #替换字符/复写模式,连续替换 d0/d$ #删除到 行首/行尾 dgg/dG #删除到 文件头/文件尾 dd/ndd #删除该行/删除该行下的n行 yy/nyy #复制该行/n行 p/P #当前行下/上面粘贴 u/ctrl+r #撤销上次操作/撤销反悔,重做上次撤销 文档检索
 /search_text #在文档后面的部分搜索 ?search_text #在文档前面的部分搜索 n/N #往前/后移动检索到的关键字 :noh #取消检索的高亮 :%s/abc/aaa #检索第一个 “abc” 字符串并将其替换成“aaa” :%s/abc/aaa/g #检索并将所有的“abc”,替换为“aaa” :%s/original/replacement/gc #替换前先询问 可视模式
 v #逐字可视模式 V #逐行可视模式 保存文件
-:w new_file #另存为 不会退出 ZZ # :wq ZQ # :q!</description></item><item><title>MySql事务</title><link>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</guid><description>更新中&amp;hellip;
-事务四大特性ACID 原子性 Atomicity
-事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
-一致性 Consistency
-同一个事务中所有操作要么全部成功，要么全部失败
-隔离性 Isolation
-每个事务都是隔离的，互相不影响，一共有4个隔离级别
-持久性 Durability
-事务一旦提交，它对数据库中的数据的改变就应该是永久性的，不能回滚
-​
-四大隔离级别 1、读未提交 Read Uncommitted
-一个事务还没提交时，它做的变更对他事务可见
-2、读已提交 Read Committed Oracle默认的隔离级别
-一个事务只有提交时候它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况
-3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
-一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读、幻读问题
-4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
-​
-事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
-A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
-时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item></channel></rss>
+:w new_file #另存为 不会退出 ZZ # :wq ZQ # :q!</description></item></channel></rss>
