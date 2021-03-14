@@ -557,8 +557,6 @@ HTTP是 **请求-应答** 模式，如果同时发送多个请求那么当浏览
 
 ## HTTP代理
 
-代理也有几个头部:
-
 `Via` 保存经过的代理节点的主机名字或则域名
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img1/image-20201007095736179.png)
@@ -575,13 +573,52 @@ X-Forwarded-For: 192.168.0.10,192.168.0.12
 
 ​        
 
-## 条件请求
+## HTTP缓存和条件请求
 
-TODO
+### 1、Cache-Control 强缓存
 
-## HTTP缓存
+`Cache-Control` 控制浏览器缓存的时间，注意此头部是通用头部，请求和响应都可以有，如果是服务器响应头部的话则是告诉浏览器此信息可以缓存多久
 
-TODO
+一般点击 **刷新、地址栏重新输入、ctrl+f5** 则浏览器会制动设置Cache-Control的值为`max-age=0` 或则 `no-cache` ，这两个意思差不多，表示不从缓存取，直接请求服务器
+
+如果是 **超链接、重定向、或则被动请求** 则不会自动加上头部，那么如果没有超过max-age的值得话就会直接从缓存中获取，这就是 **强缓存** 即使服务器资源改变了，只要没有超过max-age则就会从缓存中拿
+
+| Cache-Control值     | 含义                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| max-age             | 单位是秒，缓存的开始时间是报文创造时的时间                   |
+| no-cache(max-age=0) | 不使用强缓存，直接请求服务器，协商缓存，如果服务器返回`304`表示缓存可用，重定向到缓存 |
+| no-store            | 禁止使用缓存，也不会进行协商缓存                             |
+| private             | 专用于个人的缓存，中间代理、CDN 等不能缓存此响应             |
+| public              | 响应可以被中间代理、CDN 等缓存                               |
+| must-revalidate     | 在缓存过期前可以使用，过期后必须向服务器验证，进行协商缓存   |
+| no-transform        | 不允许中间代理服务器对资源做转化                             |
+
+### 2、协商缓存
+
+如果缓存时间过了，但是服务器资源还是没有改变，那么就还是可以继续用缓存的，而不需要服务器再次传递数据
+
+当浏览器的强缓存失效的时候或者请求头中设置了`Cache-Control:max-age=0|no-cache` 不走强缓存，并且在请求头中设置了`If-Modified-Since` 或者 `If-None-Match` 的时候，会将这两个属性值到服务端去验证是否命中协商缓存，如果命中了协商缓存，会返回 `304` 状态，加载浏览器缓存，并且响应头会设置 `Last-Modified` 或者 `ETag` 属性
+
+请求头部:
+
+![](https://raw.githubusercontent.com/biningo/cdn/master/img1/http-cache.png)
+
+响应头部:
+
+![](https://raw.githubusercontent.com/biningo/cdn/master/img1/http-cache2.png)
+
+`Last-Modified/If-Modified-Since`  的值代表的是文件的最后修改时间，第一次请求服务端会把资源的最后修改时间放到 Last-Modified 响应头中，**第二次发起请求的时候，请求头会带上上一次响应头中的 Last-Modified 的时间，并放到 If-Modified-Since 请求头属性中**，服务端根据文件最后一次修改时间和 If-Modified-Since 的值进行比较，如果相等，返回 304 ，并加载浏览器缓存
+
+`ETag/If-None-Match` 是为了解决上面两个头部无法解决的问题:
+
+- 资源改动间隔时间为秒级，无法通过时间来判断缓存是否改变，因为max-age的单位为`s`
+- 资源更新了，但是内容还是之前的内容，这种情况还是可以继续使用缓存的，所以Etag也是不会变的
+
+`ETag/If-None-Match` 的值是一串 hash 码，代表的是一个资源的标识符，当服务端的文件变化的时候，它的 hash码会随之改变，通过请求头中的 `If-None-Match` 和当前文件的 hash 值进行比较，如果相等则表示命中协商缓存
+
+ETag 又有强弱校验之分，如果 hash 码是以 `W/` 开头的一串字符串，说明此时协商缓存的校验是弱校验的，只有服务器上的文件差异（根据 ETag 计算方式来决定）达到能够触发 hash 值后缀变化的时候，才会真正地请求资源，否则返回 304 并加载浏览器缓存
+
+​    
 
 ## 同源策略和跨域请求
 
@@ -705,8 +742,32 @@ func Cors() gin.HandlerFunc {
 
 ​    
 
+## HTTP安全之Basic认证
+
+Basic认证安全性比较低，但是其实现比较简单，只需要加一个头部即可
+
+比如现在访问 `/api`资源，服务器发现没有通过认证，于是范围如下报文
+
+```http
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Basic realm=<认证范围,随便写>
+```
+
+现在浏览器都实现了Basic认证弹窗，当收到这样的报文之后浏览器就会弹窗要求用户输入密码，如果严重通过则可以访问，如果不通过则继续返回`401`或则返回`403`
+
+用户输入密码之后，浏览器会在头部加上`Authorization: base64编码(username:pwd)`
+
+​    
+
+## HTTP2和HTTP1的区别
+
+
+
+
+
 ## 参考
 
 - https://www.cnblogs.com/lightsong/p/4172979.html 【第三方Cookie】
 - https://www.bwangel.me/2018/11/01/http-chunked 【Chunked分块传输】
 - https://github.com/mojocn/flash/blob/master/main.go 【断点续传】
+- https://www.zoo.team/article/http-cache 【缓存】
