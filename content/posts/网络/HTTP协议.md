@@ -1,5 +1,5 @@
 ---
-title: HTTP协议
+sstitle: HTTP协议
 date: 2021-03-08
 categories: [网络]
 tags: [HTTP]
@@ -729,7 +729,17 @@ func Cors() gin.HandlerFunc {
 
 ​    
 
-## CSRF跨站请求伪造攻击
+## XSS和CSRF攻击
+
+### XSS 
+
+**Cross Site Script 跨站脚本攻击**
+
+简单来说就是恶意的用户通过输入框、表单等输入恶意的js代码然后对原来的网站造成修改或则背后运行恶意js脚本，以至于其他用户访问该网站的时候都会执行此段代码
+
+### CSRF
+
+**Cross Site Request Forgery 跨站请求伪造攻击**
 
 所有拥有`src`属性的 `<script>、<img>、<iframe>` 以及`<a>`标签等，是不会经过同源策略，因为浏览器认为这些标签肯定是网站主动引用外部资源所加入的的所以不需要规定同源策略，例如`baidu.com`引用了CDN的`jquery`
 
@@ -758,12 +768,6 @@ WWW-Authenticate: Basic realm=<认证范围,随便写>
 用户输入密码之后，浏览器会在头部加上`Authorization: base64编码(username:pwd)`
 
 ​    
-
-## HTTP2和HTTP1的区别
-
-
-
-
 
 ## 参考
 
