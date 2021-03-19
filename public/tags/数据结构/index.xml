@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据结构 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link><description>数据结构 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml"/><item><title>完全二叉树和满二叉树</title><link>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</guid><description>满二叉树 如果二叉树中除了叶子结点，每个结点的度都为 2，则此二叉树称为满二叉树
+满二叉树有如下几个性质:
+满二叉树第i层节点的个数2^(i-1)
+深度为n的满二叉树必须有2^(n)-1个节点，叶子节点有2^(n-1) (也就是最后一层的节点数量)
+满二叉树中不存在度为 1 的节点，每一个分支点中都两棵深度相同的子树
+具有 n 个节点的满二叉树的深度为 log2(n+1)
+第i个节点的左右孩子分别为i*2+1 i*2+2 (孩子节点从0开始算起，如果孩子节点从1开始算起的话就是i*2 i*2+1 )
+第i个节点的父亲节点i/2-1 ，如果从1开始算起就是i/2
+​
+完全二叉树 结点依次从左到右分布，中间无法断开，则此二叉树被称为完全二叉树，完全二叉树适合用数组来存储
+第i个节点的左右孩子分别为i*2+1 i*2+2 (孩子节点从0开始算起，如果孩子节点从1开始算起的话就是i*2 i*2+1 )
+第i个节点的父亲节点i/2-1 ，如果从1开始算起就是i/2
+注意上面的计算要注意范围
+堆就是用完全二叉树来实现的</description></item></channel></rss>
