@@ -1,4 +1,26 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis命令总结</title><link>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description>Keys COPY 复制key
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量替换
+${@}和${*} 的区别
+两个都是用于获取所有入参，区别在于&quot;${@}&quot;被双引号包裹会展开里面的所有的值，而&quot;${*}&quot;则会将所有值当做一个，如果不加双引号那么他们就没有区别
+#下面只会执行一次循环 for i in &#34;${*}&#34;;do echo $i done #下面会输出每个参数 for i in &#34;${@}&#34;;do echo $i done 字符串 ''和 &quot;&quot; 的区别
+name=&#34;lyer&#34; s1=&#39;hello,${name}\n&#39; #不会转义,原样输出 s2=&#34;hello,${name}\n&#34; #转义 字符串拼接
+s1=&#34;abc&#34; s2=&#34;def&#34; s3=${s1}&#34;-&#34;${s2} 获取字符串的长度
+name=&#34;lyer&#34; echo ${#name} #和array的操作一样 获取子串
+${username:1} #[1,] ${username:1:2} #1开始获取2个 包括1 ${username:1:-2} #[1,-2) ${username::2} #截取0-2  ${username: 2} ${username: -3}：提取最后3个字符，注意冒号后面添加一个空格：txt 参考  https://wangdoc.com/bash/intro.html 【阮一峰Bash脚本教程】  ]]></description></item><item><title>Spring总结</title><link>/2021/03/19/spring%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/spring%E6%80%BB%E7%BB%93/</guid><description><![CDATA[Spring控制反转IOC和依赖注入DI 1、XML配置文件DI注入  Set注入  Set注入是调用对应的Set方法来实现的，方法名需要遵循 setName 形式，必须采用小驼峰法，否则无法注入，set注入首先会调用无参构造器创建类
+&lt;bean id=&#34;hello&#34; class=&#34;di.model.User&#34;&gt; &lt;property name=&#34;username&#34; value=&#34;lyer&#34;/&gt; &lt;property name=&#34;age&#34; value=&#34;18&#34;/&gt; &lt;/bean&gt; set注入可以注入多个数据类型的属性，常见的有如下几个类型
+map array list 基本类型 set bean(对象) @Data public class Student { private Integer id; private String name; private List&lt;String&gt; hobby; private Map&lt;String,Integer&gt; scores; private Set&lt;String&gt; friends; private Address address; } &lt;bean id=&#34;stu&#34; class=&#34;di.model.Student&#34;&gt; &lt;property name=&#34;id&#34; value=&#34;1&#34;/&gt; &lt;property name=&#34;name&#34;&gt; &lt;null/&gt; #显示指定为null 默认不设置值也为null &lt;/property&gt; &lt;property name=&#34;scores&#34;&gt; &lt;map&gt; &lt;entry key=&#34;english&#34; value=&#34;100&#34;/&gt; &lt;entry key=&#34;chinese&#34; value=&#34;99&#34;/&gt; &lt;/map&gt; &lt;/property&gt; &lt;property name=&#34;friends&#34;&gt; &lt;set&gt; &lt;value&gt;xioamin&lt;/value&gt; &lt;value&gt;hong&lt;/value&gt; &lt;/set&gt; &lt;/property&gt; &lt;property name=&#34;hobby&#34;&gt; &lt;list&gt; &lt;value&gt;running&lt;/value&gt; &lt;value&gt;basketball&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; #内联bean 也可以ref引用外部bean &lt;ref bean=&#34;address&#34; /&gt; &lt;property name=&#34;address&#34;&gt; &lt;bean class=&#34;di.]]></description></item><item><title>完全二叉树和满二叉树</title><link>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</guid><description>满二叉树 如果二叉树中除了叶子结点，每个结点的度都为 2，则此二叉树称为满二叉树
+满二叉树有如下几个性质:
+满二叉树第i层节点的个数2^(i-1)
+深度为n的满二叉树必须有2^(n)-1个节点，叶子节点有2^(n-1) (也就是最后一层的节点数量)
+满二叉树中不存在度为 1 的节点，每一个分支点中都两棵深度相同的子树
+具有 n 个节点的满二叉树的深度为 log2(n+1)
+第i个节点的左右孩子分别为i*2+1 i*2+2 (孩子节点从0开始算起，如果孩子节点从1开始算起的话就是i*2 i*2+1 )
+第i个节点的父亲节点i/2-1 ，如果从1开始算起就是i/2
+​
+完全二叉树 结点依次从左到右分布，中间无法断开，则此二叉树被称为完全二叉树，完全二叉树适合用数组来存储
+第i个节点的左右孩子分别为i*2+1 i*2+2 (孩子节点从0开始算起，如果孩子节点从1开始算起的话就是i*2 i*2+1 )
+第i个节点的父亲节点i/2-1 ，如果从1开始算起就是i/2
+注意上面的计算要注意范围
+堆就是用完全二叉树来实现的</description></item><item><title>Redis命令总结</title><link>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description>Keys COPY 复制key
 COPY name username #name-&amp;gt;username username必须不存在 COPY name username DB 1 #name-&amp;gt;1:username COPY name username REPLACE #存在则更新 DEL 删除key 返回值是删除的个数
 UNLINK非阻塞删除，重新开辟一个线程去回收内存，立即返回
 DEL key1 key2 EXISTS 查看可以是否存在 返回值是存在键的数量
@@ -31,7 +53,7 @@ GET /xx HTTP/1.1 Connection: Upgrade Upgrade: websocket Sec-WebSocket-Key: sdads
 HTTP/1.1 101 Switching Protocols Sec-WebSocket-Accept: dsdada Sec-WebSocket-Accept 是把请求头里Sec-WebSocket-Key的值，加上一个专用的 UUID “258EAFA5-E914-47DA-95CA-C5AB0DC85B11”，再计算 SHA-1 摘要，客户端接受到响应之后使用相同的方法计算出摘要然后判断是否相等，相等表示认证成功
 握手成功之后传递的就是WebSocket报文了
 ​
-WebSocket报文格式 域 说明 FIN 1bit，是否为信息的最后一帧 RSV 1-3 1bit，备用，默认为0 opcode 4bit，帧类型 1 表示帧内容是纯文本，2 表示帧内容是二进制数据，8 是关闭连接，9 和 10 分别是连接保活的 PING 和 PONG MASK 1bit 掩码，是否用XOR进行简单加密数据。 客户端发送给服务端时，mask必须为1，否则断开连接。 服务端发送给客户端时，mask必须为0，否则断开连接。 payload length 表示帧的长度。它是另一种变长编码，最少 7 位，最多是 7+64 位，一个 WebSocket 帧最大是 2^64 Masking-key 0或32 bit掩码值(Mask为1时才有)，是一个4byte的随机数 Playload data 长度为Payload len的数据，如果有掩码，需要用Masking-Key来异或解密</description></item><item><title>HashMap源码分析</title><link>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link><pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid><description><![CDATA[为什么对象需要同时重写equals和hashcode Object对象有两个重要的方法: equals hashcode
+WebSocket报文格式 域 说明 FIN 1bit，是否为信息的最后一帧 RSV 1-3 1bit，备用，默认为0 opcode 4bit，帧类型 1 表示帧内容是纯文本，2 表示帧内容是二进制数据，8 是关闭连接，9 和 10 分别是连接保活的 PING 和 PONG MASK 1bit 掩码，是否用XOR进行简单加密数据。 客户端发送给服务端时，mask必须为1，否则断开连接。 服务端发送给客户端时，mask必须为0，否则断开连接。 payload length 表示帧的长度。它是另一种变长编码，最少 7 位，最多是 7+64 位，一个 WebSocket 帧最大是 2^64 Masking-key 0或32 bit掩码值(Mask为1时才有)，是一个4byte的随机数 Playload data 长度为Payload len的数据，如果有掩码，需要用Masking-Key来异或解密 ​</description></item><item><title>HashMap源码分析</title><link>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link><pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid><description><![CDATA[为什么对象需要同时重写equals和hashcode Object对象有两个重要的方法: equals hashcode
 public boolean equals(Object obj) { return this == obj; //默认直接比较是否是同一个引用 } @HotSpotIntrinsicCandidate public native int hashCode(); equals 默认是直接比较是否是同一个引用
 hashCode 则不同机器实现不一样，一般是用变量的内存地址来进行计算hash值的
 如果一个对象要放入 HashSet 或则 HashMap 的话，需要遵循下列原则，否则就会出现不可预期的错误(HashSet是用HashMap来实现的，所以只需要讨论HashMap即可):
@@ -62,25 +84,4 @@ GET /note/ef1b6cee.html HTTP/1.1 Host: www.ru23.com Connection: keep-alive Cache
 紧接着就是响应头信息
 然后还需要一个空行
 如果有响应体的化就需要一个响应体，没有的话空行也是必须的
-HTTP/1.1 200 OK Server: nginx/1.16.1 Date: Sun, 04 Oct 2020 02:27:01 GMT Last-Modified: Sun, 30 Aug 2020 14:12:42 GMT Content-Type: text/html Content-Length: 40846 Accept-Ranges: bytes &amp;lt;!</description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
-uintptr、int、uint uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
-同理int、uint等也是相似的，随本机类型而定，64位机器则是int64
-type自定义类型 type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值 类型 默认值 bool false int、float64等数值类型 0 string &amp;quot;&amp;quot; 整数类型的表示 d1:=0x10F //16进制 int64 d2:=0b111 //二进制 int64 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示 //[float64] d1:= .32 //0.32 d2:= 2. //2.0 d3:=2.3e3 //2300 d4:=2.3e-3 //0.0023 字符串的``反引号 s:=`1111 2222 3333` //反引号不会进行转义 常量const和itoa const定义的一组变量可以设置相同的值</description></item><item><title>网络分层和协议栈总览</title><link>/2021/03/05/%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E5%92%8C%E5%8D%8F%E8%AE%AE%E6%A0%88%E6%80%BB%E8%A7%88/</link><pubDate>Fri, 05 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/05/%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E5%92%8C%E5%8D%8F%E8%AE%AE%E6%A0%88%E6%80%BB%E8%A7%88/</guid><description>OSI七层模型和TCP/IP五层模型 ​
-为什么网络要分层 复杂的计算机程序都需要通过分层来设计，这是一种设计模式，通过分层每层各司其职，每层都可以独立升级和维护
-​
-TCP/IP协议栈 1、应用层 协议 全名 功能 基于/端口 HTTP Hypertext Transfer Protocol web TCP/80 HTTPS Hypertext Transfer Protocol Secure 加密的HTTP SSL/TSL/443 SSL/TSL Secure Socket Layer/Transport Layer Security 加密协议 FTP File Transfer Protocol 传输文件 TCP/21(控制)/20(数据传输) SSH Secure Shell 连接远程Linux主机 TCP/22 SFTP SSH File Transfer Protocol SSH加密的FTP SSH/22 DNS Domain Name System IP和域名的解析转化 UDP/TCP/53 SMTP Simple Mail Transfer Protocol 邮件收发 TCP/25 POP3 Post Office Protocol-Version 3 收邮件 TCP/110 RPC Remote Procedure Call 调用远程的函数 TCP/随机 DHCP Dynamic Host Configuration Protocol 在局域网中动态分配IP UDP/67(接收)/68(请求) 2、传输层 协议 全名 功能 TCP Transmission Control Protoco 可靠的传递网络数据包 QUIC Quick UDP Internet Connections Google研发的基于UDP的传输层协议，用于替换TCP 2、网络层 协议 全名 功能 IP Internet Protocol 广域网传递数据包 ARP Address Resolution Protocol 根据IP获取MAC ICMP Internet Control Message Protocol 传递网络控制信息，需要加上IP报头组成IP数据报发送 ​</description></item><item><title>数据链路层和以太网</title><link>/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/</guid><description>局域网和以太网的区别 局域网需要解决的就是网内多对多的通讯，局域网内所有的主机都可以进行通讯，一个简单粗暴的办法就是给每台PC都连接到网内任何一台PC的网线这不现实，每加入一台PC就需要给网内的每台PC加一条网线太不现实了，所以就需要一些 局域网拓扑结构 来解决这个问题
-局域网拓扑结构有很多种，有星型、环形、总线型等，大多数的局域网都是 星型 局域网内的主机都连接到比如 集线器 的物理设备中进行通讯，所有信息都经过集线器然后再进行转发，这样局域网内的主机就可以和网内所有的主机进行通讯了，这种 星型 类型的局域网叫做 以太网
-综上: 以太网是一种局域网
-​
-MAC地址 24:41:8c:28:e2:ea MAC地址由:分割，每个单元都由一个16进制表示，大小为8byte，MAC地址是全球唯一的
-前 24 位是设备制造商的标识符，由IEEE组织分配，也就是组织唯一标识符，后24位由设备制造商自己内部分配，必须要保证唯一
-​
-数据链路层 数据链路层需要将上层 网络层 传递下来的 IP数据报 封装层帧（也就是加上一些报头和报尾）然后将数据帧在 局域网/以太网 中传播，在数据链路层/以太网中 MAC地址 唯一标识一台网络设备
-为什么有了IP还需要MAC ? 为什么有了MAC还需要IP?
-现在基本的局域网都是 以太网 ，所以最常见的链路层的数据帧是 Enthernet || 格式
-的数据帧，也叫 MAC帧 (因为该帧的特点是通过MAC地址进行通讯)
-链路层主要有两种类型的信道:
-1对1信道，比如 PPP协议 广播信道，比如以太网 链路层主要解决下列3个问题:
-封装成帧: 比如 Ehthernet || 数据帧 ，并且需要对一些特殊字符(比如报文信息中出现了和数据帧控制字符一样的字节)进行转义处理，并且需要加入一些头部控制信息，比如目标的MAC地址和源地址，以及数据帧内容的类型，是IP数据报还是ARP报文、ICMP报文等其他类型的数据帧 差错检测: 如果数据帧在传输过程被干扰出现错误，那么就需要丢弃这个数据帧，所以在接受到之前需要进行检测 透明传输: 因为之前插入了一些转义处理的字节，所以在接受到时需要去除这些冗余的字节，这些多余的字节必须不影响原来数据包的传播，看起来就像是透明的 ​
-Ehthernet ||帧格式 没有VLAN的格式
-有VLAN格式</description></item></channel></rss>
+HTTP/1.1 200 OK Server: nginx/1.16.1 Date: Sun, 04 Oct 2020 02:27:01 GMT Last-Modified: Sun, 30 Aug 2020 14:12:42 GMT Content-Type: text/html Content-Length: 40846 Accept-Ranges: bytes &amp;lt;!</description></item></channel></rss>
