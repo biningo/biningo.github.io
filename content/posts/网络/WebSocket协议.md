@@ -61,3 +61,9 @@ Sec-WebSocket-Accept: dsdada
 | payload length | 表示帧的长度。它是另一种变长编码，最少 `7` 位，最多是 `7+64` 位，一个 WebSocket 帧最大是 `2^64` |
 | Masking-key    | 0或32 bit掩码值(Mask为1时才有)，是一个`4byte`的随机数        |
 | Playload data  | 长度为Payload len的数据，如果有掩码，需要用Masking-Key来异或解密 |
+
+​    
+
+## 参考
+
+https://www.ruanyifeng.com/blog/2017/05/websocket.html

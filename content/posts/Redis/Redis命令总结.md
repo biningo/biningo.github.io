@@ -78,7 +78,7 @@ KEYS name* #* 表示匹配所有
 KEYS name? #? 表示匹配一个字母
 ```
 
-`MOV
+`MOV`
 
 ```bash
 OBJECT ENCODING name #查看底层数据结构
@@ -129,9 +129,9 @@ SORT arr DESC
 APPEND name lyer
 ```
 
-`BITCOUNT` 计算val的`1`的个数，val对应的都是字符串形式保存，会转化为ascii码然后转化为二进制，包括数字也是会转化为ascii码
+`BITCOUNT` 计算val的`1`的个数，val对应的都是字符串形式保存，会转化为`ascii码`然后转化为二进制，包括数字也是会转化为ascii码
 
-`GITBIT` 获取指定位置的bit位
+`GITBIT/SETBIT`  获取/设置指定位置的bit位,setbit如果不存在key则会创建，并且以8位为单位进行适当的扩容
 
 ```bash
 a-z：97-122
@@ -147,9 +147,87 @@ GETBIT age 0 #0:0 1:1 7:1
 SETBIT age 0 1 #11100001  #返回0表示成功
 ```
 
+`BITOP` 用于位运算相关操作，dest不存在则会创建，存在则覆盖
 
+```bash
+BITOP <opt> <dest> <key1> <key2> ...
+```
 
+有如下几个操作符
 
+```bash
+AND、OR、XOR、NOT
+```
+
+```bash
+BITOP AND a b c
+```
+
+`INCR/DECR` 对整数进行加1减1 不存在会创建，0为初始值
+
+`INCRBY/DECRBY` 加减一定的数
+
+```bash
+INCR a
+DECR b
+INCRBY a 10
+```
+
+`GETDEL` 获取之后就删除
+
+```bash
+GETDEL name #之后再获取就没了
+```
+
+`GETRANGE` 获取string指定范围的字符串
+
+```bash
+GETRANGE name 0 3 #[0,3] [0,-1]全部
+```
+
+`GETSET` 获取老值同时设置新值
+
+```bash
+GETSET name abc
+```
+
+`GETEX` 获取值，同时设置过期时间
+
+`SETEX` 设置值并设置过期时间
+
+```bash
+GETEX k EX 10
+SETEX k 10 v
+```
+
+`MGET` 获取多个key，`get`只能获取一个key
+
+`MSET` 设置多个key，`set`只能设置一个key
+
+```bash
+MGET k1 k2 k3
+MSET k1 v1 k2 v2
+```
+
+`SETNX/MSETNX` 只有不存在才设置值，存在则不设置 msetnx其中有一个设置不成功则全部不成功
+
+```bash
+SETNX k v
+```
+
+`SETRANGE` 从指定位置开始设置值
+
+```bash
+SETRANGE k 10 aaaaa #10位置开始aaaaa 如果原来长度小于10则默认设置0
+```
+
+`STRLEN` 计算key的长度
+
+```bash
+STRLEN a
+```
+
+​    
 
 
 
