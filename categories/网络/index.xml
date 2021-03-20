@@ -1,4 +1,15 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>TSL(SSL)协议</title><link>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TSL协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 20 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title/><link>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</guid><description>为什么HTTP/1.1协议不支持服务器端推送 HTTP/1.1规定了只能是 请求-响应 模式，为什么这样设计呢，我个人认为主要有如下几个原因:
+客户端和服务器容易实现HTTP协议，简单 当时对页面的实时性，数据量没有现在大 当时并发程度不高 浏览器等客户端以及服务器都是根据HTTP协议进行设计的，所以即使HTTP/1.1能保持TCP的keep-alive一直连接并能被多个HTTP请求复用，但是依然无法实现服务器推送
+即使你自己的服务器程序实现了HTTP推送，有些浏览器不支持那也没办法，因为大家都是遵循协议来的
+即使服务器和客户端都实现了，那么还有很多代理服务器、缓存服务器、CDN服务器等也可能都没有实现这个HTTP推送，所以依赖无法实现推送
+所以有了WebSocket协议，浏览器和服务器双方根据HTTP先握手建立TCP连接，然后进行协议升级，双方就可以根据WebSocket协议进行通讯，服务器就可以拿到TCP句柄进行服务器推送了
+请求-应答模式带来了两个问题:
+队首阻塞 过多的HTTP通讯，往返延迟加大 HTTP/1.1正是因为这个 请求-应答 模式，在一个TCP连接上一个请求发送之后必须等待响应回来之后才可以用这个TCP连接发送另外一个请求，不然浏览器无法识别应答是哪个请求的应答，所以产生了 HTTP报文队首阻塞问题 只要一个请求的应答阻塞了那么这个请求就必须一直等，之后排队的请求也必须等
+为了解决 队首阻塞 问题于是浏览器就为每个用户开辟多个TCP连接来并发的发送多个HTTP请求，因为他们使用不同的TCP连接所以浏览器可以识别哪个应答属于哪个请求，但是一个用户如果TCP连接过多比如一个用户有10个TCP连接，那么1000个用户将会产生1000*10=10000个并发连接，这样会造成服务器压力变大，所以浏览器就必须限制每个用户的TCP并发连接数
+并且客户端请求一个页面，发现页面里面包含css、js等资源，于是又发起这些资源的请求，这样起码一个页面会产生多次请求，多次请求都会一个个排队等待响应，这样无形之中又加大了延迟，但是如果有服务器推送，那么在第一次客户端请求这个页面的同时就把页面还有css、js等资源一起推送过去，这样就只需要一次请求即可完成，减少了网络传输的HTTP包减少了请求次数，也降低了延迟
+​
+为什么 HTTP1.1 不能实现多路复用 HTTP不能实现多路复用是因为一个HTTP请求只能在一个TCP连接里面传输，因为HTTP的报文都是文本形式的，并且是不分帧，如果不在一个TCP连接里面传输的话浏览器就无法识别这个报文响应属于哪个请求，服务器必须将响应报文按原路返回回去
+HTTP2则可以实现一个HTTP报文可以在不同的TCP连接里面传输，因为HTTP2的报文是二进制形式将HTTP报文分为一个个的数据帧的，并且有 流 的概念来识别一个请求的响应报文</description></item><item><title>TSL(SSL)协议</title><link>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TSL协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
 为了防止HTTP明文传输，于是可以讲HTTP报文和数据整个进行加密然后再将数据传递给下层的TCP层，传递到客户端再进行解密，TSL协议就是解决HTTP报文加密问题的，被TSL协议加密之后的HTTP协议就叫HTTPS HTTP over SSL 使用的是443端口
 TSL是SSL的改进版，现在都是使用TSL来替换SSL了，但是延续了老的叫法，所有都叫SSL 这两个其实是同一个意思
 TSL现在广泛使用的版本为TSL1.2 TSL1.3
