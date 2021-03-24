@@ -19,8 +19,9 @@ HashMap刚开始是一个`Node`节点的数组 ，初始化为`16`大小 如果�
 
 `HashTable`和`HashMap`的主要区别如下:
 
-- HashTable是并发安全的，HashMap不安全
-- HashTable的value不允许null，HashMap允许
+- **HashTable是并发安全的，HashMap不安全**
+- **HashTable的value不允许null，HashMap允许**
+- HashTable属于老的集合容器，HashMap属于新一代集合容器
 
 ​        
 
