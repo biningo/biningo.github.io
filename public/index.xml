@@ -1,8 +1,41 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 21 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Java集合总结和源码浅析</title><link>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</link><pubDate>Sun, 21 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</guid><description>OverView ​
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 24 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>中断</title><link>/2021/03/24/%E4%B8%AD%E6%96%AD/</link><pubDate>Wed, 24 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/24/%E4%B8%AD%E6%96%AD/</guid><description>中断分类 中断按照是否由CPU内部发生分为:
+外部中断 (由CPU外部引发，比如外设、网卡等) 内部中断 (由CPU内部引发，比如系统调用) 外部中断分为:
+可屏蔽中断 (比如网卡发出数据读取中断，可以屏蔽) 不可屏蔽中断 (比如掉电、设备损坏等) 内部中断分为:
+软中断 (由软件程序触发，比如系统调用0x80号中断) 异常 (异常也是一种特殊的中断，比如除0异常、缺页异常) ​
+中断产生和调用原理 触发中断其实就是给出一个 中断号 ，然后CPU根据中断号去查找中断对应的程序进行执行的一个过程
+操作系统会设置一个 IDT中断描述符表 ，里面记载了各个中断号对应的程序的入口地址，操作系统内核在运行初始化的时候必须初始化 中断寄存器指向的位置 ，因为一旦发生中断CPU就会去中断寄存器指向的IDT中去寻找中断程序
+发生中断时用户态就会转化为内核态，CPU会保存程序当前执行的状态，比如会将栈指针、各个寄存器值、PC指针压入内核栈，然后开始执行中断处理程序，执行完毕之后再恢复现场，也就是将栈中的值都出栈然后放到各个寄存器中继续执行之前的代码
+那么这个中断是如何引发的呢?
+软中断和异常容易理解，CPU有一个int指令，后面跟给一个中断号，程序只需要执行这个指令即可触发软中断或异常，最常见的软中断就是int 0x80中断，此中断是系统调用中断，所有的系统调用都会触发这个中断，系统调用中断还需要给出 系统调用号 ，系统调用中断处理程序会根据系统调用号去执行相应的系统调用代码
+外中断需要经过一个叫 中断代理 的硬件，该硬件连接了所有外设接口的中断线，外设如果需要引发中断则只需要往这个中断线里面传输信号到中断代理即可，中断代理会根据不同的信号转化为相应的 中断号 ，中断代理和CPU只连接了两条线: INTR和NMI INTR表示可屏蔽中断，比如网卡发出的中断、NMI表示不可屏蔽中断
+可屏蔽中断的话只需要CPU设置状态寄存器中相应的位就表示屏蔽这些中断，注意: 软中断、异常都是会忽略该位的 也就是说软中断和异常都是不可屏蔽的，软中断通常来说是系统调用，用户进程需要系统调用则操作系统必须响应，否则会造成用户程序卡死无法获得操作系统提供的帮助，会造成用户体验不好，异常更不用说了，需要立即处理
+中断代理将相应的中断号输出到INTR线中通知CPU，CPU没执行一条指令都会检查该线是否有中断信号(注意:CPU检查中断是由硬件电路来实现的，并不会有任何的损耗)
+如果有中断信号则CPU会立即检测到
+​
+中断的上半部分和下半部分 一个中断程序可以分为 上部分和下部分 ，中断处理时可以先执行上半部分，这个部分一般来说比较紧急，等CPU空闲之后再继续执行下半部分
+比如网卡发出数据读取操作，此时CPU先执行上半部分的中断程序：先将网卡缓存区里的数据拷贝到内核数据区，这个网卡就不会因为缓存区满而频繁丢包了(相当于一个紧急救火)，然后等CPU空闲了之后再执行中断下半部分，也就是将内核数据区域的数据拷贝到用户空间供用户使用
+​
+操作系统时钟中断 这个时钟和CPU的时钟不是一个概念，但是他们的功能都是差不多的，都是为了使操作系统或则CPU能正确的工作，时钟就相当于一个 节拍器，很多硬件设备也有时钟，为的就是让各个电路有序的进行操作
+操作系统的时钟中断由 可编程的脉冲器 产生的，因为操作系统需要和硬件配合的，所以一般和硬件结合的比较紧密，该硬件脉冲频率是和操作系统厂商商量好的，并且可以人为的编程去改变脉冲的频率
+时钟中断会定时的引发然后传递到CPU的NMI引脚，时钟中断属于不可屏蔽中断
+时钟中断的作用非常大，可以说没有时钟中断操作系统就没有控制权，时钟中断的作用如下:
+更新系统的时间 定时的将控制权转移到操作系统的程序中，以便操作系统进行各个调度工作比如进程时间片调度，每经过一个时钟则时间片减一 (如果没有时钟中断，那么如果用户程序如果一直不进行系统调用、不引发异常那么操作系统可能永远也拿不到CPU的控制权)</description></item><item><title>JavaIO流总结</title><link>/2021/03/23/javaio%E6%B5%81%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/23/javaio%E6%B5%81%E6%80%BB%E7%BB%93/</guid><description>OverView Java 的 I/O 大概可以分成以下几类：
+磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable 网络操作：Socket 非阻塞IO：NIO ​
+File文件相关操作 File类是操作文件系统的相关操作，如果要读取文件内容的数据，则需要传递给IO流对象，通过IO流的方式进行读取
+File f = new File(&amp;#34;/home/pb/tmp/printf.sh&amp;#34;); FileInputStream inputStream = new FileInputStream(f); 通过操作此对象可以创建文件、列出目录下的文件列表、判断文件是否可读、判断类型等操作
+f.isFile(); f.createNewFile(); ​
+InputStream 字节流接口，所有流的接口，比如:
+FileInputStream文件流用于读取文件 ByteArrayInputStream 从字节数组里面读取流 OutPutStream就是将数据写入到目标处，这里将程序员作为主体，Out表示程序员将数据输出到计算机，Input则表示计算机的数据要输入到程序员中
+​
+BufferedInputStream 带有一个字节缓冲数组的InputStream ，需要传入一个实现了 InputStream 接口的流，比如文件，使用了装饰者模式 ，读取流的话不是直接操作文件了，而是每次读取会预先读取到一块byte[]中，相当于缓冲，然后更具用户读取的大小从缓冲区里面读取到用户的字节数组中
+​
+Reader 字符流接口 一个字符可能有多个字节组成比如汉字，实现的接口有:
+InputStreamReader 接受一个 InputStream 对象，然后按照编码将字节进行转化为字符 FileReader 继承 InputStreamReader ，用于直接读取文件，里面就是根据传入的File对象或则文件名创建一个 FileInputStream 然后传入父类 InputStreamReader ​
+BufferedReader 带缓冲的Reader，需要传入一个实现了 Reader 接口的流，比如文件FileInputStreamReader，读取的话会先读入到char[]中，然后直接从char[]缓冲区进行读取，装饰者模式</description></item><item><title>Java集合总结和源码浅析</title><link>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</link><pubDate>Sun, 21 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</guid><description>OverView ​
 HashMap和HashTable HashMap刚开始是一个Node节点的数组 ，初始化为16大小 如果节点元素个数达到一定的值(这个值略小于 HashTable 的大小)，则会进行扩容
 然后逐渐放入元素，刚开始如果发生碰撞就采用 拉链法 进行解决碰撞 ，如果链表的节点个数&amp;gt;=8同时 数组 大小大于64 则会进行树化，转化为 红黑树 来加快查找(红黑树是一颗高度平衡的二叉查找树) 如果链表节点个数大于8但是数组小于64则会进行扩容数组
 HashTable和HashMap的主要区别如下:
-HashTable是并发安全的，HashMap不安全 HashTable的value不允许null，HashMap允许 ​
+HashTable是并发安全的，HashMap不安全 HashTable的value不允许null，HashMap允许 HashTable属于老的集合容器，HashMap属于新一代集合容器 ​
 ConcurrentHashMap 和HashMap差不多，但是这个是并发安全的
 在 JDK1.8 中，ConcurrentHashMap 选择了与 HashMap 相同的数组+链表+红黑树结构，在锁的实现上，采用 CAS 操作和 synchronized锁 实现更加低粒度的锁，将锁的级别控制在了更细粒度的 table 元素级别，也就是说只需要锁住这个链表的首节点，并不会影响其他的 table 元素的读写，大大提高了并发度
 ​
@@ -76,27 +109,4 @@ PERSIST 解除timeout时间
 EXPIRE name 10 EXPIREAT name 8233132131 TTL name PERSIST name KEYS 模式匹配展示出keys
 KEYS name* # * 匹配所有 KEYS name? # ? 匹配一个 MOVE 移动key到指定的db
 MOVE age 2 OBJECT 展示redis每个key的对象相关的信息，比如对象底层的数据结构是什么
-redis有五大常见对象:</description></item><item><title>TSL(SSL)协议</title><link>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TSL协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
-为了防止HTTP明文传输，于是可以讲HTTP报文和数据整个进行加密然后再将数据传递给下层的TCP层，传递到客户端再进行解密，TSL协议就是解决HTTP报文加密问题的，被TSL协议加密之后的HTTP协议就叫HTTPS HTTP over SSL 使用的是443端口
-TSL是SSL的改进版，现在都是使用TSL来替换SSL了，但是延续了老的叫法，所有都叫SSL 这两个其实是同一个意思
-TSL现在广泛使用的版本为TSL1.2 TSL1.3
-​
-TSL握手第一阶段 加密算法有 对称加密、非对称加密 ，如果将HTTP报文采用非对称加密的话那么带来的CPU运算是非常大的，速度也相对较慢，因为HTTP报文一般数据比较大
-所以TSL采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 对称密钥 的问题了，这就是 TSL握手 需要解决的问题，就是生成对称密钥
-Client Hello TCP建立之后浏览器会先发送一个Client Hello TSL报文给服务器，目的是为了告诉服务器如下内容，重点关注如下内容:
-客户端TSL版本 支持的加密套件Cipher Suites : 使用什么加密算法等，服务器会选择一个加密算法 随机字符串Random1 : 这个随机数和之后的生成对称密钥有关 Session ID 用来恢复会话 SessionTicket 客户端保存的TSL的session信息 Server Hello 服务器接受到客户端的Client Hello之后就会检查客户端版本、加密套件等信息，检查通过并且符合服务器的条件则服务器会进行回复，也就是发送Server Hello包
-回复内容主要是告诉客户端如下几个重要的内容:
-服务器的TSL版本
-从Client Hello中选择一个加密套件，告诉服务器选择了哪个套件
-随机字符串Random2 此时客户端和服务器都拥有 Random1、Random2
-Session ID 初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗</description></item><item><title>WebSocket协议</title><link>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</guid><description>WebSocket要解决的问题 由于HTTP是请求应答模式，所以如果是聊天室这样的项目的话，那么为了立即获取到信息浏览器就必须进行不断的轮询服务器，不仅效率低下，而且还无法立即获取到数据
-于是就有了WebSocket协议，WebSocket是通过HTTP协议进行握手然后再进行通讯的，因为浏览器无法同服务器直接建立TCP连接，所以只能先通过HTTP协议建立一个TCP连接通道，之后再升级协议采用WebSocket协议，这样WebSocket就和HTTP采用相同的端口进行和服务器通讯了
-ws://www.chrono.com ws://www.chrono.com:8080/srv wss://www.chrono.com:445/im?user_id=xxx #加密的websocket协议 ​
-WebSocket握手 WebSocket握手是通过HTTP协议进行的
-首先浏览器请求升级协议
-GET /xx HTTP/1.1 Connection: Upgrade Upgrade: websocket Sec-WebSocket-Key: sdadsxxada== Sec-WebSocket-Version: 13 Sec-WebSocket-Key 是一个 Base64的16byte的随机数 用于简单认证，防止误连
-然后浏览器返回101响应
-HTTP/1.1 101 Switching Protocols Sec-WebSocket-Accept: dsdada Sec-WebSocket-Accept 是把请求头里Sec-WebSocket-Key的值，加上一个专用的 UUID “258EAFA5-E914-47DA-95CA-C5AB0DC85B11”，再计算 SHA-1 摘要，客户端接受到响应之后使用相同的方法计算出摘要然后判断是否相等，相等表示认证成功
-握手成功之后传递的就是WebSocket报文了
-​
-WebSocket报文格式 域 说明 FIN 1bit，是否为信息的最后一帧 RSV 1-3 1bit，备用，默认为0 opcode 4bit，帧类型 1 表示帧内容是纯文本，2 表示帧内容是二进制数据，8 是关闭连接，9 和 10 分别是连接保活的 PING 和 PONG MASK 1bit 掩码，是否用XOR进行简单加密数据。 客户端发送给服务端时，mask必须为1，否则断开连接。 服务端发送给客户端时，mask必须为0，否则断开连接。 payload length 表示帧的长度。它是另一种变长编码，最少 7 位，最多是 7+64 位，一个 WebSocket 帧最大是 2^64 Masking-key 0或32 bit掩码值(Mask为1时才有)，是一个4byte的随机数 Playload data 长度为Payload len的数据，如果有掩码，需要用Masking-Key来异或解密 ​</description></item></channel></rss>
+redis有五大常见对象:</description></item></channel></rss>

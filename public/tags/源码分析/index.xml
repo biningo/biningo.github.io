@@ -2,7 +2,7 @@
 HashMap和HashTable HashMap刚开始是一个Node节点的数组 ，初始化为16大小 如果节点元素个数达到一定的值(这个值略小于 HashTable 的大小)，则会进行扩容
 然后逐渐放入元素，刚开始如果发生碰撞就采用 拉链法 进行解决碰撞 ，如果链表的节点个数&amp;gt;=8同时 数组 大小大于64 则会进行树化，转化为 红黑树 来加快查找(红黑树是一颗高度平衡的二叉查找树) 如果链表节点个数大于8但是数组小于64则会进行扩容数组
 HashTable和HashMap的主要区别如下:
-HashTable是并发安全的，HashMap不安全 HashTable的value不允许null，HashMap允许 ​
+HashTable是并发安全的，HashMap不安全 HashTable的value不允许null，HashMap允许 HashTable属于老的集合容器，HashMap属于新一代集合容器 ​
 ConcurrentHashMap 和HashMap差不多，但是这个是并发安全的
 在 JDK1.8 中，ConcurrentHashMap 选择了与 HashMap 相同的数组+链表+红黑树结构，在锁的实现上，采用 CAS 操作和 synchronized锁 实现更加低粒度的锁，将锁的级别控制在了更细粒度的 table 元素级别，也就是说只需要锁住这个链表的首节点，并不会影响其他的 table 元素的读写，大大提高了并发度
 ​

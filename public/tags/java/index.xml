@@ -1,4 +1,16 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Java - 标签 - lyer's blog</title><link>/tags/java/</link><description>Java - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 20 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/java/" rel="self" type="application/rss+xml"/><item><title>Java泛型总结</title><link>/2021/03/20/java%E6%B3%9B%E5%9E%8B%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/java%E6%B3%9B%E5%9E%8B%E6%80%BB%E7%BB%93/</guid><description><![CDATA[为什么需要泛型 Java的泛型机制在Java 5.0中加入，为什么需要泛型呢?
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Java - 标签 - lyer's blog</title><link>/tags/java/</link><description>Java - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/java/" rel="self" type="application/rss+xml"/><item><title>JavaIO流总结</title><link>/2021/03/23/javaio%E6%B5%81%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/23/javaio%E6%B5%81%E6%80%BB%E7%BB%93/</guid><description>OverView Java 的 I/O 大概可以分成以下几类：
+磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable 网络操作：Socket 非阻塞IO：NIO ​
+File文件相关操作 File类是操作文件系统的相关操作，如果要读取文件内容的数据，则需要传递给IO流对象，通过IO流的方式进行读取
+File f = new File(&amp;#34;/home/pb/tmp/printf.sh&amp;#34;); FileInputStream inputStream = new FileInputStream(f); 通过操作此对象可以创建文件、列出目录下的文件列表、判断文件是否可读、判断类型等操作
+f.isFile(); f.createNewFile(); ​
+InputStream 字节流接口，所有流的接口，比如:
+FileInputStream文件流用于读取文件 ByteArrayInputStream 从字节数组里面读取流 OutPutStream就是将数据写入到目标处，这里将程序员作为主体，Out表示程序员将数据输出到计算机，Input则表示计算机的数据要输入到程序员中
+​
+BufferedInputStream 带有一个字节缓冲数组的InputStream ，需要传入一个实现了 InputStream 接口的流，比如文件，使用了装饰者模式 ，读取流的话不是直接操作文件了，而是每次读取会预先读取到一块byte[]中，相当于缓冲，然后更具用户读取的大小从缓冲区里面读取到用户的字节数组中
+​
+Reader 字符流接口 一个字符可能有多个字节组成比如汉字，实现的接口有:
+InputStreamReader 接受一个 InputStream 对象，然后按照编码将字节进行转化为字符 FileReader 继承 InputStreamReader ，用于直接读取文件，里面就是根据传入的File对象或则文件名创建一个 FileInputStream 然后传入父类 InputStreamReader ​
+BufferedReader 带缓冲的Reader，需要传入一个实现了 Reader 接口的流，比如文件FileInputStreamReader，读取的话会先读入到char[]中，然后直接从char[]缓冲区进行读取，装饰者模式</description></item><item><title>Java泛型总结</title><link>/2021/03/20/java%E6%B3%9B%E5%9E%8B%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/java%E6%B3%9B%E5%9E%8B%E6%80%BB%E7%BB%93/</guid><description><![CDATA[为什么需要泛型 Java的泛型机制在Java 5.0中加入，为什么需要泛型呢?
 在以前没有泛型的情况下，一个 List 类型要能存放所有类型那么底层只能是Object数组来接受所有类型，这样的话我们可以将所有类型都放入这个Lits中，从Lits中获取元素的时候再强转，这样很容易会引发 ClassCastException异常
 再来想想，如果不使用Object会怎么样？
 这样的话虽然可以避免 ClassCastException异常 但是就要为每种类型都写一个List类，增加了代码量
