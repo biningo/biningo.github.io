@@ -19,7 +19,7 @@
 操作系统的时钟中断由 可编程的脉冲器 产生的，因为操作系统需要和硬件配合的，所以一般和硬件结合的比较紧密，该硬件脉冲频率是和操作系统厂商商量好的，并且可以人为的编程去改变脉冲的频率
 时钟中断会定时的引发然后传递到CPU的NMI引脚，时钟中断属于不可屏蔽中断
 时钟中断的作用非常大，可以说没有时钟中断操作系统就没有控制权，时钟中断的作用如下:
-更新系统的时间 定时的将控制权转移到操作系统的程序中，以便操作系统进行各个调度工作比如进程时间片调度，每经过一个时钟则时间片减一 (如果没有时钟中断，那么如果用户程序如果一直不进行系统调用、不引发异常那么操作系统可能永远也拿不到CPU的控制权)</description></item><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
+更新系统的时间 定时的将控制权转移到操作系统的程序中，以便操作系统进行各个调度工作比如进程时间片调度，每经过一个时钟则时间片减一 (如果没有时钟中断，那么如果用户程序如果一直不进行系统调用、不引发异常那么操作系统可能永远也拿不到CPU的控制权) ​</description></item><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
  全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
 readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
 name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
