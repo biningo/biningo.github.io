@@ -99,6 +99,18 @@ git branch origin/dev dev2 #基于远程分支origin/dev中创建dev2分支
 
 ​            
 
+## 本地仓库管理
+
+文件状态
+
+```bash
+git status -s #以短格式输出 M A AM
+```
+
+
+
+
+
 ## 远程仓库
 
 ```bash
@@ -378,3 +390,4 @@ git clone --recurse-submodules https://github.com/chaconinc/MainProject
 - http://www.ruanyifeng.com/blog/2015/12/git-workflow.html
 - https://www.infoq.cn/article/fvrazhpyeljg9jsyddas
 - https://github.com/521xueweihan/git-tips
+- https://juejin.cn/post/6844904146571624461
