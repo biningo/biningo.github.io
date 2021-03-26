@@ -667,6 +667,8 @@ google.com/b.html google.com/c.html #同源
     所以我通过调用js脚本的方式，从服务器上获取JSON数据绕过同源策略
 
     此规则会引发 **CSRF攻击**
+    
+- **JSONP** 方式，使用回调函数来获取数据，也是因为所有`src`都可以进行跨域
 
 ### 5、CORS跨域资源共享
 
@@ -725,6 +727,51 @@ func Cors() gin.HandlerFunc {
 		c.Next()
 	}
 }
+```
+
+### 6、JSONP跨域
+
+原理就是定义一个`js`函数，然后用`src`引入的方式请求不同域的js资源，然后服务器就会返回一个 **函数调用的字符串，包括转入的json参数** ，浏览器会直接解析这个字符串为js代码进行调用，这样就可以间接获取到服务区传入的json数据了
+
+```bash
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    function hello(data){
+        console.log(data);
+    }
+</script>
+<script src="http:localhost:8080/js?callback=hello"></script>
+<body>
+</body>
+</html>
+```
+
+远程服务器
+
+```go
+func main() {
+   r := gin.Default()
+
+   r.GET("/js", func(context *gin.Context) {
+      callback := context.Query("callback") //获取约定的回调函数名
+      data := map[string]string{
+         "name": "lyer",
+         "age":  "19",
+      }
+      jsonData, _ := json.Marshal(data)
+      context.String(200, fmt.Sprintf("%s(%s)", callback, jsonData))
+      //context.JSONP(200, data)
+   })
+
+   r.Run(":8080")
+}    
 ```
 
 ​    
