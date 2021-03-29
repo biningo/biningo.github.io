@@ -77,41 +77,115 @@ git log --oneline #只记录HEAD之下的版本号
 git reflog #可以所有的版本号 以便回到过去还可以回到将来
 ```
 
+commit
+
+```bash
+# 重写上一次提交信息，确保当前工作区没有改动
+git commit --amend -m "新的提交信息"
+```
+
 ​    
 
 ## 分支管理
 
+查看分支
+
 ```bash
-git branch #查看本地所有分支 -v则显示详细信息
-git branch dev #创建新的dev分支
-git switch dev #切换分支 （注意：切换前需要先提交变更）
-git checkout -b dev #创建并且切换 上面两条命令的合并
-git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了
-git merge dev #合并dev分支到当前分支 （注意分支冲突问题 需要手动解决然后commit）
+git branch  #查看本地所有分支 -v则显示详细信息
+git branch -r # 查看远端分支
+git branch -a # 查看所有分支
 ```
 
-创建分支可以从其他分支中创建，如下：
+创建分支
 
 ```bash
+git branch dev #创建新的dev分支
+git checkout -b dev #创建并且切换到新创建的分支
 git branch dev dev2 #基于dev分支，创建dev2
 git branch origin/dev dev2 #基于远程分支origin/dev中创建dev2分支
 ```
 
-​            
+创建一个空的分支，不包括父亲分支的所有历史提交记录
+
+```bash
+# 创建一个空的分支, 不继承父分支，历史记录是空的，一般至少需要执行4步
+git checkout --orphan develop
+# 这一步可选，如果你真的想创建一个没有任何文件的分支
+git rm -rf .
+# 添加并提交，否则分支是隐藏的 （执行这一步之前需要注意当前工作区必须保留一个文件，否则无法提交）
+git add -A && git commit -m "提交"
+# 推送到远程
+git push --set-upstream origin develop
+```
+
+删除分支
+
+```bash
+git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了
+git branch -d -r origin/dev #删除本地的远端分支
+```
+
+重命名分支
+
+```bash
+git branch -m main #重命名当前分支
+```
+
+切换分支
+
+```bash
+git switch dev #切换分支 （注意：切换前需要先提交变更）
+git checkout - # 切换上一个分支
+git checkout origin/dev # 切换远端分支
+```
+
+合并分支
+
+```bash
+git merge dev #合并dev分支到当前分支 （注意分支冲突问题 需要手动解决然后commit）
+git merge a b #将b合并到a
+```
+
+​                
 
 ## 本地仓库管理
 
 文件状态
 
 ```bash
-git status -s #以短格式输出 M A AM
+git status -s #以短格式输出 M:表示有变更 A:表示已经添加到暂存库
 ```
 
+​    
 
+## commit日志查看
 
+```bash
+git log --oneline #以短格式显示
+git log -2 #查看最近的2次提交
+git log --graph #显示图形
 
+# 列出提交者贡献数量, 只会打印作者和贡献数量
+git shortlog -sn
+# 列出提交者贡献数量, 会提交者的详细commit记录
+git shortlog -n
+git shortlog -e #-e列出邮箱
+
+# 查看 README.md 文件的修改历史记录，包括时间、作者以及内容
+git blame README.md
+```
+
+​    
 
 ## 远程仓库
+
+```bash
+#clone指定分支 默认clone全部
+git clone -b main https://github.com/ajd/test
+
+# 递归克隆，如果项目包含子模块就非常有用
+git clone --recursive git@github.com:xjh22222228/git-manual.git
+```
 
 ```bash
 git branch -r #查看远程仓库的分支 -rv则显示详细信息
@@ -225,13 +299,16 @@ tag就是指想某个`commit`的的指针，类似于 **网址和IP** 的关系�
 
 ```bash
 git tag #列出所有标签
+git ls-remote --tags origin  # 列出远程所有标签
 git tag v1.0 #创建轻量标签
 git tag -a v2.0 -m 'desc' #创建注释标签
 git tag -l 'v1*' #特点模式查找标签 查找以v1开头的标签
-git show v2.0 #展示标签信息
-git tag v0.9 ce05f93 #上面默认是在最新的HEAD上打标签，也可以基于历史版本打tag
-#删除标签麻烦点，先本地删除，再远程删除
 git tag -d v1.0 #删除本地tag
+git tag v0.9 ce05f93 #上面默认是在最新的HEAD上打标签，也可以基于历史版本打tag
+
+git show v2.0 #展示标签信息
+
+#删除标签麻烦点，先本地删除，再远程删除
 git push origin :refs/tags/v1.0 #删除远程tag
 git push origin v1.0 #上传指定标签到远程仓库
 git push origin --tags #把本地所有不在远程仓库的标签全部上传

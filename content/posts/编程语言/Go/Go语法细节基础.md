@@ -174,3 +174,8 @@ s:=make([]int,5)
 s:=make([]int,0) //s:=[]int{} 此时值不为nil
 ```
 
+
+
+## 参考
+
+https://juejin.cn/post/6859145664316571661 【make和new区别】
