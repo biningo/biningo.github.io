@@ -1,4 +1,21 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 08 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 29 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>Go反射</title><link>/2021/03/29/go%E5%8F%8D%E5%B0%84/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/29/go%E5%8F%8D%E5%B0%84/</guid><description>待更新&amp;hellip;&amp;hellip;
+什么是反射 反射 是指一类应用，它们能够自描述和自控制。也就是说，这类应用通过采用某种机制来实现对自己行为的描述（self-representation）和监测（examination），并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义
+go官方自带的reflect包就是反射相关的，go反射主要有下面两大对象:
+Value 值对象，通过reflect.ValueOf获取 Type 类型对象，通过reflect.Typeof获取 ​
+Typeof 获取一个对象的类型对象Type，Type是一个接口，go中每种类型都实现了Type接口，比如chanType表示chan的Type对象
+通过Type对象就可以获取类型相关的信息，比如 Name() 类型的名字、PkgPath() 包路径、**Size()**此类型占用的字节大小等，Type接口的方法不是每种类型都可以调用的，比如 Len() 方法只能arrayType类型才可以调用，表示数组的长度 ，Size() 方法则只可以由定长的类型才可以调用，比如数组、string、int64等，而slice、map就不可以调用Size方法，会报错
+func main() { var i interface{} i = [2]int{1,2} //int类型默认和平台位数一致 这里为int64 t := reflect.TypeOf(i) log.Println(t.Len(),t.Size()) //2 8*2=16 } ​
+ValueOf ValueOf就和TypeOf同理了，这里不多赘述，重点说明下面几个问题
+Interface() 将一个对象转化为interface{}空接口类型
+Elem() 如果值是一个指针的话，调用此方法获取指针指向的值的Value对象
+Recv() 获取一个chan的值
+Call() 调用一个函数，传入各个参数的Value对象
+Field() 获取一个struct对象的各个属性的Value对象
+​
+反射原理 go在1.5之后就实现了 自举，自举过程如下:
+先用C和汇编写一个Go的编译器，用C的编译器编译成可执行文件，此二进制文件就可以编译go代码了 用Go写一个Go的编译器，用上述编译器编译成二进制文件，此二进制文件就是用Go来实现的Go编译器 go的反射与 interface和unsafe.Pointer 结合的比较紧密 TODO
+​
+参考 https://i6448038.</description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
 uintptr、int、uint uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
 同理int、uint等也是相似的，随本机类型而定，64位机器则是int64
 type自定义类型 type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值 类型 默认值 bool false int、float64等数值类型 0 string &amp;quot;&amp;quot; 整数类型的表示 d1:=0x10F //16进制 int64 d2:=0b111 //二进制 int64 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示 //[float64] d1:= .32 //0.32 d2:= 2. //2.0 d3:=2.3e3 //2300 d4:=2.3e-3 //0.0023 字符串的``反引号 s:=`1111 2222 3333` //反引号不会进行转义 常量const和itoa const定义的一组变量可以设置相同的值</description></item><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
@@ -46,13 +63,4 @@ go mod mod管理的相关命令</description></item><item><title>Go文档管理�
 Go文档注释规范 因为go的注释即文档，文档都是根据注释生成的，所以文档的详细性和合理性都必须要求注释必须符合一定的规范，这样才可以生成漂亮详细的文档
 文档主要有如下几部分组成:
 组成 作用 Overview 包含包的 import 语句和概要说明 Index 包含包中可见性为 public 的常量、类型、方法、函数的总目录及说明 Constants 项目所有的导出常量 Variables 显示所有全局变量 Functions 显示所有函数 Types 显示所有type Overview 用于整个项目的简单描述，是项目中一级目录下所有包头开始的注释内容的合并，一般将这些信息单独写在doc.go文件中，比如gin的doc.go下的内容为：
-/* Package gin implements a HTTP web framework called gin. See https://gin-gonic.com/ for more information about gin. */ package gin // import &amp;#34;github.</description></item><item><title>Go的defer</title><link>/2021/02/12/go%E7%9A%84defer/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E7%9A%84defer/</guid><description>1、defer执行时机 for i:=1;i&amp;lt;10;i++{ defer log.Println(i) } 上面那段简单的代码基本就可以说明多个defer时的执行顺序了
-当代码中出现defer时，会将defer要执行的函数压人栈，然后等函数执行完毕再执行defer栈中的内容
-go1.13以前用堆分配，加入到链表中，再尾递归调用，go1.13在栈上分配，如果defer过多则还是会在堆上用链表来管理
-go1.14则做了进一步优化，defer的开销基本很小了
-​
-2、defer的估值时刻 defer分为进入阶段和退出阶段 ，defer延迟的只是函数体的执行，并不延迟函数的初始化
-//defer初始化值和位置有关 推迟执行的仅仅是函数体 j:=10 defer func(jj int) { log.Printf(&amp;#34;j=%d jj=%d\n&amp;#34;,j,jj) //j=99 j=10 }(j) j=99 ​
-3、防止defer内存泄漏 下面这段代码会严重占用内存栈，造成短暂内存泄漏，有大量的文件句柄没有被释放
-//内存泄漏 func writeManyFiles(files []os.File) error { for _, file := range files { defer file.Close() } return nil } 用函数包裹之后每循环一个就关闭一个文件句柄
-//防止内存泄漏 func writeManyFiles(files []os.File) error { for _, file := range files { if err:= func() error { f, err := os.</description></item></channel></rss>
+/* Package gin implements a HTTP web framework called gin. See https://gin-gonic.com/ for more information about gin. */ package gin // import &amp;#34;github.</description></item></channel></rss>

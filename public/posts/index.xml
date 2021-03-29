@@ -1,4 +1,21 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 24 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>中断</title><link>/2021/03/24/%E4%B8%AD%E6%96%AD/</link><pubDate>Wed, 24 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/24/%E4%B8%AD%E6%96%AD/</guid><description>中断分类 中断按照是否由CPU内部发生分为:
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 29 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Go反射</title><link>/2021/03/29/go%E5%8F%8D%E5%B0%84/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/29/go%E5%8F%8D%E5%B0%84/</guid><description>待更新&amp;hellip;&amp;hellip;
+什么是反射 反射 是指一类应用，它们能够自描述和自控制。也就是说，这类应用通过采用某种机制来实现对自己行为的描述（self-representation）和监测（examination），并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义
+go官方自带的reflect包就是反射相关的，go反射主要有下面两大对象:
+Value 值对象，通过reflect.ValueOf获取 Type 类型对象，通过reflect.Typeof获取 ​
+Typeof 获取一个对象的类型对象Type，Type是一个接口，go中每种类型都实现了Type接口，比如chanType表示chan的Type对象
+通过Type对象就可以获取类型相关的信息，比如 Name() 类型的名字、PkgPath() 包路径、**Size()**此类型占用的字节大小等，Type接口的方法不是每种类型都可以调用的，比如 Len() 方法只能arrayType类型才可以调用，表示数组的长度 ，Size() 方法则只可以由定长的类型才可以调用，比如数组、string、int64等，而slice、map就不可以调用Size方法，会报错
+func main() { var i interface{} i = [2]int{1,2} //int类型默认和平台位数一致 这里为int64 t := reflect.TypeOf(i) log.Println(t.Len(),t.Size()) //2 8*2=16 } ​
+ValueOf ValueOf就和TypeOf同理了，这里不多赘述，重点说明下面几个问题
+Interface() 将一个对象转化为interface{}空接口类型
+Elem() 如果值是一个指针的话，调用此方法获取指针指向的值的Value对象
+Recv() 获取一个chan的值
+Call() 调用一个函数，传入各个参数的Value对象
+Field() 获取一个struct对象的各个属性的Value对象
+​
+反射原理 go在1.5之后就实现了 自举，自举过程如下:
+先用C和汇编写一个Go的编译器，用C的编译器编译成可执行文件，此二进制文件就可以编译go代码了 用Go写一个Go的编译器，用上述编译器编译成二进制文件，此二进制文件就是用Go来实现的Go编译器 go的反射与 interface和unsafe.Pointer 结合的比较紧密 TODO
+​
+参考 https://i6448038.</description></item><item><title>中断</title><link>/2021/03/24/%E4%B8%AD%E6%96%AD/</link><pubDate>Wed, 24 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/24/%E4%B8%AD%E6%96%AD/</guid><description>中断分类 中断按照是否由CPU内部发生分为:
 外部中断 (由CPU外部引发，比如外设、网卡等) 内部中断 (由CPU内部引发，比如系统调用) 外部中断分为:
 可屏蔽中断 (比如网卡发出数据读取中断，可以屏蔽) 不可屏蔽中断 (比如掉电、设备损坏等) 内部中断分为:
 软中断 (由软件程序触发，比如系统调用0x80号中断) 异常 (异常也是一种特殊的中断，比如除0异常、缺页异常) ​
@@ -99,14 +116,4 @@ map array list 基本类型 set bean(对象) @Data public class Student { privat
 第i个节点的左右孩子分别为i*2+1 i*2+2 (孩子节点从0开始算起，如果孩子节点从1开始算起的话就是i*2 i*2+1 )
 第i个节点的父亲节点i/2-1 ，如果从1开始算起就是i/2
 注意上面的计算要注意范围
-堆就是用完全二叉树来实现的</description></item><item><title>Redis命令总结</title><link>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description>Keys COPY 复制key
-COPY name username #name-&amp;gt;username username必须不存在 COPY name username DB 1 #name-&amp;gt;1:username COPY name username REPLACE #存在则更新 DEL 删除key 返回值是删除的个数
-UNLINK非阻塞删除，重新开辟一个线程去回收内存，立即返回
-DEL key1 key2 EXISTS 查看可以是否存在 返回值是存在键的数量
-EXISTS age username EXPIRE EXPIREAT 设置key的过期时间，如果重新设置的key的值，前者是设置n秒后过期，后者设置一个Unix时间戳，表示在指定时间戳后过期
-TTL 查看key剩余的时间·秒，返回-1则表示永久 -2则表示key不存在，PTTL则是毫秒
-PERSIST 解除timeout时间
-EXPIRE name 10 EXPIREAT name 8233132131 TTL name PERSIST name KEYS 模式匹配展示出keys
-KEYS name* # * 匹配所有 KEYS name? # ? 匹配一个 MOVE 移动key到指定的db
-MOVE age 2 OBJECT 展示redis每个key的对象相关的信息，比如对象底层的数据结构是什么
-redis有五大常见对象:</description></item></channel></rss>
+堆就是用完全二叉树来实现的</description></item></channel></rss>
