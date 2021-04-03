@@ -204,10 +204,9 @@ struct dentry {
 
 是一个被打开的文件的内存表现形式，每个文件对象包含对应的`inode`和`dentry`对象
 
-- 调用`open`就是在内存中创建一个**file对象**
-- `close`就是销毁内存中的 **file对象**
+- 内核会维护一个全局的文件打开表，里面会为每个打开的文件建立`file`对象，进程的文件描述符必须指向此对象才可以操作文件，`file`对象是一个打开文件的内存表现形式，会记录文件读写指针和`inode` `dentry`等文件的信息
+
 - 进程中使用文件描述符来表示打开的文件，文件描述符其实就是进程文件打开表的下标，其数组中的元素里面保存了`file`对象的指针，此对象保存在内核的全局文件打开表中，所以不同进程之间的文件描述符是隔离的，但是不同的进程可以同时打开同一个文件，也就是其file对象指针指向同一个file对象
-- 内核会维护一个数组结构的文件打开表，此表是全局共享的，表中的每一项都有一个`file`对象，进程的文件描述符就是指向一个内核文件打开表的一个条目，文件描述符是一个整数，也就是进程本身文件打开数组的下标，该数组又指向了内核的文件打开表的一个条目，因此一个文件可以被多个进程同时打开和读写
 
 ```c
 struct file {
@@ -294,10 +293,12 @@ ln -s 源文文件或目录 目标文件或目录
 
 [文件描述符 fd]([https://jsharkc.github.io/2019/11/15/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/](https://jsharkc.github.io/2019/11/15/文件描述符/))
 
-[Linux内核学习笔记（一）虚拟文件系统（VFS）https://mp.weixin.qq.com/s/qJdoXTv_XS_4ts9YuzMNIw)
+[Linux内核学习笔记（一）虚拟文件系统（VFS）](https://mp.weixin.qq.com/s/qJdoXTv_XS_4ts9YuzMNIw)
 
 [理解Linux的文件描述符FD与Inode](https://zhuanlan.zhihu.com/p/143430585)
 
 [为什么内存要分页，磁盘要分块，缓存要有cacheline？](https://zhuanlan.zhihu.com/p/81108439)
 
 [Ext4文件系统之文件数据组织](https://zhuanlan.zhihu.com/p/52052278)
+
+[linux内核中的文件描述符(一)--基础知识简介](https://www.oschina.net/question/565065_113316)
