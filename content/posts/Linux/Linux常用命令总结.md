@@ -412,6 +412,12 @@ bash快捷键
 
 ```bash
 ctrl+r #查找历史命令
+ctrl+a #移动到命令开头部分
+ctrl+e #移动到命令行尾部
+ctrl+u #剪切整行命令
+ctrl+w #剪切单词
+ctrl+k #剪切到光标尾部
+ctrl+y #粘贴
 ```
 
 ​    

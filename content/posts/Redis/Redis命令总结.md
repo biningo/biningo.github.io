@@ -129,40 +129,6 @@ SORT arr DESC
 APPEND name lyer
 ```
 
-`BITCOUNT` 计算val的`1`的个数，val对应的都是字符串形式保存，会转化为`ascii码`然后转化为二进制，包括数字也是会转化为ascii码
-
-`GITBIT/SETBIT`  获取/设置指定位置的bit位,setbit如果不存在key则会创建，并且以8位为单位进行适当的扩容
-
-```bash
-a-z：97-122
-A-Z：65-90
-0-9：48-57
-```
-
-```bash
-SET name a #01100001
-BITCOUNT age #
-BITCOUNT age 0 3 #[0,3] 2
-GETBIT age 0 #0:0 1:1 7:1
-SETBIT age 0 1 #11100001  #返回0表示成功
-```
-
-`BITOP` 用于位运算相关操作，dest不存在则会创建，存在则覆盖
-
-```bash
-BITOP <opt> <dest> <key1> <key2> ...
-```
-
-有如下几个操作符
-
-```bash
-AND、OR、XOR、NOT
-```
-
-```bash
-BITOP AND a b c
-```
-
 `INCR/DECR` 对整数进行加1减1 不存在会创建，0为初始值
 
 `INCRBY/DECRBY` 加减一定的数
@@ -229,7 +195,65 @@ STRLEN a
 
 ​    
 
+## BitMap
 
+`BITCOUNT` 计算val的`1`的个数，val对应的都是字符串形式保存，会转化为`ascii码`然后转化为二进制，包括数字也是会转化为ascii码
+
+`GITBIT/SETBIT`  获取/设置指定位置的bit位,setbit如果不存在key则会创建，并且以8位为单位进行适当的扩容
+
+```bash
+a-z：97-122
+A-Z：65-90
+0-9：48-57
+```
+
+```bash
+SET name a #01100001
+BITCOUNT name #3
+BITCOUNT name 0 3 #[0,3] 2
+GETBIT name 0 #0:0 1:1 7:1
+SETBIT name 0 1 #11100001
+```
+
+`BITOP` 用于位运算相关操作，dest不存在则会创建，存在则覆盖
+
+```bash
+BITOP <opt> <dest> <key1> <key2> ...
+```
+
+有如下几个操作符
+
+```bash
+AND、OR、XOR、NOT
+```
+
+```bash
+BITOP AND a b c
+```
+
+​    
+
+## HyperLoglog计数器
+
+`PFADD` 将值添加到BloomFilter中
+
+```bash
+PFADD names lyer
+```
+
+`PFCOUNT` 计算有多少个元素
+
+```bash
+PFCOUNT names
+```
+
+`PFMERGE` 合并两个布隆过滤器
+
+```bash
+PFMERGE dest src #将src合并到dest中 src不变 dest是合并之后的
+```
+
+​    
 
 ## redis运维
 

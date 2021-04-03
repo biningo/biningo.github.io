@@ -40,6 +40,22 @@ plugins=(
  )
 ```
 
+可以为zsh也配置`wakatime`来统计你在终端上的时间
+
+```bash
+https://github.com/sobolevn/wakatime-zsh-plugin
+```
+
+```bash
+pip install wakatime
+```
+
+waketime的python cli程序也需要安装，其地址如下:
+
+```bash
+https://github.com/wakatime/wakatime
+```
+
 ​    
 
 ## 配置tmux
@@ -79,7 +95,7 @@ bind [ splitw -h -c '#{pane_current_path}'
 
 tmux的基本命令这里分享一个链接，可以速查一些相关的命令: https://gist.github.com/ryerh/14b7c24dfd623ef8edc7
 
-​    
+​        
 
 ## 配置vim
 
