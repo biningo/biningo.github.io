@@ -302,3 +302,5 @@ ln -s 源文文件或目录 目标文件或目录
 [Ext4文件系统之文件数据组织](https://zhuanlan.zhihu.com/p/52052278)
 
 [linux内核中的文件描述符(一)--基础知识简介](https://www.oschina.net/question/565065_113316)
+
+[磁盘I/O那些事](https://tech.meituan.com/2017/05/19/about-desk-io.html)
