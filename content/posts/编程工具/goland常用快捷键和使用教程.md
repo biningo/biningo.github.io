@@ -21,6 +21,7 @@ draft: true
 | ctrl+空格                     | 代码提示                                                |            |
 | ctrl+/    ctrl+shift+/        | 单行/多行注释                                           |            |
 | ctrl+B                        | 快速跳转到结构体或方法的定义位置,光标需要移动到指定位置 |            |
+| ctrl+shift+B                  | 找变量的类                                              |            |
 | ctrl+"+/-"                    | 展开/折叠方法                                           |            |
 |                               |                                                         |            |
 | ctrl+F                        | 当前文件下查找                                          |            |
@@ -47,11 +48,19 @@ draft: true
 | alt+j                         | 相同的单词多选(往下选择)                                |            |
 | ctrl+alt+L                    | 代码格式化                                              |            |
 | ctrl+Q                        | 显示代码注释文档                                        |            |
+| shift+f6                      | 修改某个结构体、函数等变量(包括修改他的引用)            |            |
+| ctrl+shift+上下               | 更换两行的位置                                          |            |
+| F3/shift+F3                   | 向下/向上 查找关键字                                    |            |
+| F4                            | 查找变量来源                                            |            |
+| alt+1                         | 开启左目录                                              |            |
+| alt+4                         | 开启运行终端                                            |            |
+| shift+esc                     | 关闭上面开启的子窗口                                    |            |
 
-
+​    
 
 ## 参考
 
 - http://c.biancheng.net/view/6216.html
 - https://my.oschina.net/lemos/blog/1358731
 - https://learnku.com/articles/41340
+- https://blog.51cto.com/9291927/2294263
