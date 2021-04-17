@@ -1,7 +1,7 @@
 ---
 title: github美化README
 date: 2021-03-30
-categories: [折腾笔记]
+categories: [github]
 tags: [github]
 ---
 

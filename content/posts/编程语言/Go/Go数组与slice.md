@@ -263,7 +263,7 @@ arrStrClone = append(arrStrClone[:1], arrStrClone[3:]...)
 
 ​    
 
-## 12、切片实现栈队列
+## 切片实现栈队列
 
 出
 
@@ -283,7 +283,7 @@ s = append(elements, s...)
 
 ​    
 
-## 13、for-range
+## for-range
 
 range后面可以接受0个、1个、2个
 
@@ -305,7 +305,7 @@ var item [10]int
 
 ​    
 
-## 14、关于并发
+## 关于并发
 
 **注意，go里面的特殊容器都是线程不安全的，多个并发读取可以，但是并发修改是不允许的，需要加以控制**
 

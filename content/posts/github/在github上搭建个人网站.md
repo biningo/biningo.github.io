@@ -1,7 +1,7 @@
 ---
 title: 在github上搭建个人网站
 date: 2021-02-15
-categories: [折腾笔记]
+categories: [github]
 tags: [github]
 ---
 
