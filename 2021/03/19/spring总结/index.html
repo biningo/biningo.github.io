@@ -1,125 +1,392 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Spring总结 - lyer's blog</title><meta name=Description content><meta property="og:title" content="Spring总结"><meta property="og:description" content="Spring控制反转IOC和依赖注入DI 1、XML配置文件DI注入  Set注入  Set注入是调用对应的Set方法来实现的，方法名需要遵循 setName 形式，必须采用小驼峰法，否则无法注入，set注入首先会调用无参构造器创建类
-<bean id=&#34;hello&#34; class=&#34;di.model.User&#34;> <property name=&#34;username&#34; value=&#34;lyer&#34;/> <property name=&#34;age&#34; value=&#34;18&#34;/> </bean> set注入可以注入多个数据类型的属性，常见的有如下几个类型
-map array list 基本类型 set bean(对象) @Data public class Student { private Integer id; private String name; private List<String> hobby; private Map<String,Integer> scores; private Set<String> friends; private Address address; } <bean id=&#34;stu&#34; class=&#34;di.model.Student&#34;> <property name=&#34;id&#34; value=&#34;1&#34;/> <property name=&#34;name&#34;> <null/> #显示指定为null 默认不设置值也为null </property> <property name=&#34;scores&#34;> <map> <entry key=&#34;english&#34; value=&#34;100&#34;/> <entry key=&#34;chinese&#34; value=&#34;99&#34;/> </map> </property> <property name=&#34;friends&#34;> <set> <value>xioamin</value> <value>hong</value> </set> </property> <property name=&#34;hobby&#34;> <list> <value>running</value> <value>basketball</value> </list> </property> #内联bean 也可以ref引用外部bean <ref bean=&#34;address&#34; /> <property name=&#34;address&#34;> <bean class=&#34;di."><meta property="og:type" content="article"><meta property="og:url" content="/2021/03/19/spring%E6%80%BB%E7%BB%93/"><meta property="article:published_time" content="2021-03-19T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-19T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Spring总结"><meta name=twitter:description content="Spring控制反转IOC和依赖注入DI 1、XML配置文件DI注入  Set注入  Set注入是调用对应的Set方法来实现的，方法名需要遵循 setName 形式，必须采用小驼峰法，否则无法注入，set注入首先会调用无参构造器创建类
-<bean id=&#34;hello&#34; class=&#34;di.model.User&#34;> <property name=&#34;username&#34; value=&#34;lyer&#34;/> <property name=&#34;age&#34; value=&#34;18&#34;/> </bean> set注入可以注入多个数据类型的属性，常见的有如下几个类型
-map array list 基本类型 set bean(对象) @Data public class Student { private Integer id; private String name; private List<String> hobby; private Map<String,Integer> scores; private Set<String> friends; private Address address; } <bean id=&#34;stu&#34; class=&#34;di.model.Student&#34;> <property name=&#34;id&#34; value=&#34;1&#34;/> <property name=&#34;name&#34;> <null/> #显示指定为null 默认不设置值也为null </property> <property name=&#34;scores&#34;> <map> <entry key=&#34;english&#34; value=&#34;100&#34;/> <entry key=&#34;chinese&#34; value=&#34;99&#34;/> </map> </property> <property name=&#34;friends&#34;> <set> <value>xioamin</value> <value>hong</value> </set> </property> <property name=&#34;hobby&#34;> <list> <value>running</value> <value>basketball</value> </list> </property> #内联bean 也可以ref引用外部bean <ref bean=&#34;address&#34; /> <property name=&#34;address&#34;> <bean class=&#34;di."><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/03/19/spring%E6%80%BB%E7%BB%93/><link rel=prev href=/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/><link rel=next href=/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Spring总结","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/03\/19\/spring%E6%80%BB%E7%BB%93\/"},"genre":"posts","keywords":"Spring","wordcount":348,"url":"\/2021\/03\/19\/spring%E6%80%BB%E7%BB%93\/","datePublished":"2021-03-19T00:00:00+00:00","dateModified":"2021-03-19T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Spring总结</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/spring/><i class="far fa-folder fa-fw"></i>Spring</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-03-19>2021-03-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 348 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#spring控制反转ioc和依赖注入di>Spring控制反转IOC和依赖注入DI</a><ul><li><a href=#1xml配置文件di注入>1、XML配置文件DI注入</a></li><li><a href=#2xml引入合并>2、xml引入合并</a></li><li><a href=#3bean的自动装配>3、bean的自动装配</a></li><li><a href=#4spring注解注入>4、Spring注解注入</a></li><li><a href=#5java配置类注入>5、Java配置类注入</a></li></ul></li><li><a href=#控制反转ioc和依赖注入di>控制反转IOC和依赖注入DI</a></li><li><a href=#静态代理和动态代理>静态代理和动态代理</a></li><li><a href=#spring的aop使用>Spring的AOP使用</a></li><li><a href=#spring总结>Spring总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h2 id=spring控制反转ioc和依赖注入di>Spring控制反转IOC和依赖注入DI</h2><h3 id=1xml配置文件di注入>1、XML配置文件DI注入</h3><ul><li><strong>Set注入</strong></li></ul><p>Set注入是调用对应的Set方法来实现的，方法名需要遵循 <code>setName</code> 形式，必须采用小驼峰法，否则无法注入，<strong>set注入首先会调用无参构造器创建类</strong></p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;hello&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.User&#34;</span><span class=nt>&gt;</span>
-    <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;username&#34;</span> <span class=na>value=</span><span class=s>&#34;lyer&#34;</span><span class=nt>/&gt;</span>
-    <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;age&#34;</span> <span class=na>value=</span><span class=s>&#34;18&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;/bean&gt;</span>
-</code></pre></div><p>set注入可以注入多个数据类型的属性，常见的有如下几个类型</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>map array list 基本类型 <span class=nb>set</span>  bean<span class=o>(</span>对象<span class=o>)</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml>@Data
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Spring总结 - lyer&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="Spring总结" />
+<meta property="og:description" content="Spring控制反转IOC和依赖注入DI 1、XML配置文件DI注入  Set注入  Set注入是调用对应的Set方法来实现的，方法名需要遵循 setName 形式，必须采用小驼峰法，否则无法注入，set注入首先会调用无参构造器创建类
+&lt;bean id=&#34;hello&#34; class=&#34;di.model.User&#34;&gt; &lt;property name=&#34;username&#34; value=&#34;lyer&#34;/&gt; &lt;property name=&#34;age&#34; value=&#34;18&#34;/&gt; &lt;/bean&gt; set注入可以注入多个数据类型的属性，常见的有如下几个类型
+map array list 基本类型 set bean(对象) @Data public class Student { private Integer id; private String name; private List&lt;String&gt; hobby; private Map&lt;String,Integer&gt; scores; private Set&lt;String&gt; friends; private Address address; } &lt;bean id=&#34;stu&#34; class=&#34;di.model.Student&#34;&gt; &lt;property name=&#34;id&#34; value=&#34;1&#34;/&gt; &lt;property name=&#34;name&#34;&gt; &lt;null/&gt; #显示指定为null 默认不设置值也为null &lt;/property&gt; &lt;property name=&#34;scores&#34;&gt; &lt;map&gt; &lt;entry key=&#34;english&#34; value=&#34;100&#34;/&gt; &lt;entry key=&#34;chinese&#34; value=&#34;99&#34;/&gt; &lt;/map&gt; &lt;/property&gt; &lt;property name=&#34;friends&#34;&gt; &lt;set&gt; &lt;value&gt;xioamin&lt;/value&gt; &lt;value&gt;hong&lt;/value&gt; &lt;/set&gt; &lt;/property&gt; &lt;property name=&#34;hobby&#34;&gt; &lt;list&gt; &lt;value&gt;running&lt;/value&gt; &lt;value&gt;basketball&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; #内联bean 也可以ref引用外部bean &lt;ref bean=&#34;address&#34; /&gt; &lt;property name=&#34;address&#34;&gt; &lt;bean class=&#34;di." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/03/19/spring%E6%80%BB%E7%BB%93/" />
+<meta property="article:published_time" content="2021-03-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-03-19T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spring总结"/>
+<meta name="twitter:description" content="Spring控制反转IOC和依赖注入DI 1、XML配置文件DI注入  Set注入  Set注入是调用对应的Set方法来实现的，方法名需要遵循 setName 形式，必须采用小驼峰法，否则无法注入，set注入首先会调用无参构造器创建类
+&lt;bean id=&#34;hello&#34; class=&#34;di.model.User&#34;&gt; &lt;property name=&#34;username&#34; value=&#34;lyer&#34;/&gt; &lt;property name=&#34;age&#34; value=&#34;18&#34;/&gt; &lt;/bean&gt; set注入可以注入多个数据类型的属性，常见的有如下几个类型
+map array list 基本类型 set bean(对象) @Data public class Student { private Integer id; private String name; private List&lt;String&gt; hobby; private Map&lt;String,Integer&gt; scores; private Set&lt;String&gt; friends; private Address address; } &lt;bean id=&#34;stu&#34; class=&#34;di.model.Student&#34;&gt; &lt;property name=&#34;id&#34; value=&#34;1&#34;/&gt; &lt;property name=&#34;name&#34;&gt; &lt;null/&gt; #显示指定为null 默认不设置值也为null &lt;/property&gt; &lt;property name=&#34;scores&#34;&gt; &lt;map&gt; &lt;entry key=&#34;english&#34; value=&#34;100&#34;/&gt; &lt;entry key=&#34;chinese&#34; value=&#34;99&#34;/&gt; &lt;/map&gt; &lt;/property&gt; &lt;property name=&#34;friends&#34;&gt; &lt;set&gt; &lt;value&gt;xioamin&lt;/value&gt; &lt;value&gt;hong&lt;/value&gt; &lt;/set&gt; &lt;/property&gt; &lt;property name=&#34;hobby&#34;&gt; &lt;list&gt; &lt;value&gt;running&lt;/value&gt; &lt;value&gt;basketball&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; #内联bean 也可以ref引用外部bean &lt;ref bean=&#34;address&#34; /&gt; &lt;property name=&#34;address&#34;&gt; &lt;bean class=&#34;di."/>
+<meta name="application-name" content="lyer&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="lyer&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/2021/03/19/spring%E6%80%BB%E7%BB%93/" /><link rel="prev" href="/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" /><link rel="next" href="/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Spring总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2021\/03\/19\/spring%E6%80%BB%E7%BB%93\/"
+        },"genre": "posts","keywords": "Spring","wordcount":  348 ,
+        "url": "\/2021\/03\/19\/spring%E6%80%BB%E7%BB%93\/","datePublished": "2021-03-19T00:00:00+00:00","dateModified": "2021-03-19T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "lyer"},"author": {
+                "@type": "Person",
+                "name": "lyer"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> archive </a><a class="menu-item" href="/tags/"> tag </a><a class="menu-item" href="/categories/"> category </a><a class="menu-item" href="/book"> book </a><a class="menu-item" href="/about"> about </a><a class="menu-item" href="/study"> study </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">archive</a><a class="menu-item" href="/tags/" title="">tag</a><a class="menu-item" href="/categories/" title="">category</a><a class="menu-item" href="/book" title="">book</a><a class="menu-item" href="/about" title="">about</a><a class="menu-item" href="/study" title="">study</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Spring总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://icepan.cloud" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/spring/"><i class="far fa-folder fa-fw"></i>Spring</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-19">2021-03-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 348 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#spring控制反转ioc和依赖注入di">Spring控制反转IOC和依赖注入DI</a>
+      <ul>
+        <li><a href="#1xml配置文件di注入">1、XML配置文件DI注入</a></li>
+        <li><a href="#2xml引入合并">2、xml引入合并</a></li>
+        <li><a href="#3bean的自动装配">3、bean的自动装配</a></li>
+        <li><a href="#4spring注解注入">4、Spring注解注入</a></li>
+        <li><a href="#5java配置类注入">5、Java配置类注入</a></li>
+      </ul>
+    </li>
+    <li><a href="#控制反转ioc和依赖注入di">控制反转IOC和依赖注入DI</a></li>
+    <li><a href="#静态代理和动态代理">静态代理和动态代理</a></li>
+    <li><a href="#spring的aop使用">Spring的AOP使用</a></li>
+    <li><a href="#spring总结">Spring总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="spring控制反转ioc和依赖注入di">Spring控制反转IOC和依赖注入DI</h2>
+<h3 id="1xml配置文件di注入">1、XML配置文件DI注入</h3>
+<ul>
+<li><strong>Set注入</strong></li>
+</ul>
+<p>Set注入是调用对应的Set方法来实现的，方法名需要遵循 <code>setName</code> 形式，必须采用小驼峰法，否则无法注入，<strong>set注入首先会调用无参构造器创建类</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;hello&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.User&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;username&#34;</span> <span class="na">value=</span><span class="s">&#34;lyer&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;age&#34;</span> <span class="na">value=</span><span class="s">&#34;18&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div><p>set注入可以注入多个数据类型的属性，常见的有如下几个类型</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">map array list 基本类型 <span class="nb">set</span>  bean<span class="o">(</span>对象<span class="o">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">@Data
 public class Student {
     private Integer id;
     private String name;
-    private List<span class=nt>&lt;String&gt;</span> hobby;
-    private Map<span class=nt>&lt;String</span><span class=err>,Integer</span><span class=nt>&gt;</span> scores;
-    private Set<span class=nt>&lt;String&gt;</span> friends;
+    private List<span class="nt">&lt;String&gt;</span> hobby;
+    private Map<span class="nt">&lt;String</span><span class="err">,Integer</span><span class="nt">&gt;</span> scores;
+    private Set<span class="nt">&lt;String&gt;</span> friends;
     private Address address;
 }
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml>  <span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;stu&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.Student&#34;</span><span class=nt>&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;id&#34;</span> <span class=na>value=</span><span class=s>&#34;1&#34;</span><span class=nt>/&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;name&#34;</span><span class=nt>&gt;</span>
-            <span class=nt>&lt;null/&gt;</span> #显示指定为null 默认不设置值也为null
-        <span class=nt>&lt;/property&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;scores&#34;</span><span class=nt>&gt;</span>
-            <span class=nt>&lt;map&gt;</span>
-                <span class=nt>&lt;entry</span> <span class=na>key=</span><span class=s>&#34;english&#34;</span> <span class=na>value=</span><span class=s>&#34;100&#34;</span><span class=nt>/&gt;</span>
-                <span class=nt>&lt;entry</span> <span class=na>key=</span><span class=s>&#34;chinese&#34;</span> <span class=na>value=</span><span class=s>&#34;99&#34;</span><span class=nt>/&gt;</span>
-            <span class=nt>&lt;/map&gt;</span>
-        <span class=nt>&lt;/property&gt;</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;stu&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.Student&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;id&#34;</span> <span class="na">value=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;name&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;null/&gt;</span> #显示指定为null 默认不设置值也为null
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;scores&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;map&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;english&#34;</span> <span class="na">value=</span><span class="s">&#34;100&#34;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;chinese&#34;</span> <span class="na">value=</span><span class="s">&#34;99&#34;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/map&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
 
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;friends&#34;</span><span class=nt>&gt;</span>
-            <span class=nt>&lt;set&gt;</span>
-                <span class=nt>&lt;value&gt;</span>xioamin<span class=nt>&lt;/value&gt;</span>
-                <span class=nt>&lt;value&gt;</span>hong<span class=nt>&lt;/value&gt;</span>
-            <span class=nt>&lt;/set&gt;</span>
-        <span class=nt>&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;friends&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;set&gt;</span>
+                <span class="nt">&lt;value&gt;</span>xioamin<span class="nt">&lt;/value&gt;</span>
+                <span class="nt">&lt;value&gt;</span>hong<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
 
 
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;hobby&#34;</span><span class=nt>&gt;</span>
-            <span class=nt>&lt;list&gt;</span>
-                <span class=nt>&lt;value&gt;</span>running<span class=nt>&lt;/value&gt;</span>
-                <span class=nt>&lt;value&gt;</span>basketball<span class=nt>&lt;/value&gt;</span>
-            <span class=nt>&lt;/list&gt;</span>
-        <span class=nt>&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;hobby&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;value&gt;</span>running<span class="nt">&lt;/value&gt;</span>
+                <span class="nt">&lt;value&gt;</span>basketball<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
 
-		#内联bean 也可以ref引用外部bean <span class=nt>&lt;ref</span> <span class=na>bean=</span><span class=s>&#34;address&#34;</span> <span class=nt>/&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;address&#34;</span><span class=nt>&gt;</span>
-            <span class=nt>&lt;bean</span> <span class=na>class=</span><span class=s>&#34;di.model.Address&#34;</span><span class=nt>&gt;</span>
-                <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;postcode&#34;</span> <span class=na>value=</span><span class=s>&#34;1111&#34;</span><span class=nt>/&gt;</span>
-                <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;province&#34;</span> <span class=na>value=</span><span class=s>&#34;zj&#34;</span><span class=nt>/&gt;</span>
-            <span class=nt>&lt;/bean&gt;</span>
-        <span class=nt>&lt;/property&gt;</span>
-    <span class=nt>&lt;/bean&gt;</span>
-</code></pre></div><ul><li><strong>构造器注入</strong></li></ul><p>对象需要对应的构造方法，默认的<code>set</code>注入是调用无参构造器创建类的，但是构造器注入就需要特定的构造器方法支持</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;user&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.User&#34;</span><span class=nt>&gt;</span>
-        <span class=nt>&lt;constructor-arg</span> <span class=na>name=</span><span class=s>&#34;username&#34;</span> <span class=na>value=</span><span class=s>&#34;lyer&#34;</span><span class=nt>/&gt;</span>
-        <span class=nt>&lt;constructor-arg</span> <span class=na>name=</span><span class=s>&#34;age&#34;</span> <span class=na>value=</span><span class=s>&#34;18&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;/bean&gt;</span>
-</code></pre></div><ul><li><strong>bean作用域</strong></li></ul><p><code>singleton</code> 默认作用于 <strong>单例</strong></p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;userInfo&#34;</span> <span class=na>class=</span><span class=s>&#34;cn.lovepi.UserInfo&#34;</span> <span class=na>scope=</span><span class=s>&#34;singleton&#34;</span><span class=nt>&gt;&lt;/bean&gt;</span>
-</code></pre></div><p><code>prototype</code> 每次对该Bean请求的时候，Spring IoC都会创建一个新的作用域</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;userInfo&#34;</span> <span class=na>class=</span><span class=s>&#34;cn.lovepi.UserInfo&#34;</span> <span class=na>scope=</span><span class=s>&#34; prototype &#34;</span><span class=nt>&gt;&lt;/bean&gt;</span>
-</code></pre></div><p>其它的作用域用的不多，不举例了</p><p>​</p><h3 id=2xml引入合并>2、xml引入合并</h3><p>Spring可以讲所有的xml配置文件合并为一个配置，只需要<code>import</code>即可</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;beans</span> <span class=na>xmlns=</span><span class=s>&#34;http://www.springframework.org/schema/beans&#34;</span>
-       <span class=na>xmlns:xsi=</span><span class=s>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
-       <span class=na>xsi:schemaLocation=</span><span class=s>&#34;http://www.springframework.org/schema/beans
-</span><span class=s>        https://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class=nt>&gt;</span>
-    <span class=nt>&lt;import</span> <span class=na>resource=</span><span class=s>&#34;beans.xml&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;/beans&gt;</span>
-</code></pre></div><p>​</p><h3 id=3bean的自动装配>3、bean的自动装配</h3><p>如果一个对象里面引用另外的对象，那么我们需要在xml配置文件中一个个指定这些<code>bean</code>和对应<code>property</code>的<code>ref</code>值，那么很多代码都是重复性的操作，比如下面</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;door&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.Door&#34;</span> <span class=na>p:name=</span><span class=s>&#34;door&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;window&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.Window&#34;</span> <span class=na>p:name=</span><span class=s>&#34;window&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;house&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.House&#34;</span> <span class=na>p:name=</span><span class=s>&#34;house&#34;</span><span class=nt>&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;door&#34;</span> <span class=na>ref=</span><span class=s>&#34;door&#34;</span><span class=nt>/&gt;</span>
-        <span class=nt>&lt;property</span> <span class=na>name=</span><span class=s>&#34;window&#34;</span> <span class=na>ref=</span><span class=s>&#34;window&#34;</span><span class=nt>/&gt;</span>
-<span class=nt>&lt;/bean&gt;</span>
-</code></pre></div><p>Spring有一个自动装配的特性，可以根据IOC容器中的对象自动赋值给对象的属性，这样就可以省略property的书写了</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;door&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.Door&#34;</span> <span class=na>p:name=</span><span class=s>&#34;door&#34;</span> <span class=nt>/&gt;</span>
-<span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;window&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.Window&#34;</span> <span class=na>p:name=</span><span class=s>&#34;window&#34;</span> <span class=nt>/&gt;</span>
-<span class=nt>&lt;bean</span> <span class=na>id=</span><span class=s>&#34;house&#34;</span> <span class=na>class=</span><span class=s>&#34;di.model.house.House&#34;</span> <span class=na>p:name=</span><span class=s>&#34;house&#34;</span> <span class=na>autowire=</span><span class=s>&#34;byName&#34;</span> <span class=nt>/&gt;</span>
-</code></pre></div><ul><li><p><code>byName</code></p><p>自动装配会去查找类的<code>set</code>方法，然后按照<code>bean</code>的命名约定<code>setXXX</code> 最后根据后半部分的名字去容器里面查找对应的bean去装配上去</p></li><li><p><code>byType</code></p><p>类型的bean必须只有一个</p></li></ul><p>也可以启动注解方式进行自动装配，注解开启之后就不需要写<code>set</code>方法即可完成注入，开启注解方式自动装配有如下几个步骤:</p><ul><li>引入xml的<code>context</code>的命名空间</li><li>xml中添加对注解的支持<code>&lt;context:annotation-config /></code></li><li><code>@Autowire</code> <code>@Resource</code></li></ul><blockquote><p><strong>@Autowire和@Resource的区别:</strong></p><ul><li><code>@Autowire</code>通过byType来查找bean，并且必须要存在，可以配合<code>@Qualifier("xxx")</code>来查找特定id的bean</li><li><code>@Resource</code> 默认根据byName进行查找，找不到再根据byType</li></ul></blockquote><p>​</p><h3 id=4spring注解注入>4、Spring注解注入</h3><p>注解开发需要添加注解的支持，并且要添加扫描包的配置</p><div class=highlight><pre class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;context:annotation-config</span> <span class=nt>/&gt;</span>
-<span class=nt>&lt;context:component-scan</span> <span class=na>base-package=</span><span class=s>&#34;di&#34;</span> <span class=nt>/&gt;</span>
-</code></pre></div><p>将对象加入IOC容器的主要有如下几个 注解，下面的注解功能都是一样，名字不一样是为了MVC分层</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>@Component
+		#内联bean 也可以ref引用外部bean <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&#34;address&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;address&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&#34;di.model.Address&#34;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;postcode&#34;</span> <span class="na">value=</span><span class="s">&#34;1111&#34;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;province&#34;</span> <span class="na">value=</span><span class="s">&#34;zj&#34;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/bean&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+</code></pre></div><ul>
+<li><strong>构造器注入</strong></li>
+</ul>
+<p>对象需要对应的构造方法，默认的<code>set</code>注入是调用无参构造器创建类的，但是构造器注入就需要特定的构造器方法支持</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;user&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.User&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&#34;username&#34;</span> <span class="na">value=</span><span class="s">&#34;lyer&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&#34;age&#34;</span> <span class="na">value=</span><span class="s">&#34;18&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div><ul>
+<li><strong>bean作用域</strong></li>
+</ul>
+<p><code>singleton</code> 默认作用于 <strong>单例</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;userInfo&#34;</span> <span class="na">class=</span><span class="s">&#34;cn.lovepi.UserInfo&#34;</span> <span class="na">scope=</span><span class="s">&#34;singleton&#34;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+</code></pre></div><p><code>prototype</code> 每次对该Bean请求的时候，Spring IoC都会创建一个新的作用域</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;userInfo&#34;</span> <span class="na">class=</span><span class="s">&#34;cn.lovepi.UserInfo&#34;</span> <span class="na">scope=</span><span class="s">&#34; prototype &#34;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+</code></pre></div><p>其它的作用域用的不多，不举例了</p>
+<p>​</p>
+<h3 id="2xml引入合并">2、xml引入合并</h3>
+<p>Spring可以讲所有的xml配置文件合并为一个配置，只需要<code>import</code>即可</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">        https://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;import</span> <span class="na">resource=</span><span class="s">&#34;beans.xml&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div><p>​</p>
+<h3 id="3bean的自动装配">3、bean的自动装配</h3>
+<p>如果一个对象里面引用另外的对象，那么我们需要在xml配置文件中一个个指定这些<code>bean</code>和对应<code>property</code>的<code>ref</code>值，那么很多代码都是重复性的操作，比如下面</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;door&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.Door&#34;</span> <span class="na">p:name=</span><span class="s">&#34;door&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;window&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.Window&#34;</span> <span class="na">p:name=</span><span class="s">&#34;window&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;house&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.House&#34;</span> <span class="na">p:name=</span><span class="s">&#34;house&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;door&#34;</span> <span class="na">ref=</span><span class="s">&#34;door&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;window&#34;</span> <span class="na">ref=</span><span class="s">&#34;window&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div><p>Spring有一个自动装配的特性，可以根据IOC容器中的对象自动赋值给对象的属性，这样就可以省略property的书写了</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;door&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.Door&#34;</span> <span class="na">p:name=</span><span class="s">&#34;door&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;window&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.Window&#34;</span> <span class="na">p:name=</span><span class="s">&#34;window&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;house&#34;</span> <span class="na">class=</span><span class="s">&#34;di.model.house.House&#34;</span> <span class="na">p:name=</span><span class="s">&#34;house&#34;</span> <span class="na">autowire=</span><span class="s">&#34;byName&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></div><ul>
+<li>
+<p><code>byName</code></p>
+<p>自动装配会去查找类的<code>set</code>方法，然后按照<code>bean</code>的命名约定<code>setXXX</code> 最后根据后半部分的名字去容器里面查找对应的bean去装配上去</p>
+</li>
+<li>
+<p><code>byType</code></p>
+<p>类型的bean必须只有一个</p>
+</li>
+</ul>
+<p>也可以启动注解方式进行自动装配，注解开启之后就不需要写<code>set</code>方法即可完成注入，开启注解方式自动装配有如下几个步骤:</p>
+<ul>
+<li>引入xml的<code>context</code>的命名空间</li>
+<li>xml中添加对注解的支持<code>&lt;context:annotation-config /&gt;</code></li>
+<li><code>@Autowire</code> <code>@Resource</code></li>
+</ul>
+<blockquote>
+<p><strong>@Autowire和@Resource的区别:</strong></p>
+<ul>
+<li><code>@Autowire</code>通过byType来查找bean，并且必须要存在，可以配合<code>@Qualifier(&quot;xxx&quot;)</code>来查找特定id的bean</li>
+<li><code>@Resource</code> 默认根据byName进行查找，找不到再根据byType</li>
+</ul>
+</blockquote>
+<p>​</p>
+<h3 id="4spring注解注入">4、Spring注解注入</h3>
+<p>注解开发需要添加注解的支持，并且要添加扫描包的配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;context:annotation-config</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&#34;di&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></div><p>将对象加入IOC容器的主要有如下几个 注解，下面的注解功能都是一样，名字不一样是为了MVC分层</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">@Component
 @Service
 @Repository
 @Controller
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Component</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>Dog</span> <span class=o>{</span>
-    <span class=nd>@Value</span><span class=o>(</span><span class=s>&#34;haba&#34;</span><span class=o>)</span> <span class=c1>//相当于xml&lt;bean&gt;中的value 注意 这里也不需要set方法
-</span><span class=c1></span>    <span class=kd>private</span> <span class=n>String</span> <span class=n>name</span><span class=o>;</span>
-    <span class=nd>@Value</span><span class=o>(</span><span class=s>&#34;19&#34;</span><span class=o>)</span>
-    <span class=kd>private</span> <span class=n>Integer</span> <span class=n>age</span><span class=o>;</span>
-<span class=o>}</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-    <span class=n>ApplicationContext</span> <span class=n>context</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ClassPathXmlApplicationContext</span><span class=o>(</span><span class=s>&#34;all.xml&#34;</span><span class=o>);</span>
-    <span class=n>Dog</span> <span class=n>dog</span> <span class=o>=</span> <span class=n>context</span><span class=o>.</span><span class=na>getBean</span><span class=o>(</span><span class=s>&#34;dog&#34;</span><span class=o>,</span> <span class=n>Dog</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-    <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>dog</span><span class=o>);</span>
-<span class=o>}</span>
-</code></pre></div><p>​</p><h3 id=5java配置类注入>5、Java配置类注入</h3><p>用Java的配置类来<strong>替换xml的注解</strong>，需要使用不同的<code>Context</code>对象来获取对应的bean，<strong>注意bean的名字是方法名</strong> 使用配置类+注解就可以完全抛弃xml配置文件了</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Data</span>
-<span class=nd>@AllArgsConstructor</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>Cat</span> <span class=o>{</span>
-  <span class=kd>private</span> <span class=n>String</span> <span class=n>name</span><span class=o>;</span>
-<span class=o>}</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppConfig</span> <span class=o>{</span>
-  <span class=nd>@Bean</span> <span class=c1>//这样就不需要在Cat上加@Component了
-</span><span class=c1></span>  <span class=kd>public</span> <span class=n>Cat</span> <span class=nf>generateCat</span><span class=o>()</span> <span class=o>{</span>
-    <span class=k>return</span> <span class=k>new</span> <span class=n>Cat</span><span class=o>(</span><span class=s>&#34;cat&#34;</span><span class=o>);</span>
-  <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(){</span>
-    <span class=n>ApplicationContext</span> <span class=n>aContext</span> <span class=o>=</span> <span class=k>new</span> <span class=n>AnnotationConfigApplicationContext</span><span class=o>(</span><span class=n>AppConfig</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-    <span class=c1>//注意bean的名字是方法名
-</span><span class=c1></span>	<span class=n>Cat</span> <span class=n>cat</span> <span class=o>=</span> <span class=n>aContext</span><span class=o>.</span><span class=na>getBean</span><span class=o>(</span><span class=s>&#34;generateCat&#34;</span><span class=o>,</span><span class=n>Cat</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-	<span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>cat</span><span class=o>);</span>    
-<span class=o>}</span>
-</code></pre></div><p>也可以在配置类上加上<code>@ComponentScan</code>来添加扫描包，这样就完全不需要在xml里配置扫描了</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
-<span class=nd>@ComponentScan</span><span class=o>(</span><span class=s>&#34;com.cds.adsa&#34;</span><span class=o>)</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppConfig</span> <span class=o>{</span>
-  <span class=nd>@Bean</span> <span class=c1>//这样就不需要在Cat上加@Component了
-</span><span class=c1></span>  <span class=kd>public</span> <span class=n>Cat</span> <span class=nf>generateCat</span><span class=o>()</span> <span class=o>{</span>
-    <span class=k>return</span> <span class=k>new</span> <span class=n>Cat</span><span class=o>(</span><span class=s>&#34;cat&#34;</span><span class=o>);</span>
-  <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>案例请看 <a href=https://github.com/biningo/spring-play/tree/main/spring-annotation-play target=_blank rel="noopener noreffer">https://github.com/biningo/spring-play/tree/main/spring-annotation-play</a></p><p>​</p><h2 id=控制反转ioc和依赖注入di>控制反转IOC和依赖注入DI</h2><p><strong>IOC</strong> <code>Inversion of Control</code> 是一种思想理念，而 <strong>DI</strong> <code>Dependency Injection</code>是实现IOC的一种方式</p><p>先说一说什么是控制反转，简单来说就是将控制权反转过来，比如计算机可以连接很多外设比如硬盘、U盘、屏幕、打印机等，操作系统需要为每一个接口都写一套程序以此来操作这些设备，这样每增加一个设备操作系统就需要写一套程序，这样未免也太麻烦了，所以操作系统就开发了一套接口，设置了一些读取数据的规则，现在外部设备想要被操作系统操作只需要实现操作系统的接口，自己写一套驱动程序，然后将驱动程序安装到操作系统中即可操作设备，这样就反转了控制权，依赖也倒置了</p><ul><li><p>原本控制权都在操作系统中，操作系统为每个设备写了驱动程序，现在控制权都到了各个外设中，外设自己写驱动程序</p></li><li><p>原来设备需要依赖操作系统为自己写驱动程序，现在操作系统需要依赖设备提供相关的驱动</p></li></ul><p>在Spring中也是一样的，原来创建对象都需要程序员自己进行创建，创建对象的代码写死在程序中，一旦用户的需求变了，那么就需要程序员手动修改代码</p><p>Spring采用了依赖注入的方式解决了上面的问题，程序员需要写一个接口和一些实现类，或则实现类由用户自己写，那么用户就可以自行选择实现类进行创建然后注入到系统中即可，比如用<code>Set</code>方法进行注入对象</p><p>Spring还使用IOC容器来管理和创建所有对象，IOC再进行注入对象</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg, https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg title=https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg></p><p>​</p><h2 id=静态代理和动态代理>静态代理和动态代理</h2><p>TODO</p><h2 id=spring的aop使用>Spring的AOP使用</h2><p>AOP有三种方式</p><ul><li>通过实现接口，XML配置文件方式</li><li>切面类，配置XML文件</li><li>纯注解方式</li></ul><p>具体案例请看: <a href=https://github.com/biningo/spring-play/tree/main target=_blank rel="noopener noreffer">https://github.com/biningo/spring-play/tree/main</a></p><p>​</p><h2 id=spring总结>Spring总结</h2><p>Spring核心主要有如下几点:</p><ul><li><strong>IOC控制反转和DI依赖注入(Spring容器)</strong></li><li><strong>动态代理和AOP切面</strong></li><li>事务的支持</li></ul><p>​</p><h2 id=参考>参考</h2><p><a href=https://zhuanlan.zhihu.com/p/97886967>https://zhuanlan.zhihu.com/p/97886967</a></p><p><a href=https://coolshell.cn/articles/9949.html>https://coolshell.cn/articles/9949.html</a></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-03-19</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/spring/>Spring</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/ class=prev rel=prev title=完全二叉树和满二叉树><i class="fas fa-angle-left fa-fw"></i>完全二叉树和满二叉树</a>
-<a href=/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/ class=next rel=next title=Shell脚本基本语法总结>Shell脚本基本语法总结<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-03-19T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"Spring总结"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="o">{</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;haba&#34;</span><span class="o">)</span> <span class="c1">//相当于xml&lt;bean&gt;中的value 注意 这里也不需要set方法
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;19&#34;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&#34;all.xml&#34;</span><span class="o">);</span>
+    <span class="n">Dog</span> <span class="n">dog</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;dog&#34;</span><span class="o">,</span> <span class="n">Dog</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dog</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>​</p>
+<h3 id="5java配置类注入">5、Java配置类注入</h3>
+<p>用Java的配置类来<strong>替换xml的注解</strong>，需要使用不同的<code>Context</code>对象来获取对应的bean，<strong>注意bean的名字是方法名</strong> 使用配置类+注解就可以完全抛弃xml配置文件了</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Data</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Cat</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+  <span class="nd">@Bean</span> <span class="c1">//这样就不需要在Cat上加@Component了
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="n">Cat</span> <span class="nf">generateCat</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Cat</span><span class="o">(</span><span class="s">&#34;cat&#34;</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
+    <span class="n">ApplicationContext</span> <span class="n">aContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="n">AppConfig</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="c1">//注意bean的名字是方法名
+</span><span class="c1"></span>	<span class="n">Cat</span> <span class="n">cat</span> <span class="o">=</span> <span class="n">aContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;generateCat&#34;</span><span class="o">,</span><span class="n">Cat</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cat</span><span class="o">);</span>    
+<span class="o">}</span>
+</code></pre></div><p>也可以在配置类上加上<code>@ComponentScan</code>来添加扫描包，这样就完全不需要在xml里配置扫描了</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="o">(</span><span class="s">&#34;com.cds.adsa&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+  <span class="nd">@Bean</span> <span class="c1">//这样就不需要在Cat上加@Component了
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="n">Cat</span> <span class="nf">generateCat</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Cat</span><span class="o">(</span><span class="s">&#34;cat&#34;</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>案例请看 <a href="https://github.com/biningo/spring-play/tree/main/spring-annotation-play" target="_blank" rel="noopener noreffer">https://github.com/biningo/spring-play/tree/main/spring-annotation-play</a></p>
+<p>​</p>
+<h2 id="控制反转ioc和依赖注入di">控制反转IOC和依赖注入DI</h2>
+<p><strong>IOC</strong> <code>Inversion of Control</code> 是一种思想理念，而 <strong>DI</strong> <code>Dependency Injection</code>是实现IOC的一种方式</p>
+<p>先说一说什么是控制反转，简单来说就是将控制权反转过来，比如计算机可以连接很多外设比如硬盘、U盘、屏幕、打印机等，操作系统需要为每一个接口都写一套程序以此来操作这些设备，这样每增加一个设备操作系统就需要写一套程序，这样未免也太麻烦了，所以操作系统就开发了一套接口，设置了一些读取数据的规则，现在外部设备想要被操作系统操作只需要实现操作系统的接口，自己写一套驱动程序，然后将驱动程序安装到操作系统中即可操作设备，这样就反转了控制权，依赖也倒置了</p>
+<ul>
+<li>
+<p>原本控制权都在操作系统中，操作系统为每个设备写了驱动程序，现在控制权都到了各个外设中，外设自己写驱动程序</p>
+</li>
+<li>
+<p>原来设备需要依赖操作系统为自己写驱动程序，现在操作系统需要依赖设备提供相关的驱动</p>
+</li>
+</ul>
+<p>在Spring中也是一样的，原来创建对象都需要程序员自己进行创建，创建对象的代码写死在程序中，一旦用户的需求变了，那么就需要程序员手动修改代码</p>
+<p>Spring采用了依赖注入的方式解决了上面的问题，程序员需要写一个接口和一些实现类，或则实现类由用户自己写，那么用户就可以自行选择实现类进行创建然后注入到系统中即可，比如用<code>Set</code>方法进行注入对象</p>
+<p>Spring还使用IOC容器来管理和创建所有对象，IOC再进行注入对象</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg"
+        data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg, https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg"
+        title="https://raw.githubusercontent.com/biningo/cdn/master/img1/ioc.jpg" /></p>
+<p>​</p>
+<h2 id="静态代理和动态代理">静态代理和动态代理</h2>
+<p>TODO</p>
+<h2 id="spring的aop使用">Spring的AOP使用</h2>
+<p>AOP有三种方式</p>
+<ul>
+<li>通过实现接口，XML配置文件方式</li>
+<li>切面类，配置XML文件</li>
+<li>纯注解方式</li>
+</ul>
+<p>具体案例请看: <a href="https://github.com/biningo/spring-play/tree/main" target="_blank" rel="noopener noreffer">https://github.com/biningo/spring-play/tree/main</a></p>
+<p>​</p>
+<h2 id="spring总结">Spring总结</h2>
+<p>Spring核心主要有如下几点:</p>
+<ul>
+<li><strong>IOC控制反转和DI依赖注入(Spring容器)</strong></li>
+<li><strong>动态代理和AOP切面</strong></li>
+<li>事务的支持</li>
+</ul>
+<p>​</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/97886967">https://zhuanlan.zhihu.com/p/97886967</a></p>
+<p><a href="https://coolshell.cn/articles/9949.html">https://coolshell.cn/articles/9949.html</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-03-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/spring/">Spring</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" class="prev" rel="prev" title="完全二叉树和满二叉树"><i class="fas fa-angle-left fa-fw"></i>完全二叉树和满二叉树</a>
+            <a href="/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Shell脚本基本语法总结">Shell脚本基本语法总结<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://icepan.cloud" target="_blank">lyer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-03-19T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"Spring总结"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

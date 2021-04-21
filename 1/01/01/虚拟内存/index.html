@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>虚拟内存 - lyer&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="虚拟内存" />
+<meta property="og:description" content="操作系统内存管理FAQ  为什么需要将内核的页目录表底地址和高地址都设置页表指向？
+ 内核的初始页表是内核的loader汇编程序进行设置的，会建立内核的基本页表，为了将内核地址映射到高地址处，则只需要将页目录表的最后几个表项指向一级页表即可，一级页表则记录的是虚拟逻辑地址对应的物理地址，内核在编译的时候使用的就是逻辑的高地址进行开始编译编址的，运行时将此虚拟地址通过内核页表进行转化为实际的物理底地址处，loader程序建立初始页表，然后加载内核到内存中后（内核程序也是ELF格式的，loader也是程序员写的，loader需要分析内核的ELF信息然后将相关的数据段分别加载到指定的内存区域），然后就跳到了内核代码段处，然后内核就开始执行自己的代码了
+前面初始页表的开始底地址处也是需要指向内核页表的，底地址处的虚拟地址映射是需要和物理地址一一映射的，为了就是让之前实模式下的代码填的实际物理地址能在保护模式下通过虚拟地址能转换到同一个物理地址，能让实模式的代码继续运行，比如各个基础外设的驱动代码等，之前实模式的程序的地址都是实际的物理地址
+以及后来的OS内核需要打印字符的话都是要操作屏幕外设，而屏幕外设的显存地址映射都是映射在实模式的底地址处，只有操作这个显存地址才能打印字符，os写打印库的时候需要指定这个底地址的实际地址，但是需要进过虚拟地址转化，因为之前在页目录表的底地址处也设置了和高地址目录项一样的页表，所以能将虚拟地址转化为相同的物理地址，让实模式下的程序能在保护模式下正常运行 还有如果执行BIOS中断的话中断程序也是实模式的地址，所以能继续让BIOS中断工作
+​
+参考  https://m.xp.cn/b.php/77856.html 【Linux绕过GDT，直接采用分页】 https://cloud.tencent.com/developer/ask/217577 【Linux绕过GDT，直接采用分页】  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/1/01/01/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="虚拟内存"/>
+<meta name="twitter:description" content="操作系统内存管理FAQ  为什么需要将内核的页目录表底地址和高地址都设置页表指向？
+ 内核的初始页表是内核的loader汇编程序进行设置的，会建立内核的基本页表，为了将内核地址映射到高地址处，则只需要将页目录表的最后几个表项指向一级页表即可，一级页表则记录的是虚拟逻辑地址对应的物理地址，内核在编译的时候使用的就是逻辑的高地址进行开始编译编址的，运行时将此虚拟地址通过内核页表进行转化为实际的物理底地址处，loader程序建立初始页表，然后加载内核到内存中后（内核程序也是ELF格式的，loader也是程序员写的，loader需要分析内核的ELF信息然后将相关的数据段分别加载到指定的内存区域），然后就跳到了内核代码段处，然后内核就开始执行自己的代码了
+前面初始页表的开始底地址处也是需要指向内核页表的，底地址处的虚拟地址映射是需要和物理地址一一映射的，为了就是让之前实模式下的代码填的实际物理地址能在保护模式下通过虚拟地址能转换到同一个物理地址，能让实模式的代码继续运行，比如各个基础外设的驱动代码等，之前实模式的程序的地址都是实际的物理地址
+以及后来的OS内核需要打印字符的话都是要操作屏幕外设，而屏幕外设的显存地址映射都是映射在实模式的底地址处，只有操作这个显存地址才能打印字符，os写打印库的时候需要指定这个底地址的实际地址，但是需要进过虚拟地址转化，因为之前在页目录表的底地址处也设置了和高地址目录项一样的页表，所以能将虚拟地址转化为相同的物理地址，让实模式下的程序能在保护模式下正常运行 还有如果执行BIOS中断的话中断程序也是实模式的地址，所以能继续让BIOS中断工作
+​
+参考  https://m.xp.cn/b.php/77856.html 【Linux绕过GDT，直接采用分页】 https://cloud.tencent.com/developer/ask/217577 【Linux绕过GDT，直接采用分页】  "/>
+<meta name="application-name" content="lyer&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="lyer&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/1/01/01/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" /><link rel="next" href="/2019/05/25/html%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "虚拟内存",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/1\/01\/01\/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98\/"
+        },"genre": "posts","keywords": "Linux, OS","wordcount":  12 ,
+        "url": "\/1\/01\/01\/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98\/","publisher": {
+            "@type": "Organization",
+            "name": "lyer"},"author": {
+                "@type": "Person",
+                "name": "lyer"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> archive </a><a class="menu-item" href="/tags/"> tag </a><a class="menu-item" href="/categories/"> category </a><a class="menu-item" href="/book"> book </a><a class="menu-item" href="/about"> about </a><a class="menu-item" href="/study"> study </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">archive</a><a class="menu-item" href="/tags/" title="">tag</a><a class="menu-item" href="/categories/" title="">category</a><a class="menu-item" href="/book" title="">book</a><a class="menu-item" href="/about" title="">about</a><a class="menu-item" href="/study" title="">study</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">虚拟内存</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://icepan.cloud" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>操作系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="0001-01-01">0001-01-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#操作系统内存管理faq">操作系统内存管理FAQ</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="操作系统内存管理faq">操作系统内存管理FAQ</h2>
+<blockquote>
+<p>为什么需要将内核的页目录表底地址和高地址都设置页表指向？</p>
+</blockquote>
+<p>内核的初始页表是内核的<code>loader</code>汇编程序进行设置的，会建立内核的基本页表，为了将内核地址映射到高地址处，则只需要将页目录表的最后几个表项指向一级页表即可，一级页表则记录的是虚拟逻辑地址对应的物理地址，内核在编译的时候使用的就是逻辑的高地址进行开始编译编址的，运行时将此虚拟地址通过内核页表进行转化为实际的物理底地址处，<code>loader</code>程序建立初始页表，然后加载内核到内存中后（内核程序也是ELF格式的，loader也是程序员写的，loader需要分析内核的ELF信息然后将相关的数据段分别加载到指定的内存区域），然后就跳到了内核代码段处，然后内核就开始执行自己的代码了</p>
+<p>前面初始页表的开始底地址处也是需要指向内核页表的，底地址处的虚拟地址映射是需要和物理地址一一映射的，为了就是让之前实模式下的代码填的实际物理地址能在保护模式下通过虚拟地址能转换到同一个物理地址，能让实模式的代码继续运行，比如各个基础外设的驱动代码等，之前实模式的程序的地址都是实际的物理地址</p>
+<p>以及后来的OS内核需要打印字符的话都是要操作屏幕外设，而屏幕外设的显存地址映射都是映射在实模式的底地址处，只有操作这个显存地址才能打印字符，os写打印库的时候需要指定这个底地址的实际地址，但是需要进过虚拟地址转化，因为之前在页目录表的底地址处也设置了和高地址目录项一样的页表，所以能将虚拟地址转化为相同的物理地址，<strong>让实模式下的程序能在保护模式下正常运行</strong> 还有如果执行BIOS中断的话中断程序也是实模式的地址，所以能继续让BIOS中断工作</p>
+<p>​</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://m.xp.cn/b.php/77856.html">https://m.xp.cn/b.php/77856.html</a> 【Linux绕过GDT，直接采用分页】</li>
+<li><a href="https://cloud.tencent.com/developer/ask/217577">https://cloud.tencent.com/developer/ask/217577</a> 【Linux绕过GDT，直接采用分页】</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 0001-01-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">Linux</a>,&nbsp;<a href="/tags/os/">OS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/2019/05/25/html%E6%80%BB%E7%BB%93/" class="next" rel="next" title="HTML总结">HTML总结<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://icepan.cloud" target="_blank">lyer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"0001-01-01T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"虚拟内存"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
