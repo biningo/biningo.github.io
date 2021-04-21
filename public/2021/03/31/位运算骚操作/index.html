@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>位运算骚操作 - lyer&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="位运算骚操作" />
+<meta property="og:description" content="XOR 异或: 相同为0，不同为1
+x^0=x x^(~x)=全1 #位数和x一样的全1 x^x=0 交换两个整数变量
+a^=b b^=a a^=b 判断奇偶性
+x&amp;1 == 1 #奇数 x&amp;1 == 0 #偶数 计算某个数字二进制位1的个数
+int countOne(int num) { int cnt = 0; for (int i = 0; i &lt; 8 * sizeof(num); &#43;&#43;i) { cnt &#43;= num &amp; 1; num &gt;&gt;= 1; } return cnt; } 判断某一位是否为1
+(n&gt;&gt;(pos-1))&amp;1 乘2除2
+n&gt;&gt;1 #/2 n&lt;&lt;1 #*2 掩码操作，获取前面几位
+mask=11110000 n=10100000 mask&amp;n #获取前面4位 其它位置0 将最低位的1置0
+num &amp; (num - 1) 一个数组中其他数都出现了2次，只有一个数出现了1次，找出那个数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/03/31/%E4%BD%8D%E8%BF%90%E7%AE%97%E9%AA%9A%E6%93%8D%E4%BD%9C/" />
+<meta property="article:published_time" content="2021-03-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-03-31T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="位运算骚操作"/>
+<meta name="twitter:description" content="XOR 异或: 相同为0，不同为1
+x^0=x x^(~x)=全1 #位数和x一样的全1 x^x=0 交换两个整数变量
+a^=b b^=a a^=b 判断奇偶性
+x&amp;1 == 1 #奇数 x&amp;1 == 0 #偶数 计算某个数字二进制位1的个数
+int countOne(int num) { int cnt = 0; for (int i = 0; i &lt; 8 * sizeof(num); &#43;&#43;i) { cnt &#43;= num &amp; 1; num &gt;&gt;= 1; } return cnt; } 判断某一位是否为1
+(n&gt;&gt;(pos-1))&amp;1 乘2除2
+n&gt;&gt;1 #/2 n&lt;&lt;1 #*2 掩码操作，获取前面几位
+mask=11110000 n=10100000 mask&amp;n #获取前面4位 其它位置0 将最低位的1置0
+num &amp; (num - 1) 一个数组中其他数都出现了2次，只有一个数出现了1次，找出那个数"/>
+<meta name="application-name" content="lyer&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="lyer&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="/2021/03/31/%E4%BD%8D%E8%BF%90%E7%AE%97%E9%AA%9A%E6%93%8D%E4%BD%9C/" /><link rel="prev" href="/2021/03/30/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/" /><link rel="next" href="/2021/03/31/b%E6%A0%91b-%E6%A0%91avl%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "位运算骚操作",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2021\/03\/31\/%E4%BD%8D%E8%BF%90%E7%AE%97%E9%AA%9A%E6%93%8D%E4%BD%9C\/"
+        },"genre": "posts","keywords": "位运算","wordcount":  102 ,
+        "url": "\/2021\/03\/31\/%E4%BD%8D%E8%BF%90%E7%AE%97%E9%AA%9A%E6%93%8D%E4%BD%9C\/","datePublished": "2021-03-31T00:00:00+00:00","dateModified": "2021-03-31T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "lyer"},"author": {
+                "@type": "Person",
+                "name": "lyer"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> archive </a><a class="menu-item" href="/tags/"> tag </a><a class="menu-item" href="/categories/"> category </a><a class="menu-item" href="/book"> book </a><a class="menu-item" href="/about"> about </a><a class="menu-item" href="/study"> study </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="lyer&#39;s blog">lyer&#39;s blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">archive</a><a class="menu-item" href="/tags/" title="">tag</a><a class="menu-item" href="/categories/" title="">category</a><a class="menu-item" href="/book" title="">book</a><a class="menu-item" href="/about" title="">about</a><a class="menu-item" href="/study" title="">study</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">位运算骚操作</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://icepan.cloud" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>算法和数据结构</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-31">2021-03-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 102 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><p><code>XOR</code> <strong>异或: 相同为0，不同为1</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">x^0<span class="o">=</span>x
+x^<span class="o">(</span>~x<span class="o">)=</span>全1 <span class="c1">#位数和x一样的全1</span>
+x^x<span class="o">=</span><span class="m">0</span>
+</code></pre></div><p><strong>交换两个整数变量</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">a^<span class="o">=</span>b
+b^<span class="o">=</span>a
+a^<span class="o">=</span>b
+</code></pre></div><p><strong>判断奇偶性</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">x<span class="p">&amp;</span><span class="nv">1</span> <span class="o">==</span> <span class="m">1</span> <span class="c1">#奇数</span>
+x<span class="p">&amp;</span><span class="nv">1</span> <span class="o">==</span> <span class="m">0</span> <span class="c1">#偶数</span>
+</code></pre></div><p><strong>计算某个数字二进制位1的个数</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">int countOne<span class="o">(</span>int num<span class="o">)</span>
+<span class="o">{</span>
+    int <span class="nv">cnt</span> <span class="o">=</span> 0<span class="p">;</span>
+    <span class="k">for</span> <span class="o">(</span>int <span class="nv">i</span> <span class="o">=</span> 0<span class="p">;</span> i &lt; <span class="m">8</span> * sizeof<span class="o">(</span>num<span class="o">)</span><span class="p">;</span> ++i<span class="o">)</span> <span class="o">{</span>
+        <span class="nv">cnt</span> <span class="o">+=</span> num <span class="p">&amp;</span> 1<span class="p">;</span>
+        num &gt;&gt;<span class="o">=</span> 1<span class="p">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> cnt<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div><p><strong>判断某一位是否为1</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>n&gt;&gt;<span class="o">(</span>pos-1<span class="o">))</span><span class="p">&amp;</span><span class="m">1</span>
+</code></pre></div><p><strong>乘2除2</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">n&gt;&gt;1 <span class="c1">#/2</span>
+n&lt;&lt;<span class="m">1</span> <span class="c1">#*2</span>
+</code></pre></div><p><strong>掩码操作，获取前面几位</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">mask</span><span class="o">=</span><span class="m">11110000</span>
+<span class="nv">n</span><span class="o">=</span><span class="m">10100000</span>
+mask<span class="p">&amp;</span>n <span class="c1">#获取前面4位 其它位置0</span>
+</code></pre></div><p><strong>将最低位的1置0</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">num <span class="p">&amp;</span> <span class="o">(</span>num - 1<span class="o">)</span>
+</code></pre></div><p><strong>一个数组中其他数都出现了2次，只有一个数出现了1次，找出那个数</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">int showOnece<span class="o">(</span>vector&lt;int&gt; nums<span class="o">)</span>
+<span class="o">{</span>
+    int <span class="nv">res</span> <span class="o">=</span> 0<span class="p">;</span>
+    <span class="k">for</span> <span class="o">(</span>auto num : nums<span class="o">)</span> <span class="o">{</span>
+        res ^<span class="o">=</span> num<span class="p">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> res<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div><p><strong>将指定几个位清除</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">AND_NOT<span class="o">(</span>a, b<span class="o">)</span> <span class="o">=</span> AND<span class="o">(</span>a, NOT<span class="o">(</span>b<span class="o">))</span>
+n<span class="p">&amp;</span><span class="o">(</span>~0x03<span class="o">)</span> <span class="c1">#n的1、2的1位置0</span>
+</code></pre></div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-03-31</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/">位运算</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/03/30/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/" class="prev" rel="prev" title="github上的docker镜像仓库"><i class="fas fa-angle-left fa-fw"></i>github上的docker镜像仓库</a>
+            <a href="/2021/03/31/b%E6%A0%91b-%E6%A0%91avl%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/" class="next" rel="next" title="B树B&#43;树AVL树红黑树">B树B&#43;树AVL树红黑树<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://icepan.cloud" target="_blank">lyer</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-03-31T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"位运算骚操作"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

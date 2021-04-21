@@ -1,6 +1,0 @@
-[submodule "themes/zozo"]
-	path = themes/zozo
-	url = https://github.com/varkai/hugo-theme-zozo
-[submodule "themes/LoveIt"]
-	path = themes/LoveIt
-	url = https://github.com/dillonzq/LoveIt.git

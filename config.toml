@@ -2,7 +2,7 @@
 defaultContentLanguage = "zh-cn"
 languageCode = "zh-CN"
 title = "lyer's blog"
-theme = "LoveIt"
+theme = "DoIt"
 
 [params]
   version = "0.2.X"
