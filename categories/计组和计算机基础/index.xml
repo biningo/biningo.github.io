@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>计组和计算机基础 on lyer's blog</title><link>/categories/%E8%AE%A1%E7%BB%84%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</link><description>Recent content in 计组和计算机基础 on lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E8%AE%A1%E7%BB%84%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml"/><item><title>Cache高速缓存</title><link>/2021/04/07/cache%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98/</link><pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/04/07/cache%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98/</guid><description>Cache和内存地址映射 1、直接相联映射 内存指定的块只能缓存到指定的Cache行中，采用mod的方式，并且块号用中间的位数，这样主要是为了能利用局部性原理将附近的几个块都能够有机会同时缓存起来
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>计组和计算机基础 - 分类 - lyer's blog</title><link>/categories/%E8%AE%A1%E7%BB%84%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</link><description>计组和计算机基础 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E8%AE%A1%E7%BB%84%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="self" type="application/rss+xml"/><item><title>Cache高速缓存</title><link>/2021/04/07/cache%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98/</link><pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/07/cache%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98/</guid><description>Cache和内存地址映射 1、直接相联映射 内存指定的块只能缓存到指定的Cache行中，采用mod的方式，并且块号用中间的位数，这样主要是为了能利用局部性原理将附近的几个块都能够有机会同时缓存起来
 缺点是缓存利用率底，指定的块只能对应指定的行，如果对应的缓存行慢了，即时其他缓存行空着也无法缓存，需要将自己对应的缓存行的数据置换出去
 2、全相联映射 内存每块都可以映射到Cache的每一行，优点是缓存利用率高，缺点是查找缓存效率低，需要遍历查找是否存在与缓存中
 3、组相联映射 直接映射+全相联映射的结合，将多块分为一组，同时将缓存行里面的多行分为一组，每组内采用全相联映射，组间采用直接相联映射
@@ -16,13 +16,13 @@ Not Write Allocate 非写分配
 避开高速缓存，直接操作内存，此策略通常是与 Write Through 配套
 综上: 我们得出，Cache一致性问题有两种策略解决 (命中和不命中两种情况对应的策略)
 Write Through+Not Write Allocate Write Back + Write Allocate ​
-Cache分级 L1缓存分为两种: 指令缓存和数据缓存</description></item><item><title>信息的编码和表示</title><link>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</link><pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</guid><description>跟新中&amp;hellip;..
-二进制算术运算 二进制的 加减乘除 运算和十进制相似，只不过二进制到2就需要进位，而十进制到10才需要进位而已，其他进制也都类似。
-CPU逻辑运算：&amp;amp; | ^(异或) ~(取反) （由相应的与非门等电路组合而成）
+Cache分级 L1缓存分为两种: 指令缓存和数据缓存</description></item><item><title>信息的编码和表示</title><link>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</link><pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/01/%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E7%A0%81%E5%92%8C%E8%A1%A8%E7%A4%BA/</guid><description><![CDATA[跟新中&hellip;..
+ 二进制算术运算 二进制的 加减乘除 运算和十进制相似，只不过二进制到2就需要进位，而十进制到10才需要进位而已，其他进制也都类似。
+CPU逻辑运算：&amp; | ^(异或) ~(取反) （由相应的与非门等电路组合而成）
 CPU算术运算： 加法、位移 （通过上面的逻辑运算实现）
 二进制的加减乘除都是通过 加法、位移 组合来实现的，CPU里面实现二进制的算术运算由相应的部件来实现：
-加法器（全加器） 实现加法 除法器、乘法器 实现乘除 1、二进制加减 二进制加法：01+01=10 第一位1+1=0然后需要进位并且需要链式进位，这和十进制一样，加法器基本原理就是：
-异或（不带进位的加法1+1=0 0+0=0） 与 （计算进位,只有1|1==1才会产生进位）如果有进位还必须保存进位参与下一次运算 二进制里面的减法是通过加法来运算的，减去一个数其实就是加上这个数的负数，计算机为了表示负数，会出现很多问题，原码、反码、补码就是为了解决负数问题的（稍后讨论）
+ 加法器（全加器） 实现加法 除法器、乘法器 实现乘除  1、二进制加减 二进制加法：01+01=10 第一位1+1=0然后需要进位并且需要链式进位，这和十进制一样，加法器基本原理就是：
+ 异或（不带进位的加法1+1=0 0+0=0） 与 （计算进位,只有1|1==1才会产生进位）如果有进位还必须保存进位参与下一次运算  二进制里面的减法是通过加法来运算的，减去一个数其实就是加上这个数的负数，计算机为了表示负数，会出现很多问题，原码、反码、补码就是为了解决负数问题的（稍后讨论）
 二进制加法规则：0+0=0 1+0=1 1+1=1
 二进制减法规则：0-0=0 1-0=1 0-1=1(需要向前借位) 1-1=0
 可以看到和十进制一样，只不过十进制有10种状态0-9而二进制只有0-1两种状态
@@ -31,6 +31,6 @@ CPU算术运算： 加法、位移 （通过上面的逻辑运算实现）
 第一排1101叫被被乘数，第二排1011叫乘数
 为了更直观感受，将每次乘下来的结果空白部分都补0：
 00001101 00011010 00000000 01101000 -------- 10001111 CPU乘法器：有3个寄存器组成：
-A：保存被乘数 B：保存乘数 C：保存结果 下面展示完整流程（假设在8位机器上）：
+ A：保存被乘数 B：保存乘数 C：保存结果  下面展示完整流程（假设在8位机器上）：
 A：00001101 B：00001011 C：00000000
-1*00001101=00001101=&amp;gt; A：00011010 B：00000101 C：00001101 1*00011010=00011010=&amp;gt; A：00110100 B：00000010 C：00001101 0*00110100=00000000=&amp;gt; A：01101000 B：00000001 C：01101000 1*01101000=01101000=&amp;gt; A：11010000 B：00000000C：10001111 所以最终结果就是 10001111</description></item></channel></rss>
+ 1*00001101=00001101=&gt; A：00011010 B：00000101 C：00001101 1*00011010=00011010=&gt; A：00110100 B：00000010 C：00001101 0*00110100=00000000=&gt; A：01101000 B：00000001 C：01101000 1*01101000=01101000=&gt; A：11010000 B：00000000C：10001111  所以最终结果就是 10001111]]></description></item></channel></rss>

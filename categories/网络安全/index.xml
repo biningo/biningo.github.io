@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>网络安全 on lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link><description>Recent content in 网络安全 on lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 18 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>密码加盐和彩虹表攻击</title><link>/2021/04/18/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90%E5%92%8C%E5%BD%A9%E8%99%B9%E8%A1%A8%E6%94%BB%E5%87%BB/</link><pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/04/18/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90%E5%92%8C%E5%BD%A9%E8%99%B9%E8%A1%A8%E6%94%BB%E5%87%BB/</guid><description>密码明文存储 这种密码存储方式直接将用户密码明文存储在数据库中，一旦数据库被黑客获取，那么所有信息都泄露，有些用户的密码可能在好几个账户上都是相同的，这是一种最不完全的方式
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络安全 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link><description>网络安全 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 18 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml"/><item><title>密码加盐和彩虹表攻击</title><link>/2021/04/18/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90%E5%92%8C%E5%BD%A9%E8%99%B9%E8%A1%A8%E6%94%BB%E5%87%BB/</link><pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/18/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90%E5%92%8C%E5%BD%A9%E8%99%B9%E8%A1%A8%E6%94%BB%E5%87%BB/</guid><description>密码明文存储 这种密码存储方式直接将用户密码明文存储在数据库中，一旦数据库被黑客获取，那么所有信息都泄露，有些用户的密码可能在好几个账户上都是相同的，这是一种最不完全的方式
 ​
 密码hash加密存储 这种方式比上一种略微安全，用户注册时将用户的密码使用指定的hash算法进行加密，然后存储在数据库中，当用户登录的时候将登录的密码使用相同的hash算法进行计算hash值然后与数据库存储的hash值进行比较即可
 这种方式可能造成 彩虹表攻击 ，攻击者建立一个 明文-&amp;gt;密文 的一个巨大的映射表，如果凑巧你的密码密文被包含在了这个表中，那么黑客就可以知道你的密码明文了
@@ -11,13 +11,13 @@ salt 可以是任意字母、数字、或是字母或数字的组合，但必须
 并且salt插入的地方也无法知道，可能插入在头、尾、中间任意位置都有可能，这就加大了破解的难度，所以密码加盐还是能够保证安全性的
 ​
 参考 CSDN600万账户密码泄露事件
-为什么要在密码里加点“盐”</description></item><item><title>常见的Hash算法</title><link>/2021/04/17/%E5%B8%B8%E8%A7%81%E7%9A%84hash%E7%AE%97%E6%B3%95/</link><pubDate>Sat, 17 Apr 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/04/17/%E5%B8%B8%E8%A7%81%E7%9A%84hash%E7%AE%97%E6%B3%95/</guid><description>什么是Hash算法 Hash表这种数据结构中就是使用了Hash算法，其将值进行Hash转化为表数组对应的下标，这种Hash算法的目的就是将其他数据比如 字符串、int、bool 转化为数组下标(正整数)
+为什么要在密码里加点“盐”</description></item><item><title>常见的Hash算法</title><link>/2021/04/17/%E5%B8%B8%E8%A7%81%E7%9A%84hash%E7%AE%97%E6%B3%95/</link><pubDate>Sat, 17 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/17/%E5%B8%B8%E8%A7%81%E7%9A%84hash%E7%AE%97%E6%B3%95/</guid><description><![CDATA[什么是Hash算法 Hash表这种数据结构中就是使用了Hash算法，其将值进行Hash转化为表数组对应的下标，这种Hash算法的目的就是将其他数据比如 字符串、int、bool 转化为数组下标(正整数)
 下面来看看JDK11里面HashMap的hash函数
-static final int hash(Object key) { int h; return key == null ? 0 : (h = key.hashCode()) ^ h &amp;gt;&amp;gt;&amp;gt; 16; } 主要通过key的hashCode函数来计算hash值，并且还进行了二次hash来减少碰撞
+static final int hash(Object key) { int h; return key == null ? 0 : (h = key.hashCode()) ^ h &gt;&gt;&gt; 16; } 主要通过key的hashCode函数来计算hash值，并且还进行了二次hash来减少碰撞
 用户实现的这个hashCode有如下几个规定:
-如果 key1 = key2，那 hash(key1) == hash(key2) 如果 key1 != key2，那 hash(key1) != hash(key2) 如果不同的key产生了相同的hash值那么就代表产生了hash碰撞 hashCode必须返回一个非负整数 我们再来看一看String的hashCode的实现，下面是英文的拉丁字母的hashCode函数
+ 如果 key1 = key2，那 hash(key1) == hash(key2) 如果 key1 != key2，那 hash(key1) != hash(key2) 如果不同的key产生了相同的hash值那么就代表产生了hash碰撞 hashCode必须返回一个非负整数  我们再来看一看String的hashCode的实现，下面是英文的拉丁字母的hashCode函数
 至于为什么31这是为什么减少hash碰撞，因为31是一个不大不小的质数
-public static int hashCode(byte[] value) { int h = 0; byte[] var2 = value; int var3 = value.length; for(int var4 = 0; var4 &amp;lt; var3; ++var4) { byte v = var2[var4]; h = 31 * h + (v &amp;amp; 255); //字母会转化为对应的ASCII码值然后计算hash } return h; } Java中Integer类型的hashCode是它本身</description></item><item><title>Base64编码</title><link>/2021/03/02/base64%E7%BC%96%E7%A0%81/</link><pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/03/02/base64%E7%BC%96%E7%A0%81/</guid><description>什么是Base64编码 将二进制数据转化为64个可打印ASCII码的一种编码方式，这64个可打印字符分别为:
+public static int hashCode(byte[] value) { int h = 0; byte[] var2 = value; int var3 = value.length; for(int var4 = 0; var4 &lt; var3; ++var4) { byte v = var2[var4]; h = 31 * h + (v &amp; 255); //字母会转化为对应的ASCII码值然后计算hash  } return h; }  Java中Integer类型的hashCode是它本身]]></description></item><item><title>Base64编码</title><link>/2021/03/02/base64%E7%BC%96%E7%A0%81/</link><pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/02/base64%E7%BC%96%E7%A0%81/</guid><description>什么是Base64编码 将二进制数据转化为64个可打印ASCII码的一种编码方式，这64个可打印字符分别为:
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/= 注意，最后一个=不算，=当做Base64编码的结尾标志
 总结：基于 64 个可打印字符来表示二进制数据的表示方法
 ​
@@ -30,7 +30,7 @@ Base64编码原理 将待转换的字符串每3个字节分为一组，每个字
 Base64优缺点 缺点:
 Base64会增加字节数 Base64编码不是加密算法 优点:
 Base64能简单隐藏内容 Base64算法简单可逆，不会消耗太多CPU，不影响效率 Base64能将所有数据转化为可打印数据 减少网络传输出现的编解码错误 ​
-Base64的使用场景 网上留言自己的联系方式等私密信息，可以使用Base64加密一下，这样就不会直接泄露自己的信息，只有真正需要的人才会拿去解密，可以过滤一部分人 包含一些特殊字符的字符串等可以先用Base64编码一下防止被转义 http请求，在解析参数时是根据?</description></item><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>icepan@aliyun.com (lyer)</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密，
+Base64的使用场景 网上留言自己的联系方式等私密信息，可以使用Base64加密一下，这样就不会直接泄露自己的信息，只有真正需要的人才会拿去解密，可以过滤一部分人 包含一些特殊字符的字符串等可以先用Base64编码一下防止被转义 http请求，在解析参数时是根据?</description></item><item><title>SSL-TSL-HTTPS和CA证书</title><link>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</link><pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/14/ssl-tsl-https%E5%92%8Cca%E8%AF%81%E4%B9%A6/</guid><description>对称加密 对称加密就是在两端通信的时候使用同一个密钥进行加密解密，
 特点：
 不够安全，密钥如何传的问题（由非对称加密解决） 加解密的CPU消耗低 相关算法：DES、AES
 本质就是将 密钥+数据 进过一个公式或则运算获得密文，对方也用 密钥+密文 进过一个公式或运算能还原回数据，下面展示最简单的 XOR对称加密:
