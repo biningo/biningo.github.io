@@ -1,0 +1,25 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>源码分析 - 标签 - lyer's blog</title><link>/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link><description>源码分析 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 21 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="self" type="application/rss+xml"/><item><title>Java集合总结和源码浅析</title><link>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</link><pubDate>Sun, 21 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/21/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93%E5%92%8C%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90/</guid><description>OverView ​
+HashMap和HashTable HashMap刚开始是一个Node节点的数组 ，初始化为16大小 如果节点元素个数达到一定的值(这个值略小于 HashTable 的大小)，则会进行扩容
+然后逐渐放入元素，刚开始如果发生碰撞就采用 拉链法 进行解决碰撞 ，如果链表的节点个数&amp;gt;=8同时 数组 大小大于64 则会进行树化，转化为 红黑树 来加快查找(红黑树是一颗高度平衡的二叉查找树) 如果链表节点个数大于8但是数组小于64则会进行扩容数组
+HashTable和HashMap的主要区别如下:
+HashTable是并发安全的，HashMap不安全 HashTable的value不允许null，HashMap允许 HashTable属于老的集合容器，HashMap属于新一代集合容器 ​
+ConcurrentHashMap 和HashMap差不多，但是这个是并发安全的
+在 JDK1.8 中，ConcurrentHashMap 选择了与 HashMap 相同的数组+链表+红黑树结构，在锁的实现上，采用 CAS 操作和 synchronized锁 实现更加低粒度的锁，将锁的级别控制在了更细粒度的 table 元素级别，也就是说只需要锁住这个链表的首节点，并不会影响其他的 table 元素的读写，大大提高了并发度
+​
+LinkedHashMap LinkedHashMap能保持插入的顺序，HashMap+双链表 实现
+在插入的时候同时给每个节点都按照插入的顺序串成一个双链表(LinkedHashMap给之前HashMap中的链表节点多加了两个前后节点实现)，这样遍历的时候就可以保持插入的顺序了，同时用key取值得时候效率还和 HashMap 一样
+​
+TreeMap TreeMap使用 红黑树 (一种高度平衡的二叉搜索树) 来实现 K-V 存储，根据搜索树的特性可以保持key有序，这样查找一个key就可以利用二分来快速查找
+​
+ArrayList、Vector、LinkedList ArrayList
+ArrayList底层是一个Object[]数组 在添加元素的时候如果发现容量不足则以初始容量的 1.5倍速度扩容 初始容量默认值是10 ArrayList不是并发安全的 Vector
+Vector底层也是Object[]数组 在添加元素的时候如果发现容量不足则以初始容量的 2倍速度扩容 初始容量默认值也是10 Vector是并发安全的，都在方法级别加上了synchronized LinkedList</description></item><item><title>HashMap源码分析</title><link>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link><pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/12/hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid><description><![CDATA[为什么对象需要同时重写equals和hashcode Object对象有两个重要的方法: equals hashcode
+public boolean equals(Object obj) { return this == obj; //默认直接比较是否是同一个引用 } @HotSpotIntrinsicCandidate public native int hashCode(); equals 默认是直接比较是否是同一个引用
+hashCode 则不同机器实现不一样，一般是用变量的内存地址来进行计算hash值的
+如果一个对象要放入 HashSet 或则 HashMap 的话，需要遵循下列原则，否则就会出现不可预期的错误(HashSet是用HashMap来实现的，所以只需要讨论HashMap即可):
+ 如果一个类重写了equals()方法，则必须重写hashCode()方法。2个对象的equals()方法返回true的话，其hashCode()必须返回相同的值
+ 为什么需要重写 hashCode() 方法呢?
+这个很好理解，因为HashMap查找和放入一个 kv 必须计算出key的hash值，然后选择合适的位置放入value，其实就是直接调用key的hashCode()方法计算hash值，下次查找就是直接根据hash值来直接索引到value(这里还需要考虑Hash碰撞问题)，这样就实现了O(1)速度的查找，HashMap是典型的空间换时间的例子
+如果我们不重写hashCode()方法，则会调用父类Object的hashCode方法，该方法是根据值得内存地址计算得出的，也就是说我们不重写的话，那么两个我们认为值相同的key对象计算出的hash值就会不一样，这样就会导致错误，比如HashSet无法进行去重等，下面的Student没有重写hashCode方法
+public static void main(String[] args) { HashSet&lt;Student&gt; set = new HashSet&lt;&gt;(); Student s1 = new Student(&#34;one&#34;); Student s2 = new Student(&#34;one&#34;); set.add(s1); set.add(s2); System.out.println(set.size()); //2 【错误】这里应该为1 } 已经重写了hashCode()，为什么还需要重写equals()方法？
+虽然我们重写了hashCode() 方法，但是还是无法得出正确的结果，因为hash值可能会发生 hash碰撞 ，也就是两个不同值得对象计算出的hash值一样，这个时候就会用 拉链法 等算法来解决碰撞，所以如果只比较hashCode就认为两个对象是相等的这显然是不合理的，所以 HashMap 在添加和取对象的时候不仅仅会比较hashCode，还会比较equals方法，如果两个都相等才判断为同一个对象]]></description></item></channel></rss>

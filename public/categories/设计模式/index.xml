@@ -1,0 +1,35 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>设计模式 - 分类 - lyer's blog</title><link>/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><description>设计模式 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="self" type="application/rss+xml"/><item><title>原型模式</title><link>/2021/04/07/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</link><pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/07/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</guid><description>为什么要使用原型模式 原型模式又叫 克隆模式，是对一个对象的拷贝，当一个对象的创建比较复杂的时候就可以使用原型模式进行拷贝然后再修改需要修改的部分
+​
+代码实现 public class EnglishBook extends Book{ public EnglishBook(String title,Author author) { super(title,author); } @Override public String toString() { return String.format(&amp;#34;%s:《%s》&amp;#34;,this.author.getName(),this.title); } @Override protected Book clone() { return new EnglishBook(this.title,this.author); } } ​
+原型模式在Spring中的应用 Spring的Bean通常是单例的，如果我们显式需要多个对象则会使用原型模式创建多个对象</description></item><item><title>建造者模式</title><link>/2021/04/07/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/07/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>为什么要使用建造者模式 建造者模式将对象本身和对象的创建进行解耦，用户不需要知道对象创建的细节和流程
+建造者模式解决了对象的创建过程和流程，这些都不需要用户关心
+建造者和工厂模式不同的是建造者更加关系构建对象的流程，各个部件的构建顺序，而工厂模式更加关心的是对象的整体，工厂模式创建的对象比较单一，没有很复杂的组件，而如果对象由好几个对象组成，并且对象属性比较多，构建顺序有一定的要求则需要使用建造者模式
+​
+实现 创建一个电脑
+public class Computer { private String brand; private String cpu; private String mainBoard; private String hardDisk; private String displayCard; private String power; private String memory; // 省略 getter, setter, toString } Builder抽象类
+public abstract class Builder { protected Computer computer = new Computer(); public abstract void buildBrand(); public abstract void buildCPU(); public abstract void buildMainBoard(); public abstract void buildHardDisk(); public abstract void buildDisplayCard(); public abstract void buildPower(); public abstract void buildMemory(); public Computer createComputer() { return computer; } } 具体的实现</description></item><item><title>工厂模式</title><link>/2021/04/05/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/05/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid><description><![CDATA[为什么要使用工厂模式 工厂模式是一种创建型的设计模式，专门用于创建对象，通过工厂模式创建对象我们就不需要手动创建对象了，直接重工厂类里面获取即可。
+工厂方法主要有如下几个优点:
+ 隐藏了创建对象的复杂度，用户不需要知道如何创建对象，只需要调用相关的方法API即可创建对象， 降低了代码耦合，一旦我们需要修改创建对象的方式或则参数，如果不使用工厂模式直接new的话那么我们需要手动查找并且修改所有new的代码，而如果使用了工厂模式因为我们获取对象都是通过工厂获取的，我们只需要修改工厂类的相关代码即可  ​
+工厂模式实现方法  简单工厂 工厂方法模式 抽象工厂  ​
+简单工厂 简单工厂模式就是只有一个工厂，然后用户通过传入不同的名字或则参数，此工厂类再根据用户传入的参数进行判断需要创建哪个对象(被创建的实例具有相同的接口或则父亲，当然了，返回值直接设置成Object也是可以的)
+简单工厂模式有如下几个缺点:
+ 违背开闭原则(对扩展开放，对修改关闭)，如果需要增加一个类则需要修改工厂类 工厂类只有一个，职责过重，逻辑复杂  interface Computer { String Brand(); //品牌 } public class MacComputer implements Computer { public static final String BrandName = &#34;Mac&#34;; @Override public String Brand() { return BrandName; } } public class LenovoComputer implements Computer { public static final String BrandName = &#34;Lenovo&#34;; @Override public String Brand() { return BrandName; } } public enum ComputerBrand { Mac, Lenovo } 创建计算机的简单工厂，根据传入的Type不同分别创建不同品牌的计算机，如果需要增加一种品牌则需要改动此部分代码，所以违背了 开闭原则]]></description></item><item><title>单例模式</title><link>/2021/04/03/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link><pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/03/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid><description><![CDATA[为什么要使用单例模式 有时候系统只需要一个对象，比如 数据库连接对象、线程池对象 等
+线程池这种对象如果建立多个就会失去它的意义，因为线程池本来就是用来管理多个线程的只需要一个即可
+数据库连接对象使用单例并不是指只有一个数据库连接，数据库连接对象里面保存的只是数据库连接相关的信息，比如数据库类型、用户名、密码、URL、字符集等
+实际创建个多少TCP连接和实际的并发量有关，因此数据库连接对象也不必每次查询SQL的时候去创建对象，这样就显得多余和麻烦了
+这种为了让系统中只存在一个对象的模式就叫 单例模式
+​
+单例模式实现方法  饿汉式 方法级别锁、双重检查锁 静态内部类 枚举  ​
+饿汉式单例 饿汉式单例指的就是在系统初始化的时候就创建对象
+优点是无需考虑多线程问题
+缺点是无法懒加载，万一对象始终用不到那就白加载了
+Java类成员变量初始化实现 public class DataBaseManager { //初始化时就创建  private final static DataBaseManager db = new DataBaseManager(&#34;lyer&#34;,&#34;55555&#34;); private String username; private String password; //必须隐藏构造方法 外界无法创建  private DataBaseManager(String username,String password){ this.username = username; this.password = password; } public static DataBaseManager getInstance(){ return db; } } Go全局变量实现 go中可以通过 全局变量 或则init函数实现，不过这不是最佳实现方式
+var database1 = &amp;DataBase{} func main() { database1.]]></description></item><item><title>装饰者模式</title><link>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description><![CDATA[跟新中&hellip;.
+ 为什么要使用装饰者模式 Decorator Pattern 装饰者模式，动态的透明的增加一些另外的功能而不需要改变原来的代码，拥有更好的灵活性和可扩展性
+从名字中也可以看出，装饰者模式就是给一个对象加上一层装饰，穿上一件衣服，装饰者在我解除的技术里面在函数式语言中的应用比较广泛，就是在装饰函数里传入一个目标函数，装饰函数同样返回一个目标函数，但是返回的函数是进过装饰了的
+使用装饰者模式可以不改变原来的代码而增加一些额外的功能，讲增加的功能和原来的功能代码解耦了，代码可移植性更强了，原来代码还可以用在其他地方其他项目或则增加另外的装饰来实现更多的功能
+​
+在Java中的应用和实现 实现案例 下面先来看一个 Shape 自己实现的案例:
+Shape顶层接口:
+public interface Shape { String display(); } Circle和Rectangle具体实现
+public class Circle implements Shape{ private String name; public Circle(){ this.name = &#34;Circle&#34;; } public String display() { return this.name; } } ------------------------------------------------ public class Rectangle implements Shape { private String name; public Rectangle() { this.name = &#34;Rectangle&#34;; } public String display() { return this.name; } } 所有装饰器的顶层抽象对象，这里通过构造方法和set方法可以传入被装饰对象]]></description></item></channel></rss>
