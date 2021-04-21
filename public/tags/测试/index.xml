@@ -1,6 +1,0 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>测试 - 标签 - lyer's blog</title><link>/tags/%E6%B5%8B%E8%AF%95/</link><description>测试 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 15 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%B5%8B%E8%AF%95/" rel="self" type="application/rss+xml"/><item><title>Go测试总结</title><link>/2021/02/15/go%E6%B5%8B%E8%AF%95%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E6%B5%8B%E8%AF%95%E6%80%BB%E7%BB%93/</guid><description>go中的测试 go的测试是是以 xxx_test.go结尾的，前面的名字和对应的测试文件名字一样，后面加个test，运行测试命令之后就会扫描所有测试文件进行测试
-xxx_test.go测试文件中主要有如下几个部分:
-类型 格式 作用 单元测试 函数名前缀为Test 测试程序的一些逻辑行为是否正确 基准测试 函数名前缀为Benchmark 测试函数的性能 示例代码 函数名前缀为Example 为文档提供示例文档 ​
-单元测试 $ go test -v #扫描当前包下所有的测试文件进行测试 并且输出详细信息 $ go test -v -test.run A #测试包含 A 字母的单元测试函数 [只能运行单元测试] 单元测试函数必须以 t *testing为参数，t主要用于报告测试结果是否正确以及日志记录，主要有如下几个方法:
-Error Log 最常用
-//标记失败 func (c *T) Fail() //标记失败，但继续执行当前测试函数 func (c *T) FailNow() //标记失败，停止下面的执行 func (c *T) Failed() bool //日志信息 go test如果测试成功的话，不会打印这部分内容，加上 -v则测试成功也会显示 func (c *T) Log(args .</description></item></channel></rss>
