@@ -390,6 +390,18 @@ ubuntu可以通过`timedatectl`管理工具来设置时区等，具体查阅goog
 
 ​    
 
+## 压缩和解压
+
+```bash
+tar -xvf abc.tar -C /program/abc #指定解压的文件夹 默认解压到当前文件夹下
+```
+
+
+
+
+
+
+
 ## 其它
 
 开关机
