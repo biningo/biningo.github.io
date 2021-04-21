@@ -1,0 +1,3 @@
+[submodule "themes/loveIt"]
+	path = themes/loveIt
+	url = git@github.com:cityiron/LoveIt.git

@@ -1,6 +1,5 @@
 {{- $content := .Content -}}
 
-
 {{- if .Ruby -}}
     {{- $content = partial "function/ruby.html" $content -}}
 {{- end -}}
@@ -16,6 +15,5 @@
 {{- $content = partial "function/checkbox.html" $content -}}
 
 {{- $content = partial "function/escape.html" $content -}}
-
 
 {{- return $content -}}
