@@ -31,7 +31,7 @@ go1.14则做了进一步优化，defer的开销基本很小了
 //defer初始化值和位置有关 推迟执行的仅仅是函数体
 j:=10
 defer func(jj int) {
-    log.Printf("j=%d jj=%d\n",j,jj) //j=99 j=10
+    log.Printf("j=%d jj=%d\n",j,jj) //j=99 jj=10
 }(j)
 j=99
 ```
