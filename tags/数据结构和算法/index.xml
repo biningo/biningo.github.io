@@ -1,0 +1,7 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据结构和算法 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/</link><description>数据结构和算法 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 28 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml"/><item><title>为什么数组下标从0开始?</title><link>/2021/04/28/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B0%E7%BB%84%E4%B8%8B%E6%A0%87%E4%BB%8E0%E5%BC%80%E5%A7%8B/</link><pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/28/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B0%E7%BB%84%E4%B8%8B%E6%A0%87%E4%BB%8E0%E5%BC%80%E5%A7%8B/</guid><description>先说答案吧:
+历史问题，C语言数组下标使用0，于是之后的语言都使用0 数组的偏移运算规则 历史问题这个不用多说了，下面说一下第二条原因
+我们知道数组因为内存都是连续存放的，每个元素的大小都是固定的，所以支持随机访问，我们只需要根据偏移和元素大小来计算出地址即可实现随机任意的访问数组中的元素，所以随机访问效率为 O(1)
+数组查找一个元素的效率为O(n)，如果是有序数组查找一个元素使用二分的话那就是O(logn)
+a[i]的地址 = a + i * size 我们看到，如果是第一个元素，那么i=0，如果是第二个元素那么i=1 ，这就是为什么数组下标从0开始的原因
+但是如果硬要从1开始的话，那么上述的公式就会变成如下:
+a[i]的地址 = a + (i-1) * size 这样就会多一次i-1的减法操作，产生不必要的消耗，因为数组可能会进行一个频繁的随机查找</description></item></channel></rss>

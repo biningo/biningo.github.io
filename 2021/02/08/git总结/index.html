@@ -1,0 +1,191 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>git总结 - lyer's blog</title><meta name=Description content><meta property="og:title" content="git总结"><meta property="og:description" content="什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+同时也会在所有用户的本地也会保存所有版本
+这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
+使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
+在使用git的时候，时刻需要保持一个理念：
+  你的每次commit都是一个版本
+  提交版本的时候就会标注上 user.name、user.email 指示出这是谁提交的版本
+  只要是一个版本，那么在以后就都可以回滚到这个版本中
+  ​
+三大区域 工作区： 直接写代码，修改文件的地方
+暂存区： 将工作区的当前映象暂存起来以准备提交到版本库中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：
+ 我删除了a，并且add到暂存区 现在我添加了b，添加完之后就觉得还是a好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了a 最终我觉得就a了，不再修改了，于是就add+commit将最终的版本提交了  版本库： 存放最终的版本
+远程仓库： 供多人协作用，本地仓库的版本最终需要push到远程仓库，并且在push之前需要和远程仓库保持 同步 这要所有人才可以看到版本信息
+​
+三大区域变更 暂存区->工作区
+#1、将暂存区文件覆盖工作区 git restore <file> ... #2、取消暂存 git restore --staged <file>... #3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file git rm a #4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b git mv a b 版本库->工作区"><meta property="og:type" content="article"><meta property="og:url" content="/2021/02/08/git%E6%80%BB%E7%BB%93/"><meta property="article:published_time" content="2021-02-08T00:00:00+00:00"><meta property="article:modified_time" content="2021-02-08T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="git总结"><meta name=twitter:description content="什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+同时也会在所有用户的本地也会保存所有版本
+这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
+使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
+在使用git的时候，时刻需要保持一个理念：
+  你的每次commit都是一个版本
+  提交版本的时候就会标注上 user.name、user.email 指示出这是谁提交的版本
+  只要是一个版本，那么在以后就都可以回滚到这个版本中
+  ​
+三大区域 工作区： 直接写代码，修改文件的地方
+暂存区： 将工作区的当前映象暂存起来以准备提交到版本库中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：
+ 我删除了a，并且add到暂存区 现在我添加了b，添加完之后就觉得还是a好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了a 最终我觉得就a了，不再修改了，于是就add+commit将最终的版本提交了  版本库： 存放最终的版本
+远程仓库： 供多人协作用，本地仓库的版本最终需要push到远程仓库，并且在push之前需要和远程仓库保持 同步 这要所有人才可以看到版本信息
+​
+三大区域变更 暂存区->工作区
+#1、将暂存区文件覆盖工作区 git restore <file> ... #2、取消暂存 git restore --staged <file>... #3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file git rm a #4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b git mv a b 版本库->工作区"><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/02/08/git%E6%80%BB%E7%BB%93/><link rel=prev href=/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/><link rel=next href=/2021/02/12/go%E7%9A%84defer/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"git总结","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/02\/08\/git%E6%80%BB%E7%BB%93\/"},"genre":"posts","keywords":"git","wordcount":709,"url":"\/2021\/02\/08\/git%E6%80%BB%E7%BB%93\/","datePublished":"2021-02-08T00:00:00+00:00","dateModified":"2021-02-08T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">git总结</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/devops%E5%92%8Ccicd/><i class="far fa-folder fa-fw"></i>DevOps和CICD</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-02-08>2021-02-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 709 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#什么是git>什么是git</a></li><li><a href=#三大区域>三大区域</a></li><li><a href=#三大区域变更>三大区域变更</a></li><li><a href=#分支管理>分支管理</a></li><li><a href=#本地仓库管理>本地仓库管理</a></li><li><a href=#commit日志查看>commit日志查看</a></li><li><a href=#远程仓库>远程仓库</a></li><li><a href=#rebase和merge分支合并>rebase和merge分支合并</a><ul><li><a href=#1rebase合并多个commit>1、rebase合并多个commit</a></li><li><a href=#2rebase分支变基>2、rebase分支变基</a></li><li><a href=#3解决合并冲突>3、解决合并冲突</a></li></ul></li><li><a href=#tag管理>tag管理</a></li><li><a href=#git工作流>git工作流</a><ul><li><a href=#1集中式工作流>1、集中式工作流</a></li><li><a href=#2特性分支工作流>2、特性分支工作流</a></li><li><a href=#3git-flow工作流>3、git flow工作流</a></li><li><a href=#4github的pull-request和fork工作流>4、github的pull request和fork工作流</a></li></ul></li><li><a href=#gitignore文件>gitignore文件</a></li><li><a href=#git-commit规范>git commit规范</a></li><li><a href=#git-submodule子模块>git submodule子模块</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h2 id=什么是git>什么是git</h2><ul><li>版本控制工具</li><li>分布式</li></ul><p><strong>git在中心仓库保存所有的版本信息</strong></p><p><strong>同时也会在所有用户的本地也会保存所有版本</strong></p><p>这样就做到了 <strong>分布式</strong>，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起<code>push</code>上去</p><p>使用git分布式版本管理工具的最重要的就是要解决多人协作的 <strong>版本冲突</strong> 问题</p><p>在使用git的时候，时刻需要保持一个理念：</p><ul><li><p><strong>你的每次commit都是一个版本</strong></p></li><li><p>提交版本的时候就会标注上 <strong>user.name、user.email</strong> 指示出这是谁提交的版本</p></li><li><p>只要是一个版本，那么在以后就都可以回滚到这个版本中</p></li></ul><p>​</p><h2 id=三大区域>三大区域</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg, https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg title=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg></p><p><strong>工作区：</strong> 直接写代码，修改文件的地方</p><p><strong>暂存区：</strong> 将工作区的当前映象暂存起来以准备提交到<code>版本库</code>中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：</p><ul><li>我删除了<code>a</code>，并且<code>add</code>到暂存区</li><li>现在我添加了<code>b</code>，添加完之后就觉得还是<code>a</code>好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了<code>a</code></li><li>最终我觉得就<code>a</code>了，不再修改了，于是就<code>add+commit</code>将最终的版本提交了</li></ul><p><strong>版本库：</strong> 存放最终的版本</p><p><strong>远程仓库：</strong> 供多人协作用，本地仓库的版本最终需要<code>push</code>到远程仓库，并且在<code>push</code>之前需要和远程仓库保持 <strong>同步</strong> 这要所有人才可以看到版本信息</p><p>​</p><h2 id=三大区域变更>三大区域变更</h2><p><strong>暂存区->工作区</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#1、将暂存区文件覆盖工作区</span>
+git restore &lt;file&gt; ...
+<span class=c1>#2、取消暂存</span>
+git restore --staged &lt;file&gt;...
+<span class=c1>#3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file</span>
+git rm a
+<span class=c1>#4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b</span>
+git mv a b
+</code></pre></div><p><strong>版本库->工作区</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#1、将工作区代码回滚到指定版本 此时暂存区内容也会清空</span>
+git reset --hard &lt;版本号&gt;
+
+<span class=c1>#2、可以通过HEAD来指定 HEAD表示当前版本 HEAD^上一个版本 HEAD^^上上个版本....</span>
+git reset --hard HEAD
+git reset --hard HEAD^
+git reset --hard HEAD~2 <span class=c1>#假设v1 v2 v3 v4 v5 则现在HEAD在v5 命令之后:HEAD=v3</span>
+
+<span class=c1>#3、版本号可以通过如下命令获得</span>
+git log --oneline <span class=c1>#只记录HEAD之下的版本号</span>
+git reflog <span class=c1>#可以所有的版本号 以便回到过去还可以回到将来</span>
+</code></pre></div><p>commit</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 重写上一次提交信息，确保当前工作区没有改动</span>
+git commit --amend -m <span class=s2>&#34;新的提交信息&#34;</span>
+</code></pre></div><p>​</p><h2 id=分支管理>分支管理</h2><p>查看分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch  <span class=c1>#查看本地所有分支 -v则显示详细信息</span>
+git branch -r <span class=c1># 查看远端分支</span>
+git branch -a <span class=c1># 查看所有分支</span>
+</code></pre></div><p>创建分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch dev <span class=c1>#创建新的dev分支</span>
+git checkout -b dev <span class=c1>#创建并且切换到新创建的分支</span>
+git branch dev dev2 <span class=c1>#基于dev分支，创建dev2</span>
+git branch origin/dev dev2 <span class=c1>#基于远程分支origin/dev中创建dev2分支</span>
+</code></pre></div><p>创建一个空的分支，不包括父亲分支的所有历史提交记录</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 创建一个空的分支, 不继承父分支，历史记录是空的，一般至少需要执行4步</span>
+git checkout --orphan develop
+<span class=c1># 这一步可选，如果你真的想创建一个没有任何文件的分支</span>
+git rm -rf .
+<span class=c1># 添加并提交，否则分支是隐藏的 （执行这一步之前需要注意当前工作区必须保留一个文件，否则无法提交）</span>
+git add -A <span class=o>&amp;&amp;</span> git commit -m <span class=s2>&#34;提交&#34;</span>
+<span class=c1># 推送到远程</span>
+git push --set-upstream origin develop
+</code></pre></div><p>删除分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch -d dev <span class=c1>#删除分支 分支功能开发完毕之后就可以删除分支了</span>
+git branch -d -r origin/dev <span class=c1>#删除本地的远端分支</span>
+</code></pre></div><p>重命名分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch -m main <span class=c1>#重命名当前分支</span>
+</code></pre></div><p>切换分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git switch dev <span class=c1>#切换分支 （注意：切换前需要先提交变更）</span>
+git checkout - <span class=c1># 切换上一个分支</span>
+git checkout origin/dev <span class=c1># 切换远端分支</span>
+</code></pre></div><p>合并分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git merge dev <span class=c1>#合并dev分支到当前分支 （注意分支冲突问题 需要手动解决然后commit）</span>
+git merge a b <span class=c1>#将b合并到a</span>
+</code></pre></div><p>​</p><h2 id=本地仓库管理>本地仓库管理</h2><p>文件状态</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git status -s <span class=c1>#以短格式输出 M:表示有变更 A:表示已经添加到暂存库</span>
+</code></pre></div><p>​</p><h2 id=commit日志查看>commit日志查看</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git log --oneline <span class=c1>#以短格式显示</span>
+git log -2 <span class=c1>#查看最近的2次提交</span>
+git log --graph <span class=c1>#显示图形</span>
+
+<span class=c1># 列出提交者贡献数量, 只会打印作者和贡献数量</span>
+git shortlog -sn
+<span class=c1># 列出提交者贡献数量, 会提交者的详细commit记录</span>
+git shortlog -n
+git shortlog -e <span class=c1>#-e列出邮箱</span>
+
+<span class=c1># 查看 README.md 文件的修改历史记录，包括时间、作者以及内容</span>
+git blame README.md
+</code></pre></div><p>​</p><h2 id=远程仓库>远程仓库</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#clone指定分支 默认clone全部</span>
+git clone -b main https://github.com/ajd/test
+
+<span class=c1># 递归克隆，如果项目包含子模块就非常有用</span>
+git clone --recursive git@github.com:xjh22222228/git-manual.git
+</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch -r <span class=c1>#查看远程仓库的分支 -rv则显示详细信息</span>
+git branch -a <span class=c1>#查看本地+远程所有分支</span>
+git branch -vv <span class=c1>#查看本地和远程对应的分支</span>
+</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git remote <span class=c1>#查看远程仓库 -v则显示链接</span>
+git remote add origin https://github.com/ajd/test <span class=c1>#添加远程仓库 命名:origin</span>
+git remote rm origin <span class=c1>#删除远程仓库</span>
+git remote set-url origin https://github.com/ajd/dsads <span class=c1>#修改远程分支的url</span>
+</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git fetch <span class=c1>#将所有远程主机仓库全部更新到本地</span>
+git fetch origin <span class=c1>#将指定远程主机origin的所有分支的更新全部取回本地</span>
+git fetch origin dev <span class=c1>#指定远程仓库origin中dev分支取到本地</span>
+</code></pre></div><p>注意，远程仓库和本地仓库的分支是两个不同的分支，需要将本地分支和远程仓库分支建立 <strong>追踪关系</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#1、将本地分支推送到远程仓库的指定分支 如果远程分支不存在则会在远端创建</span>
+git push &lt;远程主机名&gt;  &lt;本地分支名&gt;:&lt;远程分支名&gt; 
+
+<span class=c1>#2、git push origin dev:dev</span>
+git push origin dev
+
+<span class=c1>#3、-u则表示将当前本地分支和远端的origin/dev分支建立追踪关系 --set-upstream的缩写形式，以后直接执行 git push即可将当前分支push到origin/dev分支</span>
+git push -u origin dev
+</code></pre></div><p>要从远程拉去代码很本地合并则只需要<code>pull</code>，但是也可以自己进行合并，即先<code>fetch</code>远程分支到本地，然后再将本地分支和拉去下来的远程分支代码进行合并即可，如下：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git pull origin dev <span class=c1>#git fetch origin origin dev + git merge origin/dev</span>
+</code></pre></div><p>删除远程分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git push origin -d &lt;branchName&gt;
+</code></pre></div><p>​</p><h2 id=rebase和merge分支合并>rebase和merge分支合并</h2><h3 id=1rebase合并多个commit>1、rebase合并多个commit</h3><p><code>rebase -i</code>可以用于将多个<code>commit</code>合并为一个<code>commit</code> ，<strong>但是不要将已经push到仓库的commit合并</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#将当前和的3次commit进行合并为一个commit 包括HEAD</span>
+<span class=c1>#如果写具体的版本号，则表示将该版本号之前的commit都合并为一个</span>
+<span class=c1>#将其他的commit的pick改为s，只保留最上面的pick</span>
+git rebase -i HEAD~3
+</code></pre></div><p>下面展示一个案例：<code>v1->v2->v3->v4->v5</code></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#1、将v5~v2合并为一个commit v2345</span>
+git rebase -i <span class=o>[</span>v1的commit ID<span class=o>]</span>
+-------------------------
+pick v2
+s v3
+s v4
+s v5
+
+<span class=c1>#2、将v5 c4合并 v3 v2合并 也可以分开合并也可  （一个pick就是一个commit）</span>
+git rebase -i <span class=o>[</span>v1的commit ID<span class=o>]</span>
+------------------------
+pick v2
+s v3
+pick v4
+s v5
+
+<span class=c1>#3、将HEAD之后的2个(包括HEAD)合并为1个</span>
+git rebase -i HEAD~2
+</code></pre></div><p>但是上面rebase合并commit记录的时候需要找到待合并commit的前一个commit，那么第一次的commit如何合并呢，第一次commit是没有前一个commit的，他就是第一个，这种情况我们可以使用如下命令来将多个commit与第一个commit合并</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git rebase -i --root
+</code></pre></div><h3 id=2rebase分支变基>2、rebase分支变基</h3><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git rebase master <span class=c1>#将当前分支和master分支进行变基合并</span>
+</code></pre></div><p>注意，如果<code>dev</code>已经基于<code>master</code>变基过了，那么<code>main</code>再将<code>dev</code>进行<code>merge</code>的时候，就不会出现分叉，直接就是一条线，因为<code>dev</code> rebase之后就相当于在<code>master</code>最新的上面进行开发，<code>dev</code>会将所有的commit再基于master最新的commit再进行commit一次，此时commit版本号都会发生变化，之后<code>master</code>进行merge自然就不会出现分叉了</p><h3 id=3解决合并冲突>3、解决合并冲突</h3><p>如果是<code>rebase</code>冲突了则需要到响应的文件进行修改，改完之后再进行<code>commit</code>，然后执行命令<code>git rebase --continue</code>进行继续rebase</p><p>如果是<code>merge</code>则也是一样处理的</p><p>我们还可以借助冲突解决工具来解决冲突，比如：<strong>beyond compare</strong></p><p>​</p><h2 id=tag管理>tag管理</h2><p>tag就是指想某个<code>commit</code>的的指针，类似于 <strong>网址和IP</strong> 的关系，因为某个<code>commit</code>号不好记，所以可以打个<code>tag</code>方便查找，而且通过<code>tag</code>更加容易进行版本管理了，直接通过<code>tag</code>就可以知道版本是哪几个</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git tag <span class=c1>#列出所有标签</span>
+git ls-remote --tags origin  <span class=c1># 列出远程所有标签</span>
+git tag v1.0 <span class=c1>#创建轻量标签</span>
+git tag -a v2.0 -m <span class=s1>&#39;desc&#39;</span> <span class=c1>#创建注释标签</span>
+git tag -l <span class=s1>&#39;v1*&#39;</span> <span class=c1>#特点模式查找标签 查找以v1开头的标签</span>
+git tag -d v1.0 <span class=c1>#删除本地tag</span>
+git tag v0.9 ce05f93 <span class=c1>#上面默认是在最新的HEAD上打标签，也可以基于历史版本打tag</span>
+
+git show v2.0 <span class=c1>#展示标签信息</span>
+
+<span class=c1>#删除标签麻烦点，先本地删除，再远程删除</span>
+git push origin :refs/tags/v1.0 <span class=c1>#删除远程tag</span>
+git push origin v1.0 <span class=c1>#上传指定标签到远程仓库</span>
+git push origin --tags <span class=c1>#把本地所有不在远程仓库的标签全部上传</span>
+git branch dev v1.0 <span class=c1>#从v1.0标签上创建dev分支</span>
+<span class=c1>#切换到v1标签处 这时工作目录下面才是标签的内容代码 注意标签内容无法改动和commit</span>
+git checkout v1
+</code></pre></div><p>​</p><h2 id=git工作流>git工作流</h2><h3 id=1集中式工作流>1、集中式工作流</h3><p>只有一个分支，代码全部提交到此分支上</p><p></p><h3 id=2特性分支工作流>2、特性分支工作流</h3><p>给每个功能特性都开辟一个分支进行开发，这样就可以独自来发自己的功能，最后再合并到主干分支即可，bug修复分支也都如此，有bug则立即开辟一个bug修复分支进行修复，修复完毕之后再<code>merge</code>到<code>master</code>分支</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png, https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png title=https://raw.githubusercontent.com/biningo/cdn/master/img/Feature-Branch-git-workflow-4.png></p><p><code>develop</code>用于合并多个子功能，然后合并到<code>master</code></p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png, https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png title=https://raw.githubusercontent.com/biningo/cdn/master/img/feature-branch-with-develop-git-workflow-2.png></p><h3 id=3git-flow工作流>3、git flow工作流</h3><p>项目长期存在两个分支：</p><ul><li><code>master</code> ：用于存放对外发布的版本，任何时候在这个分支拿到的，都是稳定的分布版</li><li><code>develop</code> ：用于日常开发，存放最新的开发版</li></ul><p>项目存在三种短期分支：</p><ul><li><code>feature</code>：各种功能分支</li><li><code>hotfix</code>：补丁分支</li><li><code>release</code>：预发布分支，用于对代码进行<strong>最终测试</strong>保证最终是没有bug的</li></ul><p>短期分支完成之后就可以删除了</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png, https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png title=https://raw.githubusercontent.com/biningo/cdn/master/img/GitFlow-git-workflow-2.png></p><h3 id=4github的pull-request和fork工作流>4、github的pull request和fork工作流</h3><p>github上的开源代码任何人都可以贡献代码，只需要<code>fork</code>项目到自己的仓库，可以选择直接在<code>master</code>分支上进行修改然后发起一个 <strong>pull request</strong>，源项目的负责人就可以对这个<code>request</code>进行<code>review</code>，如果觉得需要修改则让贡献者继续修改，如果觉得可以合并了则进行<code>merge</code>操作合并贡献者的代码，贡献者也可以选择重新创建一个分支然后再进行<strong>pull request</strong></p><p>​</p><h2 id=gitignore文件>gitignore文件</h2><ul><li>以斜杠 <code>“/”</code> 结尾表示目录</li><li>以星号 <code>“*”</code> 通配多个字符</li><li>以问号 <code>“?”</code> 通配单个字符</li></ul><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>*.a <span class=c1>#忽略全部 .a 文件  包括子目录</span>
+!lib.a <span class=c1>#但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件</span>
+build/ <span class=c1>#忽略 build/ 文件夹下的所有文件</span>
+build <span class=c1>#忽略build文件</span>
+doc/*.txt <span class=c1># 只忽略doc一级路径下的txt文件</span>
+doc/**/*.pdf <span class=c1># 忽略所有的 .pdf 文件 在 doc/ directory 下的</span>
+*.<span class=o>[</span>oa<span class=o>]</span> <span class=c1>#忽略所有以&#34;.o&#34;或&#34;.a&#34;结尾</span>
+<span class=o>[</span>0-9<span class=o>]</span>.txt <span class=c1>#忽略0~9.txt结尾的文件</span>
+</code></pre></div><p>可以查看这个模板：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2Fgithub%2Fgitignore" target=_blank rel="noopener noreffer">https://github.com/github/gitignore</a></p><p>​</p><h2 id=git-commit规范>git commit规范</h2><p><code>commit message</code>的格式如下：</p><div class=highlight><pre class=chroma><code class=language-http data-lang=http><span class=err>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+</span><span class=err>fix(DAO):用户查询缺少username属性 
+</span><span class=err>feat(Controller):用户查询接口开发
+</span></code></pre></div><p><strong>type(必须)：</strong> 用于说明 git commit 的类别，只允许使用下面的标识</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>feat：新功能（feature）
+fix/to：修复 bug，可以是 QA 发现的 BUG，也可以是研发自己发现的 BUG。
+	fix：产生 diff 并自动修复此问题。适合于一次提交直接修复问题
+	to：只产生 diff 不自动修复此问题。适合于多次提交。最终修复问题提交时使用 fix
+docs：文档（documentation）
+style：格式（不影响代码运行的变动）
+refactor：重构（即不是新增功能，也不是修改 bug 的代码变动）
+perf：优化相关，比如提升性能、体验
+test：增加测试
+chore：构建过程或辅助工具的变动
+revert：回滚到上一个版本
+merge：代码合并。
+sync：同步主线或分支的 Bug
+</code></pre></div><p><strong>scope(可选)</strong>：用于说明commit 影响的范围，比如数据层、控制层、视图层等等，不同的项目不一样</p><p><strong>subject(必须)：</strong> subject 是 commit 目的的简短描述，不超过 <code>50</code> 个字符。</p><ul><li>中文/英文</li><li>结尾不加句号或其他标点符号</li></ul><p>下面我们再来看看<code>git commit</code>的相关命令</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git commit -m <span class=s2>&#34;xxxx&#34;</span>
+git commit --amend <span class=c1>#修改最近一次的commit的信息</span>
+git commit -am <span class=s2>&#34;xxx&#34;</span> <span class=c1>#免去了 git add 操作，直接commit     </span>
+</code></pre></div><p>如果要修改<code>commit message</code>信息，可以通过上面的<code>rebase</code>命令来修改，只需要修改<code>message</code>部分即可</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git rebase -i HEAD^^     
+</code></pre></div><p>​</p><h2 id=git-submodule子模块>git submodule子模块</h2><p>子模块主要有如下几个作用:</p><ul><li>将多个分离的项目统一放在一个文件夹下进行管理</li><li>将另外一个独立的项目导入到当前项目中，但是导入的项目不需要你自己来管理，由别人来管理</li></ul><p>一个<code>git</code>仓库下面某个文件夹的来源可以跟本库的来源不同，这个文件夹连接着别的库，这样你可以让这个文件夹通过别的库来管理，主库唯一需要知道的信息是这个子模块当前最新的 <code>commit</code>，如果别人的项目更新了，主库可以决定自己是否需要跟新还是继续用旧版本。如果你一直不更新子模块，那么就永远是老的版本，子模块的更新需要你主动进行，<strong>注意，主库是不追踪子模块的变化的，如果你修改了子模块，需要进子模块的目录下进行commit和push</strong></p><p>添加子模块到当前项目:</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git submodule add https://github.com/biningo/biningo
+</code></pre></div><p>如果子模块发生更改，仓库不会察觉到，需要我们手动进到子模块里去<code>commit</code>和<code>push</code>，如果子模块执行了<code>commit</code>，那么主库就会察觉到子模块发生了<code>commit</code>，提示执行<code>status</code>的时候就会提示子模块发生了变化，此时主库需要执行一次<code>commit</code>来提交更新</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git submodule update <span class=c1>#将子模块和远程仓库保持同步,也可以到子模块目录下手动merge或则rebase</span>
+</code></pre></div><p><code>clone</code>带有子模块的仓库不会拉取子模块相关代码，需要加上<code>--recurse-submodules</code>参数，或则执行<code>git submodule update</code></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git clone --recurse-submodules https://github.com/chaconinc/MainProject
+</code></pre></div><p>​</p><h2 id=参考>参考</h2><ul><li><a href=https://juejin.cn/post/6864753221894668302>https://juejin.cn/post/6864753221894668302</a></li><li><a href=http://www.ruanyifeng.com/blog/2015/12/git-workflow.html>http://www.ruanyifeng.com/blog/2015/12/git-workflow.html</a></li><li><a href=https://www.infoq.cn/article/fvrazhpyeljg9jsyddas>https://www.infoq.cn/article/fvrazhpyeljg9jsyddas</a></li><li><a href=https://github.com/521xueweihan/git-tips>https://github.com/521xueweihan/git-tips</a></li><li><a href=https://juejin.cn/post/6844904146571624461>https://juejin.cn/post/6844904146571624461</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-02-08</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/git/>git</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/02/04/%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84linux%E7%BB%88%E7%AB%AF%E7%8E%AF%E5%A2%83/ class=prev rel=prev title=打造自己的终端环境><i class="fas fa-angle-left fa-fw"></i>打造自己的终端环境</a>
+<a href=/2021/02/12/go%E7%9A%84defer/ class=next rel=next title=Go的defer>Go的defer<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-02-08T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"git总结"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

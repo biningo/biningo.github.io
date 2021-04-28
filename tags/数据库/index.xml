@@ -1,0 +1,68 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据库 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>数据库 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="self" type="application/rss+xml"/><item><title>Redis命令总结</title><link>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description>Keys COPY 复制key
+COPY name username #name-&amp;gt;username username必须不存在 COPY name username DB 1 #name-&amp;gt;1:username COPY name username REPLACE #存在则更新 DEL 删除key 返回值是删除的个数
+UNLINK非阻塞删除，重新开辟一个线程去回收内存，立即返回
+DEL key1 key2 EXISTS 查看可以是否存在 返回值是存在键的数量
+EXISTS age username EXPIRE EXPIREAT 设置key的过期时间，如果重新设置的key的值，前者是设置n秒后过期，后者设置一个Unix时间戳，表示在指定时间戳后过期
+TTL 查看key剩余的时间·秒，返回-1则表示永久 -2则表示key不存在，PTTL则是毫秒
+PERSIST 解除timeout时间
+EXPIRE name 10 EXPIREAT name 8233132131 TTL name PERSIST name KEYS 模式匹配展示出keys
+KEYS name* # * 匹配所有 KEYS name? # ? 匹配一个 MOVE 移动key到指定的db
+MOVE age 2 OBJECT 展示redis每个key的对象相关的信息，比如对象底层的数据结构是什么
+redis有五大常见对象:</description></item><item><title>MySql事务</title><link>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</guid><description>更新中&amp;hellip;
+事务四大特性ACID 原子性 Atomicity
+事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
+一致性 Consistency
+同一个事务中所有操作要么全部成功，要么全部失败
+隔离性 Isolation
+每个事务都是隔离的，互相不影响，一共有4个隔离级别
+持久性 Durability
+事务一旦提交，它对数据库中的数据的改变就应该是永久性的，不能回滚
+​
+四大隔离级别 1、读未提交 Read Uncommitted
+一个事务还没提交时，它做的变更对他事务可见
+2、读已提交 Read Committed Oracle默认的隔离级别
+一个事务只有提交时候它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况
+3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
+一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读、幻读问题
+4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
+​
+事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
+A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
+时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item><item><title>MySql约束</title><link>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</guid><description><![CDATA[约束分类 约束就是给字段设置一定的规则，约束这个字段 主要有如下几类约束
+ 主键约束 外键约束 非空约束 唯一约束 默认值约束 检查约束  ​
+主键约束 主键约束是非空的，最好使用 AUTO_INCREMENT来自动增加防止重复，并且能用int就不要用 bigint ，因为这和索引有关系，主键数据越小越好 如果一张表没有设置主键，那么Mysql就会拿一个非空约束字段当做主键，如果都没有则会自己生成一个RowID的列作主键
+CREATE TABLE tb( id int PRIMARY KEY AUTO_INCREMENT ) CREATE TABLE tb( id int AUTO_INCREMENT, name varchar(20), PRIMARY KEY pk(id) ) #添加主键约束 ALTER TABLE 表名 ADD CONSTRAINT 约束名 PRIMARY KEY(列名); #删除主键约束 ALTER TABLE 表名 DROP PRIMARY KEY 约束名; ​
+外键约束 外键是指引用另一个表中的一列或多列，被引用的列应该具有主键约束或唯一约束
+外键约束可以设置联级:
+ 联级删除: 外键表中被引用的记录删除之后则连同所有拥有这个外键的记录都删除 联级更新: 外键表中被引用的记录更新之后则连同所有拥有这个外键的记录都更新  如果不设置则不允许删除还被引用的记录
+CREATE TABLE IF NOT EXISTS category ( id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50) NOT NULL, UNIQUE uq_title (title) ); CREATE TABLE article ( id INT AUTO_INCREMENT, title VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, author VARCHAR(20) NOT NULL, status ENUM (&#39;published&#39;,&#39;auditing&#39;,&#39;draft&#39;,&#39;deleted&#39;) NOT NULL, cid INT NOT NULL, PRIMARY KEY pk_id (id), #联级删除 category记录删除了 所有引用该记录的article记录也一并删除  #如果没设置此联级策略则不允许删除还被引用的category记录  FOREIGN KEY fk_cid (cid) REFERENCES category (id) ON DELETE CASCADE, UNIQUE uq_title (title) COMMENT &#39;会自动创建唯一索引&#39; ); #添加外键 ALTER TABLE 表名 ADD CONSTRAINT 约束名 FOREIGN KEY (外键字段名) REFERENCES 外键表名(列名); #删除外键 ALTER TABLE 表名 DROP FOREIGN KEY 外键名; ​]]></description></item><item><title>MySql字符集</title><link>/2021/02/16/mysql%E5%AD%97%E7%AC%A6%E9%9B%86/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/mysql%E5%AD%97%E7%AC%A6%E9%9B%86/</guid><description><![CDATA[MySql字符集 MySql支持很多字符集，可以使用如下命令查看MySql支持的字符集:
+SHOW CHARACTER SET SHOW CHARSET SHOW CHARACTER SET LIKE &#39;utf8%&#39; 其中Default collation 表示默认的 比较规则 MAXlen表示最大长度
+下面是几个重要的字符集的最大长度:
+   字符集名称 Maxlen     ascii 1   gbk 2   utf8 3   utf8mb4 4    ​
+utf8和utf8mb4 utf8是utf8mb3的别名，只支持最大长度是3byte，属于 阉割版 的UTF8字符集
+utf8mb4 是完整的UTF8字符集，最大支持4byte，包含所有UTF8字符集
+所以如果文本里面有特殊符号或则表情符号，比如存博客等就需要修改表的字符集为utf8mb4
+​
+字符集比较规则 字符集比较规则用于字符集比较，比如a、A两个比较，是按照二进制大小来比较还是忽略大小写进行比较
+可以使用如下命令显示支持的比较规则
+SHOW COLLATION #显示所有比较规则 SHOW COLLATION LIKE &#39;%utf8%&#39; utf8默认的比较规则就是utf8_general_ci
+utf8mb4默认是utf8mb4_0900_ai_ci
+ 以ci结尾的比较规则都是忽略大小写的
+ ​
+字符集和比较规则应用范围 分别有3个应用范围:]]></description></item><item><title>MySql配置文件</title><link>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/mysql%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F/</guid><description><![CDATA[更新中&hellip;&hellip;
+ 配置文件 MySql配置文件的作用就是给mysqld服务器进程提供启动参数，设置一些变量，也可以通过命令行方式设置参数，但是这样太麻烦了而且不是永久的，所以一般都将这些参数写在配置文件中，mysqld进程启动的时候会按照如下方式去寻找配置文件:
+$ mysql --help | grep my.cnf /etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf  /etc/my.cnf /etc/mysql/my.cnf $MYSQL_HOME/my.cnf ~/.my.cnf  可以指定配置文件路径:
+$ mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件 $ mysqld --defaults-extra-file=/my.cnf #添加额外的配置文件路径加入默认的搜索路径，也就是说其他路径包括这个也会被搜索到 另外注意：命令行参数优先级高于配置文件，搜索路径前面的配置高于后面的，并且有些命令行参数是只属于命令行的，不属于配置文件，配置文件都可以用命令行替代
+配置文件分为如下几组:
+[server] ... [mysqld] ... [mysqld_safe] [client] [mysql] [mysqladmin] ​
+[mysqld]配置 TODO
+[server]配置 TODO
+[client]配置 TODO
+[mysql]配置 TODO
+[mysqld_safe]配置 TODO
+[mysqladmin]配置 TODO
+系统变量 1、系统变量的查看 系统变量一般通过SHOW VARIABLES LIKE xxx来查看，下面展示常用的系统变量
+SHOW VARIABLES LIKE &#39;default_storage_engine&#39; #默认使用的搜索引擎 在配置文件的变量可以用-线链接，而这些变量保存在数据库中则是以_链接
+2、系统变量作用范围 系统变量有作用的范围之分，有下面几个范围:
+ GLOBAL 全局所有用户 SESSION 特指当前一个用户，一般客户端可以通过连接字符串添加参数来设置这些变量比如设置 时区、字符集 等，这属于单个连接的客户端  查询的时候可以指定范围，不指定则默认是SESSION]]></description></item><item><title>SQL总结</title><link>/2021/02/16/sql%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/16/sql%E6%80%BB%E7%BB%93/</guid><description><![CDATA[更新中&hellip;&hellip;
+ 表操作 CREATE TABLE test ( ) ENGINE = InnoDB #设置表的存储引擎  DEFAULT CHARSET = utf8 #设置表的字符集、  COLLATE=utf8_bin #设置字符集比较规则 DROP TABLE IF EXISTS category,article,tag,article_tag; #删除表 CREATE TABLE IF NOT EXISTS category ( id INT PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50) NOT NULL, UNIQUE uq_title (title) ) ENGINE = InnoDB CHARACTER SET = utf8; CREATE TABLE article ( id INT AUTO_INCREMENT, title VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, author VARCHAR(20) NOT NULL, status ENUM (&#39;published&#39;,&#39;auditing&#39;,&#39;draft&#39;,&#39;deleted&#39;) NOT NULL, cid INT NOT NULL, PRIMARY KEY pk_id (id), FOREIGN KEY fk_cid (cid) REFERENCES category (id) ON DELETE CASCADE, UNIQUE uq_title (title) COMMENT &#39;会自动创建唯一索引&#39; ) ENGINE = InnoDB CHARACTER SET = utf8mb4; CREATE TABLE tag ( id INT PRIMARY KEY AUTO_INCREMENT, title varchar(20) NOT NULL, UNIQUE uq_title (title) ); CREATE TABLE article_tag ( id INT PRIMARY KEY AUTO_INCREMENT, tid INT NOT NULL, aid INT NOT NULL, FOREIGN KEY fk_tid (tid) REFERENCES tag (id), FOREIGN KEY fk_aid (aid) REFERENCES article (id), UNIQUE uq_tid_aid (tid, aid) ); #展示建表语句 SHOW CREATE TABLE test #展示test表的建表语句 DESC test #展示字段信息 #修改表 ALTER TABLE test ENGINE=MyISAM #修改存储引擎 ​]]></description></item></channel></rss>
