@@ -1,4 +1,16 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据结构 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link><description>数据结构 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml"/><item><title>完全二叉树和满二叉树</title><link>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</guid><description>满二叉树 如果二叉树中除了叶子结点，每个结点的度都为 2，则此二叉树称为满二叉树
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据结构 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link><description>数据结构 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 28 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml"/><item><title>链表总结</title><link>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</guid><description>链表分类 链表主要分为一下几类:
+单链表 循环链表 双链表 ​
+各个链表比较 开发中最常用的链表就是 循环双链表
+循环链表和单链表对比起来，循环链表有如下几个优点:
+通过任意一个节点即可以遍历所有的节点 单链表和双链表对比起来，双链表有如下几个优点:
+可以轻松获取一个节点的前后节点 双链表的删除和插入节点效率更高更方便 双链表遍历更方便，可以从一个节点开始可以往前往后遍历 ​
+链表和数组的比较 随机访问
+数组支持随机访问，随机访问的时间复杂度为O(1)，但是链表不支持随机访问，如果要访问指定位置的节点必须遍历前面所有的节点，时间复杂度为O(n)
+查找元素
+链表和数组查找元素的时间复杂度都是O(n) ，但是对于一个有序的数组可以使用二分查找来加快速度，此时时间复杂度为O(logn)，但是对于链表就没有办法进行二分了
+对于元素的插入和删除，链表的时间复杂度为O(1)，而数组则为O(n)，因为数组需要进行元素的移动，链表只需要改变指针即可
+总结
+如果是需要频繁进行随机访问的时候可以使用数组，如果需要频繁进行增加和删除则可以考虑使用链表</description></item><item><title>完全二叉树和满二叉树</title><link>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/</guid><description>满二叉树 如果二叉树中除了叶子结点，每个结点的度都为 2，则此二叉树称为满二叉树
 满二叉树有如下几个性质:
 满二叉树第i层节点的个数2^(i-1)
 深度为n的满二叉树必须有2^(n)-1个节点，叶子节点有2^(n-1) (也就是最后一层的节点数量)
