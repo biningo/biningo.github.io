@@ -1,0 +1,11 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>中间件 - 标签 - lyer's blog</title><link>/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/</link><description>中间件 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="self" type="application/rss+xml"/><item><title>Redis命令总结</title><link>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/redis%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description>Keys COPY 复制key
+COPY name username #name-&amp;gt;username username必须不存在 COPY name username DB 1 #name-&amp;gt;1:username COPY name username REPLACE #存在则更新 DEL 删除key 返回值是删除的个数
+UNLINK非阻塞删除，重新开辟一个线程去回收内存，立即返回
+DEL key1 key2 EXISTS 查看可以是否存在 返回值是存在键的数量
+EXISTS age username EXPIRE EXPIREAT 设置key的过期时间，如果重新设置的key的值，前者是设置n秒后过期，后者设置一个Unix时间戳，表示在指定时间戳后过期
+TTL 查看key剩余的时间·秒，返回-1则表示永久 -2则表示key不存在，PTTL则是毫秒
+PERSIST 解除timeout时间
+EXPIRE name 10 EXPIREAT name 8233132131 TTL name PERSIST name KEYS 模式匹配展示出keys
+KEYS name* # * 匹配所有 KEYS name? # ? 匹配一个 MOVE 移动key到指定的db
+MOVE age 2 OBJECT 展示redis每个key的对象相关的信息，比如对象底层的数据结构是什么
+redis有五大常见对象:</description></item></channel></rss>

@@ -1,0 +1,10 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>DNS - 标签 - lyer's blog</title><link>/tags/dns/</link><description>DNS - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 25 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/dns/" rel="self" type="application/rss+xml"/><item><title>为什么DNS使用UDP?</title><link>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</link><pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</guid><description>DNS协议 在讲解为什么之前我们先来讲解什么是DNS协议，以及DNS协议的一些细节
+DNS协议的作用就是建立 域名和IP地址的映射，因为IP地址太长并且没有语义所以需要给IP一个域名，DNS协议的作用就是将域名转化为IP地址，这就是DNS协议的主要功能，当然还有其他功能比如记录CNAME、IP地址负载均衡等
+浏览器在请求一个网址之前需要通过DNS协议获取到这个网址的IP地址这样才可以进行网络通讯建立TCP连接，因为网络中都是以IP地址来识别一个主机的
+那么浏览器向谁请求DNS协议呢？这就是DNS服务器的功劳
+DNS服务器是专门用来记录域名以及IP地址的映射的一个服务器，其他计算机可以通过DNS协议来请求DNS服务器来查询他所需要的信息，这些信息也是通过DNS协议返回回去的，主机只需要依照DNS协议的规范规则进行请求并且解析响应即可获取信息
+DNS服务器主要会记录域名的如下几种记录:
+类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），返回记录此服务器的DNS服务器域名 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 SRV 用于服务发现和负载均衡 下面来看一个DNS查询icepan.cloud的完整过程:
+dig -t A icepan.cloud +trace .是根DNS服务器，查询会先根据缓存在本地的根域名服务器的NS记录和A记录去查询到权威域名服务器对应的A记录和NS记录
+下面是13组根域名服务器对应的NS记录
+. 7117 IN NS g.root-servers.net. . 7117 IN NS l.root-servers.net. . 7117 IN NS d.root-servers.net. . 7117 IN NS b.root-servers.net. . 7117 IN NS h.</description></item></channel></rss>

@@ -1,0 +1,8 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>锁 - 标签 - lyer's blog</title><link>/tags/%E9%94%81/</link><description>锁 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Mon, 26 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E9%94%81/" rel="self" type="application/rss+xml"/><item><title>锁</title><link>/2021/04/26/%E9%94%81/</link><pubDate>Mon, 26 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/26/%E9%94%81/</guid><description>什么是锁 锁其实就是一个变量，保存在内存中，比如一个flag，初始化为false ，当被线程加锁之后就将他设置为true，当一个线程拿锁时会检测这个变量是否上锁，如果没有上锁也就是值不为true则可以拿到锁
+但是难度在与置位flag要求是一个原子操作，并且CPU还有一个缓存问题需要解决TODO
+​
+互斥锁和自旋锁 互斥锁 在加锁失败之后会释放CPU资源让给其他线程，所以互斥锁在加锁失败之后会引发一个线程调度，线程调度是有开销的，这就是为什么互斥锁会产生开销的原因
+如果你锁住的代码执行时间比较短，那可能上下文切换的时间都比你锁住的代码执行时间还要长
+自旋锁 线程在加锁失败之后会进入一个 忙等 的一个状态，相当于当前线程并不会放弃CPU而是进入一个空转的状态，一旦锁被释放了就可以立即获得锁，所以自旋锁的消耗在于空转时的消耗，不过CPU提供了空转指令PAUSE能大大降低这种消耗，所以如果被锁住的处理代码很长的话则不适合使用自旋锁
+​
+参考 面试官：你说说互斥锁、自旋锁、读写锁、悲观锁、乐观锁的应用场景</description></item></channel></rss>
