@@ -1,4 +1,16 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>算法和数据结构 - 分类 - lyer's blog</title><link>/categories/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link><description>算法和数据结构 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml"/><item><title>BloomFilter布隆过滤器</title><link>/2021/03/31/bloomfilter%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/31/bloomfilter%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/</guid><description>布隆过滤器原理 布隆过滤器就是通过 3个hash函数，当然hash函数的数量不限，hash函数越多判断越准确，但是同时消耗也越大
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>算法和数据结构 - 分类 - lyer's blog</title><link>/categories/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link><description>算法和数据结构 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 28 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml"/><item><title>链表总结</title><link>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</guid><description>链表分类 链表主要分为一下几类:
+单链表 循环链表 双链表 ​
+各个链表比较 开发中最常用的链表就是 循环双链表
+循环链表和单链表对比起来，循环链表有如下几个优点:
+通过任意一个节点即可以遍历所有的节点 单链表和双链表对比起来，双链表有如下几个优点:
+可以轻松获取一个节点的前后节点 双链表的删除和插入节点效率更高更方便 双链表遍历更方便，可以从一个节点开始可以往前往后遍历 ​
+链表和数组的比较 随机访问
+数组支持随机访问，随机访问的时间复杂度为O(1)，但是链表不支持随机访问，如果要访问指定位置的节点必须遍历前面所有的节点，时间复杂度为O(n)
+查找元素
+链表和数组查找元素的时间复杂度都是O(n) ，但是对于一个有序的数组可以使用二分查找来加快速度，此时时间复杂度为O(logn)，但是对于链表就没有办法进行二分了
+对于元素的插入和删除，链表的时间复杂度为O(1)，而数组则为O(n)，因为数组需要进行元素的移动，链表只需要改变指针即可
+总结
+如果是需要频繁进行随机访问的时候可以使用数组，如果需要频繁进行增加和删除则可以考虑使用链表</description></item><item><title>BloomFilter布隆过滤器</title><link>/2021/03/31/bloomfilter%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/31/bloomfilter%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/</guid><description>布隆过滤器原理 布隆过滤器就是通过 3个hash函数，当然hash函数的数量不限，hash函数越多判断越准确，但是同时消耗也越大
 将值进行一个hash，计算出对应的index，然后设置对应的bitmap
 查找的时候再将值进行hash，分别查找对应的bitmap的位数是否为1，,如果都为1那么则表示找到，如果有一个不为1则表示不存在
 BloomFilter 的缺点就是发生hash碰撞之后会出现误判的情况 ，也就是说有可能多个值都映射到相同的位置，所以如果判断出元素存在的话还需要进一步到真实的数据中去再次确认元素是否存在，但是如果判断出不存在，则肯定是不存在
@@ -73,6 +85,5 @@ T[n] = n * (n-1) = n^2 + n = O(n^2) 空间复杂度就是树的高度，单边�
 ​
 pivot支点的选择 支点只要能将两边平均分就是最好的支点，主要有如下几个选法:
 选第一个/最后一个 选中间一个 随机选一个 三数取中法: 选 开头、结尾、中间 的数中大小排中间的数 为了便于算法实现，需要取中间某个Pivot时，可以通过交换元素，转换成取第一个（或最后一个）来方便实现
-//随机 pivot := rand.Intn(end+1-start) + start //三数取中 func getMiddle(arr []int, start, end int) int { mid := start + (end-start)/2 if arr[start] &amp;gt; arr[mid] { mid, start = start, mid } if arr[mid] &amp;gt; arr[end] { mid, end = end, mid } return mid } //取数组位置中间的数 pivot:=len(arr)/2 ​</description></item><item><title>十大排序算法</title><link>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</guid><description><![CDATA[更新中&hellip;..
- 冒泡排序  稳定排序 最好时间复杂度: O(n) 基本有序状态，进行1次冒泡 最坏时间复杂度: O(n^2) 逆序状态，需要进行n次冒泡 平均时间复杂度: O(n^2) 空间复杂度: O(1)  func BubbleSort(arr []int) { flag := true for i := 0; i &lt; len(arr); i++ { for j := 0; j &lt; len(arr)-i-1; j++ { if arr[j] &gt; arr[j+1] { flag = false arr[j], arr[j+1] = arr[j+1], arr[j] } } if flag { break } } } ​
-选择排序  不稳定排序 比如 5 8 5 2 9 两个相同的5会发生位置交换 最好时间复杂度: O(n^2) 最坏时间复杂度: O(n^2) 平均时间复杂度: O(n^2) 空间复杂度: O(1)  每次选择剩余排序区间中最小(大)的元素放入排序好的区间的最后一个位置中]]></description></item></channel></rss>
+//随机 pivot := rand.Intn(end+1-start) + start //三数取中 func getMiddle(arr []int, start, end int) int { mid := start + (end-start)/2 if arr[start] &amp;gt; arr[mid] { mid, start = start, mid } if arr[mid] &amp;gt; arr[end] { mid, end = end, mid } return mid } //取数组位置中间的数 pivot:=len(arr)/2 ​</description></item><item><title>十大排序算法</title><link>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link><pubDate>Wed, 17 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/17/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</guid><description>冒泡排序 稳定排序 最好时间复杂度: O(n) 基本有序状态，进行1次冒泡 最坏时间复杂度: O(n^2) 逆序状态，需要进行n次冒泡 平均时间复杂度: O(n^2) 空间复杂度: O(1) func BubbleSort(arr []int) { flag := true for i := 0; i &amp;lt; len(arr); i++ { for j := 0; j &amp;lt; len(arr)-i-1; j++ { if arr[j] &amp;gt; arr[j+1] { flag = false arr[j], arr[j+1] = arr[j+1], arr[j] } } if flag { break } } } ​
+选择排序 不稳定排序 比如 5 8 5 2 9 两个相同的5会发生位置交换 最好时间复杂度: O(n^2) 最坏时间复杂度: O(n^2) 平均时间复杂度: O(n^2) 空间复杂度: O(1) 每次选择剩余排序区间中最小(大)的元素放入排序好的区间的最后一个位置中</description></item></channel></rss>
