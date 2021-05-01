@@ -2,7 +2,8 @@
 title: Linux中的VFS虚拟文件系统
 date: 2021-04-02
 categories: [操作系统]
-tags: [Linux,OS,VFS]   
+tags: [Linux,OS,VFS]
+draft: true 
 ---
 
 ## 为什么磁盘需要分区分块

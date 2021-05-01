@@ -146,14 +146,14 @@ git merge dev #合并dev分支到当前分支 （注意分支冲突问题 需要
 git merge a b #将b合并到a
 ```
 
-​                
+​      
 
 ## 本地仓库管理
 
 文件状态
 
 ```bash
-git status -s #以短格式输出 M:表示有变更 A:表示已经添加到暂存库
+git status -s #以短格式输出 M:表示有变更 A:表示已经添加到暂存库 D:表示删除
 ```
 
 ​    
@@ -212,7 +212,7 @@ git fetch origin dev #指定远程仓库origin中dev分支取到本地
 #1、将本地分支推送到远程仓库的指定分支 如果远程分支不存在则会在远端创建
 git push <远程主机名>  <本地分支名>:<远程分支名> 
 
-#2、git push origin dev:dev
+#2、git push origin dev:dev 默认写一个就表示将本地分支push到远程的dev
 git push origin dev
 
 #3、-u则表示将当前本地分支和远端的origin/dev分支建立追踪关系 --set-upstream的缩写形式，以后直接执行 git push即可将当前分支push到origin/dev分支
