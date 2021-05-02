@@ -54,6 +54,30 @@ public static int hashCode(byte[] value) {
 
 ​     
 
+## string转化为int的hash算法
+
+字符串hash函数能任意长度的将字符串转化为int，如果需要int在指定范围内则对结果取余即可
+
+最著名的字符串转化为int的hash算法为: `times 33`  
+
+```bash
+hash(i)=hash(i-1)*33+str[i]
+```
+
+c语言实现
+
+```c
+static unsigned int hashFunction(const unsigned char*buf,int len){
+    unsigned int hash = 5381;
+    while(len--){
+        hash = ((hash<<5)+hash)+(*buf++); //hash*32+hash
+    }
+    return hash;
+}
+```
+
+​    
+
 ## MD5算法
 
 MD5算法无论输入多长最终会输出`128位`的二进制串，通常使用 **16进制** 表示，如下:

@@ -93,6 +93,7 @@ int main(int argc, char const *argv[])
     printf("p->data: %s\n", s->data);
     //偏移后，对应的字符串
     printf("data msg: %s\n", (char*)(s+1)); 
+    printf("data msg: %s\n",(char*)(&(s->data))+8); 
     
     free(s);
 }

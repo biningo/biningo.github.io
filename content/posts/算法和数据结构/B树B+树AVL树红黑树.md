@@ -63,7 +63,15 @@ B+树和B树的区别如下:
 
 ## 红黑树
 
+- 节点非黑即红
+- 根节点必须是黑色
+- 叶子节点是黑色，一般省略叶子节点
+- 相邻节点不能都为红色（红色节点的子节点或则父亲必须是黑色）
+- 从一个节点出发的任意一条路径下的黑色节点数量相等
 
+![](https://raw.githubusercontent.com/biningo/cdn/master/2021-04/red_black_tree.png)
+
+​    
 
 ## 参考
 
@@ -75,3 +83,6 @@ B+树和B树的区别如下:
 
 [MYSQL核心底层原理大盘点！看完心里有B树了吗？](https://www.bilibili.com/video/BV14v411z7M2?p=1) 【InnoDB讲的很好】
 
+[10分钟带你揭秘红黑树](https://www.bilibili.com/video/BV1AK4y1S7yz?from=search&seid=17727796357150918544)
+
+[通俗易懂的红黑树图解 (上)](https://www.infoq.cn/article/xbzme1oqnkicaywiubrc)
