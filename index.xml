@@ -1,4 +1,12 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 01 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>C语言中的柔性数组</title><link>/2021/05/01/c%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</guid><description><![CDATA[什么是柔性数组  结构中最后一个元素允许是未知大小的数组，这个数组就是柔性数组
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 04 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>C的enum枚举</title><link>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</guid><description><![CDATA[enum枚举 如果没有枚举的话，我们其实也可以用宏定义来实现，只是代码不够优雅
+#include &lt;stdio.h&gt;enum DAY{ MON,THU,WED }; int main(int argc, char const *argv[]) { enum DAY day=THU; printf(&#34;%d\n&#34;,day); //1  return 0; } ]]></description></item><item><title>C的函数指针和回调函数</title><link>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</guid><description><![CDATA[回调函数 下面将四则运算法则传入函数中进行回调
+int sum(int i1,int i2){ return i1+i2; } int sub(int i1,int i2){ return i1-i2; } int mul(int i1,int i2){ return i1*i2; } int div(int i1,int i2){ return i1/i2; } void func(int i1,int i2,int (*operate)(int,int)){ printf(&#34;i1:%d i2:%d = %d\n&#34;,i1,i2,operate(i1,i2)); } int main(int argc, char const *argv[]) { func(8,4,sum); func(8,4,sub); func(8,4,mul); func(8,4,div); return 0; } ​
+函数指针用于结构体 函数指针可以用于结构体，实现类似于了类方法的效果
+typedef struct Stu { char *name; void (*say)(char *msg); }Stu; void say(char *name){ printf(&#34;hello,%s\n&#34;,name); } int main(int argc, char const *argv[]) { Stu stu; stu.]]></description></item><item><title>C的extern关键字</title><link>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</guid><description><![CDATA[extern关键字 extern关键字的作用就是告诉编译器此值在其它文件中定义了，这里只是作个声明
+//sum.c //表示a b的值由外部定义了 extern int a; extern int b; int sum(){ return a+b; } //main.c #include &lt;stdio.h&gt;extern int sum(); //表示sum是外部定义的 因为这里没有.h头文件 int a = 10; int b = 20; int main(int argc, char const *argv[]) { int c = sum(); printf(&#34;%d\n&#34;, c); //30  return 0; } 再看一个案例
+//a.c char a = &#39;A&#39;; //main.c int main(){ extern char a; //引用a.c中定义的全局变量  printf(&#34;%c&#34;, a); } ​
+static关键字 此关键字修饰的全局变量表示禁止被外部的extern所引用，表示这个变量的作用域仅仅在此文件内
+static int age=19; 比如我在上面的a前加一个static那么main中就无法引用了，就会报错]]></description></item><item><title>C的柔性数组</title><link>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</guid><description><![CDATA[什么是柔性数组  结构中最后一个元素允许是未知大小的数组，这个数组就是柔性数组
  但结构中的柔性数组前面必须至少一个其他成员,柔性数组成员允许结构中包含一个大小可变的数组，sizeof返回的这种结构大小不包括柔性数组的内存。包含柔数组成员的结构体用malloc函数进行内存的动态分配,且分配的内存应该大于结构的大小以适应柔性数组的预期大小
 ​
 为什么需要柔性数组 C中的结构体都是固定大小的，但是有些时候我们需要一个可变大小的结构体，比如有时候需要在结构体中存放一个长度动态的字符串
@@ -11,7 +19,8 @@ blob 记录了文件的实际内容，每次add都会为每个文件生成一个
 tree 记录了index指针指向的几个blob的hash值还有对应的文件信息和文件权限
 commit记录了此次commit的作者信息和对应的tree节点，同时还会记录上一个commits
 ​
-参考 这才是真正的Git——Git内部原理</description></item><item><title>git三大区域</title><link>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</guid><description><![CDATA[git三大区域 工作区
+参考 这才是真正的Git——Git内部原理
+三道 google 风格 git 面试题及其解答</description></item><item><title>git三大区域</title><link>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</guid><description><![CDATA[git三大区域 工作区
 工作区就是我们的本地目录
 暂存区
 暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区，然后我继续修改这个文件&hellip;&hellip;
@@ -36,40 +45,4 @@ E---F---G---L---M----K dev / / \ / \ A---B---C---D---H---I---J---P master 看上
 数组查找一个元素的效率为O(n)，如果是有序数组查找一个元素使用二分的话那就是O(logn)
 a[i]的地址 = a + i * size 我们看到，如果是第一个元素，那么i=0，如果是第二个元素那么i=1 ，这就是为什么数组下标从0开始的原因
 但是如果硬要从1开始的话，那么上述的公式就会变成如下:
-a[i]的地址 = a + (i-1) * size 这样就会多一次i-1的减法操作，产生不必要的消耗，因为数组可能会进行一个频繁的随机查找</description></item><item><title>链表总结</title><link>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/28/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93/</guid><description>链表分类 链表主要分为一下几类:
-单链表 循环链表 双链表 ​
-各个链表比较 开发中最常用的链表就是 循环双链表
-循环链表和单链表对比起来，循环链表有如下几个优点:
-通过任意一个节点即可以遍历所有的节点 单链表和双链表对比起来，双链表有如下几个优点:
-可以轻松获取一个节点的前后节点 双链表的删除和插入节点效率更高更方便 双链表遍历更方便，可以从一个节点开始可以往前往后遍历 ​
-链表和数组的比较 随机访问
-数组支持随机访问，随机访问的时间复杂度为O(1)，但是链表不支持随机访问，如果要访问指定位置的节点必须遍历前面所有的节点，时间复杂度为O(n)
-查找元素
-链表和数组查找元素的时间复杂度都是O(n) ，但是对于一个有序的数组可以使用二分查找来加快速度，此时时间复杂度为O(logn)，但是对于链表就没有办法进行二分了
-对于元素的插入和删除，链表的时间复杂度为O(1)，而数组则为O(n)，因为数组需要进行元素的移动，链表只需要改变指针即可
-总结
-如果是需要频繁进行随机访问的时候可以使用数组，如果需要频繁进行增加和删除则可以考虑使用链表</description></item><item><title>Java并发总结</title><link>/2021/04/27/java%E5%B9%B6%E5%8F%91%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/27/java%E5%B9%B6%E5%8F%91%E6%80%BB%E7%BB%93/</guid><description>TODO</description></item><item><title>常用设计模式总结</title><link>/2021/04/27/%E5%B8%B8%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/27/%E5%B8%B8%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</guid><description>单例模式 单例模式有两种实现方式:
-饿汉式单例
-类一加载就创建单例对象,如果对象比较多比较大并且在运行中始终没有用到那么就白白的消耗内存了
-饿汉模式可以通过如下几个方法来实现:
-直接赋予属性值 静态代码块 Enum枚举(Java推荐方式) 懒汉式单例
-懒汉和饿汉相反，只有当对象用到的时候才创建，但是这种模式需要考虑一个并发问题，如果处理的不恰当的话就会破坏单例而创建出两个对象
-实现饿汉的方式主要有下面几个:
-静态内部类(Java语法特性，只有用到静态内部类的时候静态内部类才会被加载) 方法级加上同步锁 双重检查，控制锁的粒度更小 上面的单例都会被 反射 给破坏，所以Java推荐以Enum方式创建单例来防止反射破坏单例，Java在编译层面防止用反射创建Enum对象
-容器注册式单例
-还有一种 容器注册式单例 ，在Spring中会有一个IOC容器，如果没有显示指定对象需要多个，那么Spring都只会创建一个单例对象并且注册进IOC容器，需要的时候直接去这个容器中获取，如果容器中没有则进行创建并且保存到容器中，如果有则直接从容器中取出来返回，这个容器可以简单的看成是一个ConcurrentHashMap
-容器注册式单例和对象式单例的区别?
-下面列出一些具体的应用:
-Runtime类使用的就是饿汉式单例，这是一个JVM运行时类，记录了JVM运行时的一些信息比如JVM可用的堆内存，可用的CPU个数等
-Spring中会解析XML配置文件然后通过BeanFactory创建单例的Bean对象同时注册到IOC容器中供程序进行DI注入
-我们在使用JDBC连接数据库的时候创建的JDBC连接对象是单例的，因为我们连接对象仅仅只是维护了一些连接数据库的参数，查询的时候会根据这些参数创建TCP连接，所以这样的连接上下文对象也只需要一个即可
-​
-工厂模式 工厂模式有三种，三种模式都是逐步演变过来的?
-简单工厂
-所有对象的创建都在一个工厂类里，工厂类职责过于复杂
-工厂方法
-定义一个工厂接口，每个类都定义一个创建他本身的工厂类，缺点就是工厂类随着类的增加会逐渐增加
-抽象工厂
-在工厂方法上面做的一个改进，不为每个类都创建工厂类了，而是只为同一类对象只创建一个工厂类，抽象工厂所关注的是如何创建一系列的类
-比如美的和海尔各自有自己的工厂类，美的工厂只负责创建美的空调、美的冰箱、美的电磁炉等，而海尔工厂只负责创建海尔冰箱、海尔空调、海尔电磁炉等
-依赖注入Dependency Injection其实就是用工厂模式来创建对象的</description></item></channel></rss>
+a[i]的地址 = a + (i-1) * size 这样就会多一次i-1的减法操作，产生不必要的消耗，因为数组可能会进行一个频繁的随机查找</description></item></channel></rss>
