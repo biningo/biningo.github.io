@@ -55,7 +55,7 @@ draft: true
 
 于是就出现了 **IO多路复用**
 
-多路复用是一种 **非阻塞IO模型** ，传统同步IO模型比如阻塞IO和非阻塞IO只能在一个线程中监听一个IO句柄，并且需要用户程序主动轮询，但是多路复用则可以**在一个线程中监听多个IO句柄，并且不需要用户程序主动轮询**，相当于进行系统调用操作系统帮你进行轮询管理多个IO句柄了，所以非阻塞IO需要操作系统的支持
+多路复用是一种 **非阻塞IO模型** ，传统同步IO模型比如阻塞IO和非阻塞IO只能在一个线程中监听一个IO句柄，并且需要用户程序主动轮询，但是多路复用则可以**在一个线程中监听多个IO句柄，并且不需要用户程序主动轮询而，是由操作系统帮你监听，如果有数据可读则通过系统调用直接返回，相当于进行系统调用操作系统帮你进行轮询管理多个IO句柄了**，所以非阻塞IO需要操作系统的支持
 
 数据从内核缓冲区copy到用户缓冲区等一系列操作，这个copy的过程还是阻塞的，因此多路复用是一种 **同步IO模型中的非阻塞IO**
 
@@ -65,9 +65,52 @@ draft: true
 
 ## IO多路复用的系统调用函数
 
-TODO
+### select
 
-​    
+```c
+int select(
+    int nfds, //最大fd+1
+    //fd_set是个数组 最大监听1024个fd
+  	fd_set *readfds, //读事件 比如socket fd可读了
+    fd_set *writefds, //写事件 比如socket缓冲区可写了
+    fd_set *writefds, //异常事件
+    struct timeval *timeout //超时时间 为NULL则表示如果没有fd可读则阻塞等待
+);
+```
+
+- 监听的fd数量有限
+- 每次需要将fd在用户空间到内核空间来回copy
+- 产生惊群，只要有一个fd可读，那么用户进程必须遍历所有fd去检查到底是哪个fd可读
+
+### poll
+
+因为poll将fd集合用**链表**来保存，所以poll能监听的fd数量没有限制（小于操作系统的最大打开文件描述符个数），其他都和select区别不大
+
+### epoll
+
+```c
+//初始化一个epoll句柄 返回一个句柄
+//epoll_create1(EPOLL_CLOEXEC);
+int epoll_create1 (int flags);
+
+//epoll注册等操作
+int epoll_ctl(
+	int epfd, //create出来的epoll句柄
+    int op, //操作类型 增加,删除..
+    int fd, //待操作的fd
+    struct epoll_event *events //epoll事件
+)
+
+    
+int epoll_wait(
+	int epfd,
+    struct epoll_event *events,
+    int maxevents //最大的事件数量
+    int timeout
+)
+```
+
+​        
 
 ## 异步IO(AIO)和同步IO
 
@@ -84,3 +127,5 @@ TODO
 [一口气搞懂「文件系统」，就靠这 25 张图了](https://mp.weixin.qq.com/s/qJdoXTv_XS_4ts9YuzMNIw)
 
 [彻底理解 IO多路复用](https://juejin.cn/post/6844904200141438984)
+
+[协程和IO多路复用更配哦~](https://www.bilibili.com/video/BV1a5411b7aZ?from=search&seid=16788754659546307329)

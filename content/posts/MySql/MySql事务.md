@@ -39,7 +39,10 @@ tags: [数据库,MySql]
 
 `Read Committed` **Oracle默认的隔离级别**
 
-一个事务只有提交时候它做的变化才对其他事务可见，该级别会造成 **在事务中两次读取数据不一致的情况**
+一个事务只有提交时WW候它做的变化才对其他事务可见，该级别会造成 **在事务中两次读取数据不一致的情况**
+
+- 不可重复读，两次读取的数据值不一样
+- 幻读，两次读取的数据条数不一样
 
 ### 3、可重复读
 
@@ -214,9 +217,20 @@ TODO
 ```mysql
 SHOW VARIABLES LIKE '%AUTOCOMMIT%';
 SET AUTOCOMMIT = 0; #取消事务自动提交 on|off
+
+SHOW VARIABLES LIKE 'transaction_isolation';  #查询当前的事务隔离级别
+#修改系统的隔离级别  每次修改之后需要重新连接服务器才能生效
+# read uncommitted 读未提交
+# read committed 读已提交
+# repeatable read 可重复读 (MySql默认的隔离级别，Mysql在此隔离级别下不会)
+# serializable 串行化
+set global transaction isolation level repeatable read;
+
 begin;
 commit;
 rollback;
+
+
 ```
 
 ​    

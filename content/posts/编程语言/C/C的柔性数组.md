@@ -1,5 +1,5 @@
 ---
-title: C语言中的柔性数组
+title: C的柔性数组
 date: 2021-05-01
 categories: [编程语言/C]
 tags: [C]

@@ -21,12 +21,12 @@ tags: [TCP]
 
 ## 为什么需要 TIME_WAIT
 
-- 回复B最后一个`FIN`包
-- 重发ACK包
-- 接受之前还遗留在网络上的数据包
+- 回复B最后一个`FINACK` ，让B端关闭连接
+- 重发之前还滞留在网络上数据包的ACK
+- 接受之前还遗留在网络上的数据包，防止对以后的同端口的TCP连接造成影响(因为以后同端口的另外一个TCP连接可能碰巧也在接受同样seq号的数据包)
 
 ​    
 
 ## 参考
 
-[https://www.bilibili.com/video/BV1x441177hF?from=search&seid=3231512348930851320](https://www.bilibili.com/video/BV1x441177hF?from=search&seid=3231512348930851320)
+[TCP的运输连接管理](https://www.bilibili.com/video/BV1x441177hF?from=search&seid=3231512348930851320)
