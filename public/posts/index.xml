@@ -1,8 +1,28 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Tue, 04 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>C的enum枚举</title><link>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</guid><description><![CDATA[enum枚举 如果没有枚举的话，我们其实也可以用宏定义来实现，只是代码不够优雅
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 05 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>基于Redis分布式锁实现思路</title><link>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</link><pubDate>Wed, 05 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</guid><description>为什么需要分布式锁 单机应用中(也就是一台机器中)的锁用于控制当前程序多个线程并发而引发的资源争夺问题，但是当应用场景扩展到了分布式环境就不一样了，这样的锁就没用了。因为每台机器都是独立的，如果还是之前的锁的话只能保证本机器不会引发资源竞争问题，分布式环境下相当于每台机器都有一个自己独立的锁，所以无法避免资源竞争问题
+这个时候就需要将这把锁保存到第三方中 （比如Redis），多台机器同时到Redis中取抢锁，这就可以保证分布式环境下争抢的是同一把锁
+​
+Redis分布式锁实现思路 首先，Redis里面并没有锁的概念。所谓的锁其实就是Redis里的一个key，加锁就是设置这个key，释放锁就是删除这个key
+一个进程如果在请求加锁的过程中发现这个key已经存在了则表示加锁失败，这个锁已经被别人持有了。如果发现这个key不存在则表示这个锁没有被人持有
+Redis中可以借助如下命令来实现判断如果没有锁再加锁操作:
+#此命令表示如果key不存才会设置key并且返回1 如果是普通的set则会覆盖 setnx lock 1 单纯的这样实现分布式锁貌似太简单了，并且有个问题: 死锁
+也就是说如果一台机器设置了锁，在执行过程中宕机了或出错了，那么这把锁将永远得不到释放，其他机器进程就永远无法获取到锁，引发死锁问题
+于是我们可以借助Redis的key过期功能来给锁设置一个过期时间，这样就不用怕锁永远得不到释放了。同时需要注意设置key以及对应的过期时间这一系列动作应该是原子的，否则在设置key时还没来得及设置过期时间这台机器又宕机了还是会引发死锁问题。
+综上，我们使用Redis提供的set命令以及参数来实现
+#如果key不存在则设置lock并且过期时间为10s (nx表示不存在才会设置 存在则失败返回0) set lock 1 ex 10 nx 但是这样还会引发一个锁被错误释放问题
+想象一下下面的场景:
+A加锁执行，但是在莫个操作上面阻塞很久，此时锁过期了被自动释放 B获得锁继续执行 在B执行过程中A从阻塞中恢复了，并且A执行完毕了 于是A再次释放了锁（注意此时A释放的是B设置的锁）但是此时B还在执行中 此时C过来了，于是C就抢到锁了 这样就引发了一个错误: 在B加锁执行过程中，B的锁被错误的释放了
+为了解决锁被错误释放的问题，我们需要给锁设置一个唯一标识，这个锁标识了是哪个进程加的锁，并且只有加锁的进程本身才能释放这把锁
+set lock &amp;lt;uuid&amp;gt; ex 10 nx 实现思路就是线程在释放锁的时候获取一下key对应的value也就是锁的标识，判断一下是否是自己的那把锁。
+如果不是自己的说明自己的锁已经超时被自动释放了则不会再次释放别人的锁，如果是自己的则进行释放
+完整代码:
+//redis分布式锁的实现 type Lock struct { RedisClient *redis.Client Key string UUID string Expire time.Duration } func NewLock(key string, expire time.Duration) *Lock { uuid, err := exec.</description></item><item><title>C的enum枚举</title><link>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</guid><description><![CDATA[enum枚举 如果没有枚举的话，我们其实也可以用宏定义来实现，只是代码不够优雅
 #include &lt;stdio.h&gt;enum DAY{ MON,THU,WED }; int main(int argc, char const *argv[]) { enum DAY day=THU; printf(&#34;%d\n&#34;,day); //1  return 0; } ]]></description></item><item><title>C的函数指针和回调函数</title><link>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</guid><description><![CDATA[回调函数 下面将四则运算法则传入函数中进行回调
 int sum(int i1,int i2){ return i1+i2; } int sub(int i1,int i2){ return i1-i2; } int mul(int i1,int i2){ return i1*i2; } int div(int i1,int i2){ return i1/i2; } void func(int i1,int i2,int (*operate)(int,int)){ printf(&#34;i1:%d i2:%d = %d\n&#34;,i1,i2,operate(i1,i2)); } int main(int argc, char const *argv[]) { func(8,4,sum); func(8,4,sub); func(8,4,mul); func(8,4,div); return 0; } ​
 函数指针用于结构体 函数指针可以用于结构体，实现类似于了类方法的效果
-typedef struct Stu { char *name; void (*say)(char *msg); }Stu; void say(char *name){ printf(&#34;hello,%s\n&#34;,name); } int main(int argc, char const *argv[]) { Stu stu; stu.]]></description></item><item><title>C的extern关键字</title><link>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</guid><description><![CDATA[extern关键字 extern关键字的作用就是告诉编译器此值在其它文件中定义了，这里只是作个声明
+typedef struct Stu { char *name; void (*say)(char *msg); }Stu; void say(char *name){ printf(&#34;hello,%s\n&#34;,name); } int main(int argc, char const *argv[]) { Stu stu; stu.]]></description></item><item><title>malloc和calloc的区别</title><link>/2021/05/04/malloc%E5%92%8Ccalloc%E5%8C%BA%E5%88%AB/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/malloc%E5%92%8Ccalloc%E5%8C%BA%E5%88%AB/</guid><description><![CDATA[malloc和calloc的区别 malloc分配的内存不会进行初始化，有可能内存里还包含其他脏值。而calloc分配的内存会将内存值都初始化为0，并且calloc分配数组类型的内存更加方便，传入类型大小以及分配的个数即可
+malloc案例
+//malloc #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int main(int argc, char const *argv[]) { char *p=NULL; p = (char*)malloc(sizeof(50)); if(p==NULL){ perror(&#34;分配失败&#34;); exit(EXIT_FAILURE); } for(int i=0;i&lt;50;i++){ printf(&#34;%d\n&#34;,*p++); //有可能会有非0值 也就是脏值  } return 0; } calloc案例
+//calloc #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int main(int argc, char const *argv[]) { char *p=NULL; p = (char*)calloc(50,1); //分配大小为1byte的50个连续的位置  if(p==NULL){ perror(&#34;分配失败&#34;); exit(EXIT_FAILURE); } for(int i=0;i&lt;50;i++){ printf(&#34;%d\n&#34;,*p++); //都是0  } return 0; } ]]></description></item><item><title>C的extern关键字</title><link>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</guid><description><![CDATA[extern关键字 extern关键字的作用就是告诉编译器此值在其它文件中定义了，这里只是作个声明
 //sum.c //表示a b的值由外部定义了 extern int a; extern int b; int sum(){ return a+b; } //main.c #include &lt;stdio.h&gt;extern int sum(); //表示sum是外部定义的 因为这里没有.h头文件 int a = 10; int b = 20; int main(int argc, char const *argv[]) { int c = sum(); printf(&#34;%d\n&#34;, c); //30  return 0; } 再看一个案例
 //a.c char a = &#39;A&#39;; //main.c int main(){ extern char a; //引用a.c中定义的全局变量  printf(&#34;%c&#34;, a); } ​
 static关键字 此关键字修饰的全局变量表示禁止被外部的extern所引用，表示这个变量的作用域仅仅在此文件内
@@ -30,19 +50,4 @@ git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git 
 所以在提交之前需要确保暂存区的内容就是确定了的不会再修改了的
 git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退之后 三大区域也是一致的 git reset a112c #也可以指定特定的版本号 ​]]></description></item><item><title>git优雅的提交</title><link>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</guid><description><![CDATA[git commit命令 git commit #进入vi界面编辑 git commit -m &#34;message&#34; #直接输入剪短信息 git commit --amend -m &#34;new a&#34; #修改最近一次的commit信息 ​
 commit规范 &lt;type&gt;[optional scope]: &lt;description&gt; &lt;BLANK LINE&gt; [optional body] &lt;BLANK LINE&gt; [optional footer(s)]  标题行: 必填, 描述主要修改的type类型和desc简短描述 主题内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路等详细注释，这是可选的 页脚注释: 放 Breaking Changes 或 Closed Issues 这也是可选的  type 提交类型
-   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 影响范围]]></description></item><item><title>merge和rebase的区别</title><link>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</guid><description>merge和rebase的区别 假如下面的分支如下
-E---F dev / A---B---C---D master 使用rebase的场景 此时dev为了和master保持同步，则在dev中使用rebase操作，rebase就是寻找公共父节点
-C---D--E--F dev / A---B---C---D master 实际上现在的分支图变成了这样
-E--F dev / A---B---C---D master 此时在master分支中不管是执行rebase还是merge都是一条线，其实就是将master指针移动到dev指针处
-A---B---C---D---E---F dev,master 使用merge的场景 dev为了和master保持同步，于是使用merge
-E---F---G dev / / A---B---C---D master 现在master使用merge合并dev
-E---F---G dev / / \ A---B---C---D---H master 此时master又开发了几个版本，dev也开发了几个版本
-E---F---G---L---M dev / / \ A---B---C---D---H---I---J master 此时dev又要进行和master同步
-E---F---G---L---M----K dev / / \ / A---B---C---D---H---I---J master 此时dev需要合并到master中
-E---F---G---L---M----K dev / / \ / \ A---B---C---D---H---I---J---P master 看上面merge的图，分支一多就显的很乱</description></item><item><title>为什么数组下标从0开始?</title><link>/2021/04/28/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B0%E7%BB%84%E4%B8%8B%E6%A0%87%E4%BB%8E0%E5%BC%80%E5%A7%8B/</link><pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/28/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B0%E7%BB%84%E4%B8%8B%E6%A0%87%E4%BB%8E0%E5%BC%80%E5%A7%8B/</guid><description>先说答案吧:
-历史问题，C语言数组下标使用0，于是之后的语言都使用0 数组的偏移运算规则 历史问题这个不用多说了，下面说一下第二条原因
-我们知道数组因为内存都是连续存放的，每个元素的大小都是固定的，所以支持随机访问，我们只需要根据偏移和元素大小来计算出地址即可实现随机任意的访问数组中的元素，所以随机访问效率为 O(1)
-数组查找一个元素的效率为O(n)，如果是有序数组查找一个元素使用二分的话那就是O(logn)
-a[i]的地址 = a + i * size 我们看到，如果是第一个元素，那么i=0，如果是第二个元素那么i=1 ，这就是为什么数组下标从0开始的原因
-但是如果硬要从1开始的话，那么上述的公式就会变成如下:
-a[i]的地址 = a + (i-1) * size 这样就会多一次i-1的减法操作，产生不必要的消耗，因为数组可能会进行一个频繁的随机查找</description></item></channel></rss>
+   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 影响范围]]></description></item></channel></rss>
