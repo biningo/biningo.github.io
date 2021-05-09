@@ -3,9 +3,8 @@ title: SQL总结
 date: 2021-02-16
 categories: [Mysql]
 tags: [数据库,MySql] 
+draft: true
 ---
-
-> **更新中......**
 
 ## 表操作
 

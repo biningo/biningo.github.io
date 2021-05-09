@@ -15,16 +15,16 @@ SHOW CHARSET
 SHOW CHARACTER SET LIKE  'utf8%'
 ```
 
-其中`Default collation` 表示默认的 **比较规则** `MAXlen`表示最大长度
+其中`Default collation` 表示默认的 **比较规则** `MAXlen`表示最大长度（单位byte）
 
 下面是几个重要的字符集的最大长度:
 
-| 字符集名称 | Maxlen |
-| ---------- | ------ |
-| ascii      | 1      |
-| gbk        | 2      |
-| utf8       | 3      |
-| utf8mb4    | 4      |
+| 字符集名称                                     | Maxlen |
+| ---------------------------------------------- | ------ |
+| ascii                                          | 1      |
+| gbk                                            | 2      |
+| utf8（阉割版UTF8，不包含特殊字符如表情字符等） | 3      |
+| utf8mb4                                        | 4      |
 
 ​    
 
@@ -153,7 +153,7 @@ ALTER TABLE tb MODIFY username VARCHAR(10) CHARACTER SET gbk COLLATE gbk_chinese
 客户端和服务器通信过程如下:
 
 - 客户端使用系统的字符集进行编码转化为二进制发送到服务器
-- 服务器接受到二进制会认为客户端使用的是`character_set_client`解码方式，于是就使用`character_set_results`进行解码转化为字符串
+- 接受到二进制会认为客户端使用的是`character_set_client`解码方式，于是就使用`character_set_results`进行解码转化为字符串
 - 然后用`character_set_connection`进行编码，转化为此编码的字符串，然后进行SQL语句解析和数据查询
 - 查询出来的数据再用`character_set_results`进行编码为二进制然后发送给客户端
 - 客户端再根据自己的系统的字符集进行解码为字符串

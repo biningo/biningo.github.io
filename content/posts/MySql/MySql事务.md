@@ -240,3 +240,4 @@ rollback;
 - https://juejin.cn/post/6844904115353436174#heading-4
 - https://www.zhihu.com/question/47007926 【幻读】
 - https://blog.csdn.net/mxw2552261/article/details/93263578 
+- [周瑜Mysql事务](https://www.bilibili.com/video/BV1W64y1u761?p=9)
