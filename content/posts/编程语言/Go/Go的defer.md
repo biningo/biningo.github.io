@@ -5,7 +5,7 @@ categories: [编程语言/Go]
 tags: [Go]
 ---
 
-## 1、defer执行时机
+## defer执行时机
 
 ```go
 for i:=1;i<10;i++{
@@ -23,22 +23,24 @@ go1.14则做了进一步优化，defer的开销基本很小了
 
 ​    
 
-## 2、defer的估值时刻
+## defer的估值时刻
 
 **defer**分为**进入阶段**和**退出阶段** ，defer延迟的只是函数体的执行，并不延迟函数的初始化
 
 ```go
 //defer初始化值和位置有关 推迟执行的仅仅是函数体
-j:=10
-defer func(jj int) {
-    log.Printf("j=%d jj=%d\n",j,jj) //j=99 jj=10
-}(j)
-j=99
+func main(){
+    j:=10
+    defer func(jj int) {
+        log.Printf("j=%d jj=%d\n",j,jj) //j=99 jj=10
+    }(j) //传入10
+    j=99
+}
 ```
 
 ​    
 
-## 3、防止defer内存泄漏
+## 防止defer内存泄漏
 
 下面这段代码会严重占用内存栈，造成短暂内存泄漏，有大量的文件句柄没有被释放
 
@@ -46,6 +48,7 @@ j=99
 //内存泄漏
  func writeManyFiles(files []os.File) error {
 	 for _, file := range files {
+         //......
          defer file.Close()
 	 }
 	 return nil
@@ -76,9 +79,9 @@ j=99
 
 ​    
 
-## 4、defer和闭包
+## defer和闭包
 
-下面打印的都是`4`，
+下面打印的都是`4`
 
 ```go
 func P(){
@@ -101,3 +104,12 @@ for i:=0;i<4;i++{
     }(i)
 }
 ```
+
+​    
+
+## defer需要注意的点
+
+1. `defer`引发的内存泄露问题
+2. `defer`估值时刻
+3. `defer`结合闭包
+

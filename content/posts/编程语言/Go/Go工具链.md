@@ -1,13 +1,38 @@
 ---
-title: Go命令行和相关环境变量
-date: 2021-02-12
+title: Go工具链
+date: 2021-05-10
 categories: [编程语言/Go]
 tags: [Go]
 ---
 
-## go命令
+## go get和go install
 
-### go build
+`go1.6`之后，`go get`命令的设计主要用于追加`go.mod`的依赖包，如下:
+
+```bash
+go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本
+go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本
+```
+
+当然，也可以在`go.mod`直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
+
+此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
+
+```bash
+go mod tidy #此命令应该会很常用
+```
+
+`go install`命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行`build`编译代码生成二进制文件转移到`$GOPATH/bin`路径下。此命令必须添加版本
+
+此命令是全局安装，不会修改项目的`mod`文件
+
+```bash
+go install github.com/cosmtrek/air@v1.15.1
+```
+
+​    
+
+## go build
 
 将代码编译为相关平台的可执行文件，只需要编译带有`main`的入口文件即可
 
@@ -17,7 +42,9 @@ go build -o main  #指定生成可执行文件的名字
 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制
 ```
 
-### go env
+​    
+
+## go env
 
 用于管理go的环境变量相关信息，go相关环境变量也可在`.bashrc`等文件里面设置，优先级高
 
@@ -28,7 +55,9 @@ go env -json #json格式输出
 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割
 ```
 
-### go fmt和gofmt
+   
+
+## go fmt和gofmt
 
 `go fmt`是对`gofmt`的封装，直接使用`gofmt`即可，格式化如果不加`-w`是不会改变源代码的，所以最常用的就是：
 
@@ -45,23 +74,36 @@ gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出
 gofmt -w ./viper/ #执行格式化 并且写入源代码
 ```
 
-### go get
+​    
 
-拉取依赖并且编译安装代码的命令
-
-### go list
+## go list
 
 列出`go.mod`依赖了哪些库
 
-### go mod
+```bash
+go list -m all
+```
+
+​    
+
+## go mod
 
 `mod`管理的相关命令
 
-### go test
+```bash
+go mod init github.com/biningo/test #新建一个项目 模块名字为 github...
+go mod tidy #整理mod项目依赖
+```
+
+​    
+
+## go test
 
 执行go测试相关的命令
 
-### go run
+​    
+
+## go run
 
 直接跑代码，而不需要编译生成可执行文件，一般用于程序调试
 
@@ -69,16 +111,9 @@ gofmt -w ./viper/ #执行格式化 并且写入源代码
 go run main.go
 ```
 
-### go vet
+​    
 
-静态代码检查命令，涉及代码逻辑的检查
-
-```bash
-go vet main.go #对单个文件
-go vet ./... #对整个项目进行检查
-```
-
-### go tool
+## go tool
 
 用于执行一些go的工具命令，比如：
 
@@ -91,7 +126,7 @@ go tool fix #......
 
 ​    
 
-### go doc
+## go doc
 
 `godoc`是一款**文档工具**，需要外部安装，Go的文档就是注释，注释就是文档，该工具可以根据注释生成web界面的文档在浏览器上查看，go有个文档仓库，会自动根据你的代码注释生成你github上开源项目的文档 https://pkg.go.dev ，前提是第一次的话需要手动加入该库(执行go get或则到上面的网站上去搜索并且添加) 
 
@@ -111,46 +146,17 @@ godoc -http :8080 #godoc会为$GOROOT和根据当前项目下的mod文件建立�
 go doc
 ```
 
-​        
+​       
 
-### 其他命令
+## 其他
 
 ```bash
 go version #go版本
-go fix #把指定代码包的所有Go语言源码文件中的旧版本代码修正为新版本的代码，这里的版本是指Go语言本身的版本
-```
-
-### 没什么用的命令
-
-go bug
-
-直接输入`go bug`就会跳转到`github`的`issue`页面，其实也**没什么用**
-
-```bash
-go bug
-```
-
-go clean
-
-自动清理一些编译、测试文件，**没什么用**
-
-```bash
-go clean
-```
-
-go install
-
-现在基本不怎么用了，用于编译当前项目代码，并且将编译生成的二进制可执行文件放到`$GOPATH/bin`下
-
-```bash
-go install
 ```
 
 ​    
 
-​    
-
-## go相关环境变量[TODO]
+## go相关环境变量
 
 ```bash
 GO111MODULE="on" #开启Go Modules 默认开启

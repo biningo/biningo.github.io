@@ -35,14 +35,16 @@ tags: [数据库,MySql]
 
 一个事务还没提交时，它做的变更对他事务可见
 
+- 脏读、脏写、不可重复读、幻读
+
 ### 2、读已提交
 
 `Read Committed` **Oracle默认的隔离级别**
 
 一个事务只有提交时WW候它做的变化才对其他事务可见，该级别会造成 **在事务中两次读取数据不一致的情况**
 
-- 不可重复读，两次读取的数据值不一样
-- 幻读，两次读取的数据条数不一样
+- 不可重复读
+- 幻读
 
 ### 3、可重复读
 
@@ -79,6 +81,8 @@ tags: [数据库,MySql]
 ### 2、不可重复读
 
 **事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样**
+
+（一个已经提交了的事务修改了另外一个没有提交事务中读取过的数据）
 
 `A`事务在执行过程中读到了`B`事务已经提交了的修改，造成`A`事务在执行过程中两次读取数据不一致
 
@@ -222,7 +226,7 @@ SHOW VARIABLES LIKE 'transaction_isolation';  #查询当前的事务隔离级别
 #修改系统的隔离级别  每次修改之后需要重新连接服务器才能生效
 # read uncommitted 读未提交
 # read committed 读已提交
-# repeatable read 可重复读 (MySql默认的隔离级别，Mysql在此隔离级别下不会)
+# repeatable read 可重复读 (MySql默认的隔离级别)
 # serializable 串行化
 set global transaction isolation level repeatable read;
 
