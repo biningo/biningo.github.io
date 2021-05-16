@@ -1,0 +1,122 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Go工具链 - lyer's blog</title><meta name=Description content><meta property="og:title" content="Go工具链"><meta property="og:description" content="go get和go install go1.6之后，go get命令的设计主要用于追加go.mod的依赖包，如下:
+go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本 go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本 当然，也可以在go.mod直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
+此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
+go mod tidy #此命令应该会很常用 go install命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行build编译代码生成二进制文件转移到$GOPATH/bin路径下。此命令必须添加版本
+此命令是全局安装，不会修改项目的mod文件
+go install github.com/cosmtrek/air@v1.15.1 ​
+go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w ."><meta property="og:type" content="article"><meta property="og:url" content="/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/"><meta property="article:published_time" content="2021-05-10T00:00:00+00:00"><meta property="article:modified_time" content="2021-05-10T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Go工具链"><meta name=twitter:description content="go get和go install go1.6之后，go get命令的设计主要用于追加go.mod的依赖包，如下:
+go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本 go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本 当然，也可以在go.mod直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
+此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
+go mod tidy #此命令应该会很常用 go install命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行build编译代码生成二进制文件转移到$GOPATH/bin路径下。此命令必须添加版本
+此命令是全局安装，不会修改项目的mod文件
+go install github.com/cosmtrek/air@v1.15.1 ​
+go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w ."><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/><link rel=prev href=/2021/05/10/go%E6%8C%87%E9%92%88/><link rel=next href=/2021/05/14/ttl%E5%92%8Cmsl/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Go工具链","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/05\/10\/go%E5%B7%A5%E5%85%B7%E9%93%BE\/"},"genre":"posts","keywords":"Go","wordcount":313,"url":"\/2021\/05\/10\/go%E5%B7%A5%E5%85%B7%E9%93%BE\/","datePublished":"2021-05-10T00:00:00+00:00","dateModified":"2021-05-10T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Go工具链</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/><i class="far fa-folder fa-fw"></i>编程语言/Go</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-05-10>2021-05-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 313 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#go-get和go-install>go get和go install</a></li><li><a href=#go-build>go build</a></li><li><a href=#go-env>go env</a></li><li><a href=#go-fmt和gofmt>go fmt和gofmt</a></li><li><a href=#go-list>go list</a></li><li><a href=#go-mod>go mod</a></li><li><a href=#go-test>go test</a></li><li><a href=#go-run>go run</a></li><li><a href=#go-tool>go tool</a></li><li><a href=#go-doc>go doc</a></li><li><a href=#其他>其他</a></li><li><a href=#go相关环境变量>go相关环境变量</a></li></ul></nav></div></div><div class=content id=content><h2 id=go-get和go-install>go get和go install</h2><p><code>go1.6</code>之后，<code>go get</code>命令的设计主要用于追加<code>go.mod</code>的依赖包，如下:</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go get github.com/go-redis/redis/v8 <span class=c1>#如果不添加版本的话就在最新的版本</span>
+go get github.com/gin-gonic/gin@v1.7.0 <span class=c1>#可以添加版本</span>
+</code></pre></div><p>当然，也可以在<code>go.mod</code>直接添加依赖或则删除依赖，然后使用如下命令来处理依赖</p><p>此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go mod tidy <span class=c1>#此命令应该会很常用</span>
+</code></pre></div><p><code>go install</code>命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行<code>build</code>编译代码生成二进制文件转移到<code>$GOPATH/bin</code>路径下。此命令必须添加版本</p><p>此命令是全局安装，不会修改项目的<code>mod</code>文件</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go install github.com/cosmtrek/air@v1.15.1
+</code></pre></div><p>​</p><h2 id=go-build>go build</h2><p>将代码编译为相关平台的可执行文件，只需要编译带有<code>main</code>的入口文件即可</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go build <span class=c1>#会寻找当前目录下main入口文件然后进行编译 会编译所有</span>
+go build -o main  <span class=c1>#指定生成可执行文件的名字</span>
+go build mymain.go <span class=c1>#也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制</span>
+</code></pre></div><p>​</p><h2 id=go-env>go env</h2><p>用于管理go的环境变量相关信息，go相关环境变量也可在<code>.bashrc</code>等文件里面设置，优先级高</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go env <span class=c1>#打印所有go的环境变量</span>
+go env GOPROXY <span class=c1>#打印某个环境变量的值</span>
+go env -json <span class=c1>#json格式输出</span>
+go env -w <span class=nv>GOPROXY</span><span class=o>=</span>https://goproxy.cn,direct <span class=c1>#修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割</span>
+</code></pre></div><h2 id=go-fmt和gofmt>go fmt和gofmt</h2><p><code>go fmt</code>是对<code>gofmt</code>的封装，直接使用<code>gofmt</code>即可，格式化如果不加<code>-w</code>是不会改变源代码的，所以最常用的就是：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>gofmt -w ./ <span class=c1>#格式化当前项目，并且会修改原文件而不是输出到控制台</span>
+</code></pre></div><p>还有一些其他命令，看看就行</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>gofmt test.go <span class=c1>#格式化单个文件</span>
+gofmt ./viper/ <span class=c1>#格式化整个目录文件</span>
+gofmt -l ./viper/ <span class=c1>#列出哪些文件格式化前后会出现不同(只是列出 不进行格式化)</span>
+gofmt -w ./viper/ <span class=c1>#执行格式化 并且写入源代码</span>
+</code></pre></div><p>​</p><h2 id=go-list>go list</h2><p>列出<code>go.mod</code>依赖了哪些库</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go list -m all
+</code></pre></div><p>​</p><h2 id=go-mod>go mod</h2><p><code>mod</code>管理的相关命令</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go mod init github.com/biningo/test <span class=c1>#新建一个项目 模块名字为 github...</span>
+go mod tidy <span class=c1>#整理mod项目依赖</span>
+</code></pre></div><p>​</p><h2 id=go-test>go test</h2><p>执行go测试相关的命令</p><p>​</p><h2 id=go-run>go run</h2><p>直接跑代码，而不需要编译生成可执行文件，一般用于程序调试</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go run main.go
+</code></pre></div><p>​</p><h2 id=go-tool>go tool</h2><p>用于执行一些go的工具命令，比如：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go tool vet <span class=c1>#和go vet不一样</span>
+go tool doc <span class=c1>#和go doc 不一样</span>
+go tool fix <span class=c1>#......</span>
+.....
+</code></pre></div><p>​</p><h2 id=go-doc>go doc</h2><p><code>godoc</code>是一款<strong>文档工具</strong>，需要外部安装，Go的文档就是注释，注释就是文档，该工具可以根据注释生成web界面的文档在浏览器上查看，go有个文档仓库，会自动根据你的代码注释生成你github上开源项目的文档 <a href=https://pkg.go.dev>https://pkg.go.dev</a> ，前提是第一次的话需要手动加入该库(执行go get或则到上面的网站上去搜索并且添加)</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>godoc -http :8080 <span class=c1>#godoc会为$GOROOT和根据当前项目下的mod文件建立文档</span>
+</code></pre></div><p><strong>这就是可以通过本地来查看文档了，一般用处不大，都是到官网上去看的</strong></p><p>在go官网上，则直接访问 <code>https://pkg.go.dev/github.com/&lt;username>/foo</code> 这样就访问到了<code>username</code>的<code>foo</code>仓库的代码文档</p><p><code>go doc</code>就是可以直接在控制台打印相关包或则函数、结构体等的注释文档</p><p><strong>但是用这个命令看文档还不如看官网搜集的文档或则直接看代码，所以一般不用，或则使用godoc来在web显示文档</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go doc
+</code></pre></div><p>​</p><h2 id=其他>其他</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>go version <span class=c1>#go版本</span>
+</code></pre></div><p>​</p><h2 id=go相关环境变量>go相关环境变量</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>GO111MODULE</span><span class=o>=</span><span class=s2>&#34;on&#34;</span> <span class=c1>#开启Go Modules 默认开启</span>
+<span class=nv>GOARCH</span><span class=o>=</span><span class=s2>&#34;amd64&#34;</span> <span class=c1>#CPU架构 如:arm amd64等</span>
+<span class=nv>GOBIN</span><span class=o>=</span><span class=s2>&#34;/home/lyer/data/go-path/bin&#34;</span> <span class=c1>#编译产生的可执行二进制文件的安装目录  默认$GOPATH/bin</span>
+<span class=nv>GOCACHE</span><span class=o>=</span><span class=s2>&#34;/home/lyer/.cache/go-build&#34;</span> 
+<span class=nv>GOENV</span><span class=o>=</span><span class=s2>&#34;/home/lyer/.config/go/env&#34;</span> <span class=c1>#go环境变量配置文件 也可以配置到系统环境变量上</span>
+<span class=nv>GOEXE</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+<span class=nv>GOFLAGS</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+<span class=nv>GOHOSTARCH</span><span class=o>=</span><span class=s2>&#34;amd64&#34;</span>
+<span class=nv>GOHOSTOS</span><span class=o>=</span><span class=s2>&#34;linux&#34;</span> 
+<span class=nv>GOINSECURE</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+<span class=nv>GOMODCACHE</span><span class=o>=</span><span class=s2>&#34;/home/pb/data/go-path/pkg/mod&#34;</span>  <span class=c1>#go mod代码下载地址</span>
+<span class=nv>GONOPROXY</span><span class=o>=</span><span class=s2>&#34;*.gitlab.com&#34;</span>
+<span class=nv>GONOSUMDB</span><span class=o>=</span><span class=s2>&#34;*.gitlab.com&#34;</span>
+<span class=nv>GOOS</span><span class=o>=</span><span class=s2>&#34;linux&#34;</span> <span class=c1>#操作系统平台 win linux darwin(mac)</span>
+<span class=nv>GOPATH</span><span class=o>=</span><span class=s2>&#34;/home/pb/data/go-path&#34;</span> <span class=c1>#GOPATH</span>
+<span class=nv>GOPRIVATE</span><span class=o>=</span><span class=s2>&#34;*.gitlab.com&#34;</span>
+<span class=nv>GOPROXY</span><span class=o>=</span><span class=s2>&#34;https://goproxy.cn,direct&#34;</span> <span class=c1>#go get下载代理地址</span>
+<span class=nv>GOROOT</span><span class=o>=</span><span class=s2>&#34;/home/pb/program/go&#34;</span> <span class=c1>#go安装目录</span>
+<span class=nv>GOSUMDB</span><span class=o>=</span><span class=s2>&#34;off&#34;</span>
+<span class=nv>GOTMPDIR</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+<span class=nv>GOTOOLDIR</span><span class=o>=</span><span class=s2>&#34;/home/pb/program/go/pkg/tool/linux_amd64&#34;</span>
+<span class=nv>GCCGO</span><span class=o>=</span><span class=s2>&#34;gccgo&#34;</span>
+<span class=nv>AR</span><span class=o>=</span><span class=s2>&#34;ar&#34;</span>
+<span class=nv>CC</span><span class=o>=</span><span class=s2>&#34;gcc&#34;</span>
+<span class=nv>CXX</span><span class=o>=</span><span class=s2>&#34;g++&#34;</span>
+<span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=s2>&#34;1&#34;</span>
+<span class=nv>GOMOD</span><span class=o>=</span><span class=s2>&#34;/dev/null&#34;</span>
+<span class=nv>CGO_CFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+<span class=nv>CGO_CPPFLAGS</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+<span class=nv>CGO_CXXFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+<span class=nv>CGO_FFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+<span class=nv>CGO_LDFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+<span class=nv>PKG_CONFIG</span><span class=o>=</span><span class=s2>&#34;pkg-config&#34;</span>
+<span class=nv>GOGCCFLAGS</span><span class=o>=</span><span class=s2>&#34;-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build029755246=/tmp/go-build -gno-record-gcc-switches&#34;</span>
+</code></pre></div><p><code>GOOS</code>和<code>GOARCH</code>的值成对出现，而且只能是下面列表对应的值。</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>$GOOS</span>	    <span class=nv>$GOARCH</span>
+android	    arm
+darwin	    <span class=m>386</span>
+darwin	    amd64
+darwin	    arm
+darwin	    arm64
+dragonfly   amd64
+freebsd	    <span class=m>386</span>
+freebsd	    amd64
+freebsd	    arm
+linux	    <span class=m>386</span>
+linux	    amd64
+linux	    arm
+linux	    arm64
+linux	    ppc64
+linux	    ppc64le
+linux	    mips
+linux	    mipsle
+linux	    mips64
+linux	    mips64le
+linux	    s390x
+netbsd	    <span class=m>386</span>
+netbsd	    amd64
+netbsd	    arm
+openbsd	    <span class=m>386</span>
+openbsd	    amd64
+openbsd	    arm
+plan9	    <span class=m>386</span>
+plan9	    amd64
+solaris	    amd64
+windows	    <span class=m>386</span>
+windows	    amd64
+</code></pre></div><p>编译在64位Linux操作系统上运行的目标程序</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>$ <span class=nv>GOOS</span><span class=o>=</span>linux <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+</code></pre></div><p>编译arm架构Android操作上的目标程序</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>$ <span class=nv>GOOS</span><span class=o>=</span>android <span class=nv>GOARCH</span><span class=o>=</span>arm <span class=nv>GOARM</span><span class=o>=</span><span class=m>7</span> go build main.go
+</code></pre></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-05-10</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>Go</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/05/10/go%E6%8C%87%E9%92%88/ class=prev rel=prev title=Go指针><i class="fas fa-angle-left fa-fw"></i>Go指针</a>
+<a href=/2021/05/14/ttl%E5%92%8Cmsl/ class=next rel=next title=TTL和MSL>TTL和MSL<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-05-10T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"Go工具链"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

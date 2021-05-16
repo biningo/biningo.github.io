@@ -1,4 +1,33 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 09 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>MySql备份与恢复</title><link>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid><description><![CDATA[mysqldump备份与恢复 备份所有数据库--all-databases
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 16 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>C语法总结</title><link>/2021/05/16/c%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/16/c%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[函数指针和回调函数  指针函数 返回指针的函数  char * sayHello(){ char *msg = (char*)malloc(sizeof(13)); msg = &#34;hello,world\n&#34;; return msg; } int main(int argc, char const *argv[]) { char *msg; msg = sayHello(); printf(&#34;%s\n&#34;,msg); }  函数指针 保存函数入口地址的指针，可用于直接设置CPU的PC，直接跳转到目标函数代码指向，目标代码还可以是一段汇编程序，这样也可以实现C和汇编混合编程  void echo(char *msg) { printf(&#34;%s\n&#34;, msg); } int main(int argc, char const *argv[]) { //void:返回值 (*func):函数指针写法 (char *msg):形参  void (*func)(char *msg); //可以直接赋予一个函数的地址 或则void*地址都可  //赋予一段汇编代码地址起始处也可  func = &amp;echo; func(&#34;hello,world&#34;); //直接跳转到地址入口执行 } 下面将四则运算法则传入函数中进行回调]]></description></item><item><title>TTL和MSL</title><link>/2021/05/14/ttl%E5%92%8Cmsl/</link><pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/14/ttl%E5%92%8Cmsl/</guid><description>TTL Time To Live 指定了IP包允许跳转(允许通过的最大网段数量)的路由器数量，最大值为255，推荐值为64
+TTL在IP数据包中表示
+IP数据包每经过一个路由器其值就会-1，一旦TTL=0路由器就会将该IP数据包丢弃，并向IP包的发送者发送 ICMP time exceeded消息
+TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，一旦出现循环跳转的话就会比较浪费网络资源
+​
+MSL Maximum Segment Lifetime最大报文段生存时间，此时间应该是略大于TTL跳转的时间的，也就是说一旦IP包只要送到对方的机器上，那么此包就一定不会超过MSL，想象一下如果MSL小于TTL那么IP包送到了但是TCP包超时了那么就会比较浪费资源，并且因为TCP包是包含在IP包上的，里面的时间按逻辑上就应该大于等于TTL的
+所以只要经过了MSL时间，那么TCP包就肯定已经被传输线路上的路由器给丢弃了
+​
+参考 TCP/IP</description></item><item><title>Go工具链</title><link>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</guid><description>go get和go install go1.6之后，go get命令的设计主要用于追加go.mod的依赖包，如下:
+go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本 go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本 当然，也可以在go.mod直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
+此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
+go mod tidy #此命令应该会很常用 go install命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行build编译代码生成二进制文件转移到$GOPATH/bin路径下。此命令必须添加版本
+此命令是全局安装，不会修改项目的mod文件
+go install github.com/cosmtrek/air@v1.15.1 ​
+go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w .</description></item><item><title>Go指针</title><link>/2021/05/10/go%E6%8C%87%E9%92%88/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E6%8C%87%E9%92%88/</guid><description><![CDATA[返回局部变量的指针 Go支持垃圾回收，所以当一个函数返回了局部变量的地址这是合法的。这是Go和C指针的区别之一。Go编译器会作内存逃逸分析，如果一个局部遍历的指针被返回了则会将他的内存分配到堆空间
+type Stu struct { Name string Age int } func NewStudent() *Stu { stu := Stu{} stu.Name = &#34;lyer&#34; stu.Age = 18 return &amp;stu //这是合法的 } func main() { stu:=NewStudent() stu.Age = 21 } ​
+Go指针的限制   普通类型的指针不能作算术运算
+  一个指针类型的值不能被随意转化为另外一个指针类型，也就是说每个类型的指针其实也相当于一个类型
+  指针只能在同类型比较(==、!=)
+func main() { s1:=&amp;Stu{} s1= nil s2:=&amp;Stu{} log.Println(s1==s2) //false }   指针的值不能赋给其他类型的指针
+  综上所述: Go每个类型的指针都是一个独立的类型
+任意一个类型的指针都可以转化为unsafe.Pointer类型，此类型相当于void*
+​
+unsafe.Pointer和uintptr unintptr属于一个可运算的指针类型，其长度每个平台不一样，比如64位平台则此类型必须能够表达所有的地址，所以长度为int64
+注意unintptr指向的地址不会被Go感知到，也就是说其指向的地址无法保证不被GC回收
+unsafe.Pointer指针相当于void*，其它所有类型的指针都可以转化为此类型，如果要进行运算的话则需要继续转化为uintptr]]></description></item><item><title>MySql备份与恢复</title><link>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid><description><![CDATA[mysqldump备份与恢复 备份所有数据库--all-databases
 #备份所有数据库 mysqldump -uroot -p --all-databases &gt; ./all.sql 备份指定的数据库
 #备份 lyer test 库 mysqldump -uroot -p lyer --databases lyer test &gt; ./db.sql 备份指定数据库中的表，恢复时必须use到指定的数据库下
 #备份test库中的a b c 表 mysqldump -uroot -p test a b c &gt; ./db.sql 恢复数据
@@ -34,26 +63,25 @@ A加锁执行，但是在莫个操作上面阻塞很久，此时锁过期了被�
 set lock &amp;lt;uuid&amp;gt; ex 10 nx 实现思路就是线程在释放锁的时候获取一下key对应的value也就是锁的标识，判断一下是否是自己的那把锁。
 如果不是自己的说明自己的锁已经超时被自动释放了则不会再次释放别人的锁，如果是自己的则进行释放
 完整代码:
-//redis分布式锁的实现 type Lock struct { RedisClient *redis.Client Key string UUID string Expire time.Duration } func NewLock(key string, expire time.Duration) *Lock { uuid, err := exec.</description></item><item><title>C的enum枚举</title><link>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84enum%E6%9E%9A%E4%B8%BE/</guid><description><![CDATA[enum枚举 如果没有枚举的话，我们其实也可以用宏定义来实现，只是代码不够优雅
-#include &lt;stdio.h&gt;enum DAY{ MON,THU,WED }; int main(int argc, char const *argv[]) { enum DAY day=THU; printf(&#34;%d\n&#34;,day); //1  return 0; } ]]></description></item><item><title>C的函数指针和回调函数</title><link>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/c%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</guid><description><![CDATA[函数指针和指针函数  指针函数 返回指针的函数  char * sayHello(){ char *msg = (char*)malloc(sizeof(13)); msg = &#34;hello,world\n&#34;; return msg; } int main(int argc, char const *argv[]) { char *msg; msg = sayHello(); printf(&#34;%s\n&#34;,msg); }  函数指针 保存函数入口地址的指针，可用于直接设置CPU的PC，直接跳转到目标函数代码指向  void echo(char *msg) { printf(&#34;%s\n&#34;, msg); } int main(int argc, char const *argv[]) { //void:返回值 (*func):函数指针写法 (char *msg):形参  void (*func)(char *msg); //可以直接赋予一个函数的地址 或则void*地址都可  //赋予一段汇编代码地址起始处也可  func = &amp;echo; func(&#34;hello,world&#34;); //直接跳转到地址入口执行 } ​]]></description></item><item><title>malloc和calloc的区别</title><link>/2021/05/04/malloc%E5%92%8Ccalloc%E5%8C%BA%E5%88%AB/</link><pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/04/malloc%E5%92%8Ccalloc%E5%8C%BA%E5%88%AB/</guid><description><![CDATA[malloc和calloc的区别 malloc分配的内存不会进行初始化，有可能内存里还包含其他脏值。而calloc分配的内存会将内存值都初始化为0，并且calloc分配数组类型的内存更加方便，传入类型大小以及分配的个数即可
-malloc案例
-//malloc #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int main(int argc, char const *argv[]) { char *p=NULL; p = (char*)malloc(sizeof(50)); if(p==NULL){ perror(&#34;分配失败&#34;); exit(EXIT_FAILURE); } for(int i=0;i&lt;50;i++){ printf(&#34;%d\n&#34;,*p++); //有可能会有非0值 也就是脏值  } return 0; } calloc案例
-//calloc #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int main(int argc, char const *argv[]) { char *p=NULL; p = (char*)calloc(50,1); //分配大小为1byte的50个连续的位置  if(p==NULL){ perror(&#34;分配失败&#34;); exit(EXIT_FAILURE); } for(int i=0;i&lt;50;i++){ printf(&#34;%d\n&#34;,*p++); //都是0  } return 0; } ]]></description></item><item><title>C的extern关键字</title><link>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84extern%E5%85%B3%E9%94%AE%E5%AD%97/</guid><description><![CDATA[extern关键字 extern关键字的作用就是告诉编译器此值在其它文件中定义了，这里只是作个声明
-//sum.c //表示a b的值由外部定义了 extern int a; extern int b; int sum(){ return a+b; } //main.c #include &lt;stdio.h&gt;extern int sum(); //表示sum是外部定义的 因为这里没有.h头文件 int a = 10; int b = 20; int main(int argc, char const *argv[]) { int c = sum(); printf(&#34;%d\n&#34;, c); //30  return 0; } 再看一个案例
-//a.c char a = &#39;A&#39;; //main.c int main(){ extern char a; //引用a.c中定义的全局变量  printf(&#34;%c&#34;, a); } ​
-static关键字 此关键字修饰的全局变量表示禁止被外部的extern所引用，表示这个变量的作用域仅仅在此文件内
-static int age=19; 比如我在上面的a前加一个static那么main中就无法引用了，就会报错]]></description></item><item><title>C的柔性数组</title><link>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</guid><description><![CDATA[什么是柔性数组  结构中最后一个元素允许是未知大小的数组，这个数组就是柔性数组
+//redis分布式锁的实现 type Lock struct { RedisClient *redis.Client Key string UUID string Expire time.Duration } func NewLock(key string, expire time.Duration) *Lock { uuid, err := exec.</description></item><item><title>C的柔性数组</title><link>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</guid><description><![CDATA[什么是柔性数组  结构中最后一个元素允许是未知大小的数组，这个数组就是柔性数组
  但结构中的柔性数组前面必须至少一个其他成员,柔性数组成员允许结构中包含一个大小可变的数组，sizeof返回的这种结构大小不包括柔性数组的内存。包含柔数组成员的结构体用malloc函数进行内存的动态分配,且分配的内存应该大于结构的大小以适应柔性数组的预期大小
 ​
 为什么需要柔性数组 C中的结构体都是固定大小的，但是有些时候我们需要一个可变大小的结构体，比如有时候需要在结构体中存放一个长度动态的字符串
 typedef struct mystr { int len; //记录字符串长度  char *data;//底层的char数组指针 }mystr; 我们需要为data malloc一段内存，然后通过这个指针访问这段内存。
 首先我们按照常规的做法，不做任何处理，直接malloc，如下
-typedef struct mystr { int len; char* data; }mystr; int main(int argc, char const *argv[]) { char* c = &#34;hello,world&#34;; //分别分配内存  mystr* s = (mystr*)malloc(sizeof(mystr)); s-&gt;data = (char*)malloc(strlen(c)+1); //+1是为\0分配的 strlen不会将\0计算进来  strcpy(s-&gt;data,c); s-&gt;len = strlen(s-&gt;data); printf(&#34;len:%d data:%s\n&#34;,s-&gt;len,s-&gt;data); //11 hello,world  //分别释放空间  free(s-&gt;data); free(s); return 0; } 可以看到上面的操作比较麻烦，结构体和内部的data指针分配内存和释放内存操作都是分开的，data数据区和结构体不是连续的两块内存，这样会带来两个问题:]]></description></item><item><title>malloc实现原理</title><link>/2021/05/01/malloc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/malloc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</guid><description>TODO
-参考 malloc和free的实现原理解析</description></item><item><title>git原理</title><link>/2021/04/30/git%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/30/git%E5%8E%9F%E7%90%86/</guid><description>git三大对象 git三大对象分别为:
+typedef struct mystr { int len; char* data; }mystr; int main(int argc, char const *argv[]) { char* c = &#34;hello,world&#34;; //分别分配内存  mystr* s = (mystr*)malloc(sizeof(mystr)); s-&gt;data = (char*)malloc(strlen(c)+1); //+1是为\0分配的 strlen不会将\0计算进来  strcpy(s-&gt;data,c); s-&gt;len = strlen(s-&gt;data); printf(&#34;len:%d data:%s\n&#34;,s-&gt;len,s-&gt;data); //11 hello,world  //分别释放空间  free(s-&gt;data); free(s); return 0; } 可以看到上面的操作比较麻烦，结构体和内部的data指针分配内存和释放内存操作都是分开的，data数据区和结构体不是连续的两块内存，这样会带来两个问题:]]></description></item><item><title>git原理</title><link>/2021/04/30/git%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/30/git%E5%8E%9F%E7%90%86/</guid><description>git三大对象 git三大对象分别为:
 blob tree commit 下面来讲述这些对象的细节:
 blob 记录了文件的实际内容，每次add都会为每个文件生成一个blob，暂存区有个index指针会指向最新add到暂存区的几个blob 每次进行commit时都会生成两个对象: tree和commit
 tree 记录了index指针指向的几个blob的hash值还有对应的文件信息和文件权限
 commit记录了此次commit的作者信息和对应的tree节点，同时还会记录上一个commits
 ​
 参考 这才是真正的Git——Git内部原理
-三道 google 风格 git 面试题及其解答</description></item></channel></rss>
+三道 google 风格 git 面试题及其解答</description></item><item><title>git三大区域</title><link>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</guid><description><![CDATA[git三大区域 工作区
+工作区就是我们的本地目录
+暂存区
+暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区，然后我继续修改这个文件&hellip;&hellip;
+改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了，我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
+git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 本地仓库
+如果确保此次修改就是最终版本，那么我们可以讲暂存区域中的内容提交到本地仓库，此时三大区域就一致了，一次提交就相当于一次版本的发布，以后可以回退到此版本
+所以在提交之前需要确保暂存区的内容就是确定了的不会再修改了的
+git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退之后 三大区域也是一致的 git reset a112c #也可以指定特定的版本号 ​]]></description></item></channel></rss>
