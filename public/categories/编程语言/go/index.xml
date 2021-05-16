@@ -1,24 +1,28 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>编程语言/Go - 分类 - lyer's blog</title><link>/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/</link><description>编程语言/Go - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><atom:link href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/" rel="self" type="application/rss+xml"/><item><title>Go反射</title><link>/2021/03/29/go%E5%8F%8D%E5%B0%84/</link><pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/29/go%E5%8F%8D%E5%B0%84/</guid><description>待更新&amp;hellip;&amp;hellip;
-什么是反射 反射 是指一类应用，它们能够自描述和自控制。也就是说，这类应用通过采用某种机制来实现对自己行为的描述（self-representation）和监测（examination），并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义
-go官方自带的reflect包就是反射相关的，go反射主要有下面两大对象:
-Value 值对象，通过reflect.ValueOf获取 Type 类型对象，通过reflect.Typeof获取 ​
-Typeof 获取一个对象的类型对象Type，Type是一个接口，go中每种类型都实现了Type接口，比如chanType表示chan的Type对象
-通过Type对象就可以获取类型相关的信息，比如 Name() 类型的名字、PkgPath() 包路径、**Size()**此类型占用的字节大小等，Type接口的方法不是每种类型都可以调用的，比如 Len() 方法只能arrayType类型才可以调用，表示数组的长度 ，Size() 方法则只可以由定长的类型才可以调用，比如数组、string、int64等，而slice、map就不可以调用Size方法，会报错
-func main() { var i interface{} i = [2]int{1,2} //int类型默认和平台位数一致 这里为int64 t := reflect.TypeOf(i) log.Println(t.Len(),t.Size()) //2 8*2=16 } ​
-ValueOf ValueOf就和TypeOf同理了，这里不多赘述，重点说明下面几个问题
-Interface() 将一个对象转化为interface{}空接口类型
-Elem() 如果值是一个指针的话，调用此方法获取指针指向的值的Value对象
-Recv() 获取一个chan的值
-Call() 调用一个函数，传入各个参数的Value对象
-Field() 获取一个struct对象的各个属性的Value对象
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>编程语言/Go - 分类 - lyer's blog</title><link>/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/</link><description>编程语言/Go - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><atom:link href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/" rel="self" type="application/rss+xml"/><item><title>Go工具链</title><link>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</guid><description>go get和go install go1.6之后，go get命令的设计主要用于追加go.mod的依赖包，如下:
+go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本 go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本 当然，也可以在go.mod直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
+此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
+go mod tidy #此命令应该会很常用 go install命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行build编译代码生成二进制文件转移到$GOPATH/bin路径下。此命令必须添加版本
+此命令是全局安装，不会修改项目的mod文件
+go install github.com/cosmtrek/air@v1.15.1 ​
+go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
+go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 ​
+go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
+go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
+gofmt -w .</description></item><item><title>Go指针</title><link>/2021/05/10/go%E6%8C%87%E9%92%88/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E6%8C%87%E9%92%88/</guid><description><![CDATA[返回局部变量的指针 Go支持垃圾回收，所以当一个函数返回了局部变量的地址这是合法的。这是Go和C指针的区别之一。Go编译器会作内存逃逸分析，如果一个局部遍历的指针被返回了则会将他的内存分配到堆空间
+type Stu struct { Name string Age int } func NewStudent() *Stu { stu := Stu{} stu.Name = &#34;lyer&#34; stu.Age = 18 return &amp;stu //这是合法的 } func main() { stu:=NewStudent() stu.Age = 21 } ​
+Go指针的限制   普通类型的指针不能作算术运算
+  一个指针类型的值不能被随意转化为另外一个指针类型，也就是说每个类型的指针其实也相当于一个类型
+  指针只能在同类型比较(==、!=)
+func main() { s1:=&amp;Stu{} s1= nil s2:=&amp;Stu{} log.Println(s1==s2) //false }   指针的值不能赋给其他类型的指针
+  综上所述: Go每个类型的指针都是一个独立的类型
+任意一个类型的指针都可以转化为unsafe.Pointer类型，此类型相当于void*
 ​
-反射原理 go在1.5之后就实现了 自举，自举过程如下:
-先用C和汇编写一个Go的编译器，用C的编译器编译成可执行文件，此二进制文件就可以编译go代码了 用Go写一个Go的编译器，用上述编译器编译成二进制文件，此二进制文件就是用Go来实现的Go编译器 go的反射与 interface和unsafe.Pointer 结合的比较紧密 TODO
-​
-参考 https://i6448038.</description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description>基础 byte和rune byte是uint8的内置别名。 我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名。 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
-uintptr、int、uint uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
+unsafe.Pointer和uintptr unintptr属于一个可运算的指针类型，其长度每个平台不一样，比如64位平台则此类型必须能够表达所有的地址，所以长度为int64
+注意unintptr指向的地址不会被Go感知到，也就是说其指向的地址无法保证不被GC回收
+unsafe.Pointer指针相当于void*，其它所有类型的指针都可以转化为此类型，如果要进行运算的话则需要继续转化为uintptr]]></description></item><item><title>Go语法细节基础</title><link>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/go%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E5%9F%BA%E7%A1%80/</guid><description><![CDATA[byte和rune byte是uint8的内置别名，代表一个字节，我们可以将byte和uint8看作是同一个类型 rune是int32的内置别名，代表一个字符， 我们可以将rune和int32看作是同一个类型，代表一个Unicode字符，Unicode字符目前还没超过32位
+var b1 rune =&#39;你&#39; // var b byte = &#39;你&#39; 报错 var b2 rune = 20320 //你的Unicode值 var b3 byte = &#39;a&#39; uintptr、int、uint uintptr代表一个地址，所以必须要能寻找到计算机所能表示的最大地址，随意其大小随计算机的位数而确定，如果是64位则该类型的大小也是64位的
 同理int、uint等也是相似的，随本机类型而定，64位机器则是int64
-type自定义类型 type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值 类型 默认值 bool false int、float64等数值类型 0 string &amp;quot;&amp;quot; 整数类型的表示 d1:=0x10F //16进制 int64 d2:=0b111 //二进制 int64 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示 //[float64] d1:= .32 //0.32 d2:= 2. //2.0 d3:=2.3e3 //2300 d4:=2.3e-3 //0.0023 字符串的``反引号 s:=`1111 2222 3333` //反引号不会进行转义 常量const和itoa const定义的一组变量可以设置相同的值</description></item><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
+type自定义类型 type MyInt int64 //此类型是一个新的自定义类型 和int64类型不一样 type Int64=int64 //此类型和int64类型是一样的 类型0值    类型 默认值     bool false   int、float64等数值类型 0   string &quot;&quot;    整数类型的表示 d1:=0x10F //16进制 d2:=0b111	//二进制 d3:=10_000_000 //可以用下划线分割方便观看 10000000 浮点数的表示 //[float64] d1:= .]]></description></item><item><title>Go优雅的处理error</title><link>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E4%BC%98%E9%9B%85%E7%9A%84%E5%A4%84%E7%90%86error/</guid><description>大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
 errors.go wrap.go go的error也就是通过创建一个 错误提示的字符串 的方式，然后通过返回值来返回这个错误，基本每个函数的返回值都标配一个error对象以及函数本身的返回值：
 函数本身返回值 error对象 最简单的创建错误的方式就是通过errors.New来创建：
 func f() error{ return errors.New(&amp;#34;error&amp;#34;) } 下面来看下errors.go的源码，不过10行左右
@@ -53,13 +57,7 @@ go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指�
   开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
 go mod的replace命令主要用来替换原来的包，使用场景有如下几个
   单纯的替换包（用处不大）
-  替换无法下载的包]]></description></item><item><title>Go命令行和相关环境变量</title><link>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid><description>go命令 go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
-go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
-go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
-gofmt -w ./ #格式化当前项目，并且会修改原文件而不是输出到控制台 还有一些其他命令，看看就行
-gofmt test.go #格式化单个文件 gofmt ./viper/ #格式化整个目录文件 gofmt -l ./viper/ #列出哪些文件格式化前后会出现不同(只是列出 不进行格式化) gofmt -w ./viper/ #执行格式化 并且写入源代码 go get 拉取依赖并且编译安装代码的命令
-go list 列出go.mod依赖了哪些库
-go mod mod管理的相关命令</description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>godoc godoc -http=:8000 #开启本地文档服务器 ​
+  替换无法下载的包]]></description></item><item><title>Go文档管理和规范</title><link>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/go%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E5%92%8C%E8%A7%84%E8%8C%83/</guid><description>godoc godoc -http=:8000 #开启本地文档服务器 ​
 Go文档注释规范 因为go的注释即文档，文档都是根据注释生成的，所以文档的详细性和合理性都必须要求注释必须符合一定的规范，这样才可以生成漂亮详细的文档
 文档主要有如下几部分组成:
 组成 作用 Overview 包含包的 import 语句和概要说明 Index 包含包中可见性为 public 的常量、类型、方法、函数的总目录及说明 Constants 项目所有的导出常量 Variables 显示所有全局变量 Functions 显示所有函数 Types 显示所有type Overview 用于整个项目的简单描述，是项目中一级目录下所有包头开始的注释内容的合并，一般将这些信息单独写在doc.go文件中，比如gin的doc.go下的内容为：

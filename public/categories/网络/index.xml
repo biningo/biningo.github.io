@@ -1,4 +1,12 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 20 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>HTTP协议FAQ</title><link>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</guid><description>为什么HTTP/1.1协议不支持服务器端推送 HTTP/1.1规定了只能是 请求-响应 模式，为什么这样设计呢，我个人认为主要有如下几个原因:
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 14 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>TTL和MSL</title><link>/2021/05/14/ttl%E5%92%8Cmsl/</link><pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/14/ttl%E5%92%8Cmsl/</guid><description>TTL Time To Live 指定了IP包允许跳转(允许通过的最大网段数量)的路由器数量，最大值为255，推荐值为64
+TTL在IP数据包中表示
+IP数据包每经过一个路由器其值就会-1，一旦TTL=0路由器就会将该IP数据包丢弃，并向IP包的发送者发送 ICMP time exceeded消息
+TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，一旦出现循环跳转的话就会比较浪费网络资源
+​
+MSL Maximum Segment Lifetime最大报文段生存时间，此时间应该是略大于TTL跳转的时间的，也就是说一旦IP包只要送到对方的机器上，那么此包就一定不会超过MSL，想象一下如果MSL小于TTL那么IP包送到了但是TCP包超时了那么就会比较浪费资源，并且因为TCP包是包含在IP包上的，里面的时间按逻辑上就应该大于等于TTL的
+所以只要经过了MSL时间，那么TCP包就肯定已经被传输线路上的路由器给丢弃了
+​
+参考 TCP/IP</description></item><item><title>HTTP协议FAQ</title><link>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</guid><description>为什么HTTP/1.1协议不支持服务器端推送 HTTP/1.1规定了只能是 请求-响应 模式，为什么这样设计呢，我个人认为主要有如下几个原因:
 客户端和服务器容易实现HTTP协议，简单 当时对页面的实时性，数据量没有现在大 当时并发程度不高 浏览器等客户端以及服务器都是根据HTTP协议进行设计的，所以即使HTTP/1.1能保持TCP的keep-alive一直连接并能被多个HTTP请求复用，但是依然无法实现服务器推送
 即使你自己的服务器程序实现了HTTP推送，有些浏览器不支持那也没办法，因为大家都是遵循协议来的
 即使服务器和客户端都实现了，那么还有很多代理服务器、缓存服务器、CDN服务器等也可能都没有实现这个HTTP推送，所以依赖无法实现推送

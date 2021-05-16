@@ -1,4 +1,12 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>TCP - 标签 - lyer's blog</title><link>/tags/tcp/</link><description>TCP - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 25 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/tcp/" rel="self" type="application/rss+xml"/><item><title>为什么DNS使用UDP?</title><link>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</link><pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</guid><description>DNS协议 在讲解为什么之前我们先来讲解什么是DNS协议，以及DNS协议的一些细节
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>TCP - 标签 - lyer's blog</title><link>/tags/tcp/</link><description>TCP - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 14 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/tcp/" rel="self" type="application/rss+xml"/><item><title>TTL和MSL</title><link>/2021/05/14/ttl%E5%92%8Cmsl/</link><pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/14/ttl%E5%92%8Cmsl/</guid><description>TTL Time To Live 指定了IP包允许跳转(允许通过的最大网段数量)的路由器数量，最大值为255，推荐值为64
+TTL在IP数据包中表示
+IP数据包每经过一个路由器其值就会-1，一旦TTL=0路由器就会将该IP数据包丢弃，并向IP包的发送者发送 ICMP time exceeded消息
+TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，一旦出现循环跳转的话就会比较浪费网络资源
+​
+MSL Maximum Segment Lifetime最大报文段生存时间，此时间应该是略大于TTL跳转的时间的，也就是说一旦IP包只要送到对方的机器上，那么此包就一定不会超过MSL，想象一下如果MSL小于TTL那么IP包送到了但是TCP包超时了那么就会比较浪费资源，并且因为TCP包是包含在IP包上的，里面的时间按逻辑上就应该大于等于TTL的
+所以只要经过了MSL时间，那么TCP包就肯定已经被传输线路上的路由器给丢弃了
+​
+参考 TCP/IP</description></item><item><title>为什么DNS使用UDP?</title><link>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</link><pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88dns%E4%BD%BF%E7%94%A8udp/</guid><description>DNS协议 在讲解为什么之前我们先来讲解什么是DNS协议，以及DNS协议的一些细节
 DNS协议的作用就是建立 域名和IP地址的映射，因为IP地址太长并且没有语义所以需要给IP一个域名，DNS协议的作用就是将域名转化为IP地址，这就是DNS协议的主要功能，当然还有其他功能比如记录CNAME、IP地址负载均衡等
 浏览器在请求一个网址之前需要通过DNS协议获取到这个网址的IP地址这样才可以进行网络通讯建立TCP连接，因为网络中都是以IP地址来识别一个主机的
 那么浏览器向谁请求DNS协议呢？这就是DNS服务器的功劳
@@ -73,7 +81,11 @@ seq号通常需要随机产生，如果都从1开始那么会出现问题，主�
 第三次: B将剩余的数据发送完毕之后就需要发送一个FIN包给A表示”自己的数据发送完毕了，我要断开了“
 第四次: 此时A必须回复这个FIN表示收到了B的断开请求，此时就进入 TIME_WAIT 状态等待一段时间才会断开，B如果收到了A的ACK则断开连接，如果没收到则还会继续发送FIN请求，此刻因为A还处于 TIME_WAIT 状态则会继续回复ACK
 ​
-为什么需要 TIME_WAIT 回复B最后一个FINACK ，让B端关闭连接 重发之前还滞留在网络上数据包的ACK 接受之前还遗留在网络上的数据包，防止对以后的同端口的TCP连接造成影响(因为以后同端口的另外一个TCP连接可能碰巧也在接受同样seq号的数据包) ​
+为什么需要 TIME_WAIT 回复B最后一个FINACK ，让B端关闭连接 接受之前还遗留在网络上的数据包，防止对以后的同端口的TCP连接造成影响，可能另外的应用复用同一个端口，此时对方的FIN包还遗留在网络并且稍后又到达了，那么就会破坏新建立的TCP连接 ​
+TIME_WAIT状态为什么是2MSL的时长 MSL Maximum Segment Lifetime最大报文段生存时间，和IP数据包的那个TTL(Time To Live)不同的是TTL是按照路由器跳数来计算的，超过了一定的跳数则丢弃该IP包，作用是限制IP数据包在计算机网络中的存在的时间。TTL的最大值是255，TTL的一个推荐值是64
+而MSL是按照时间来计算的，超过了一定的时间则TCP报文就会被丢弃
+考虑最坏的情况: A回复了ACK之后进入TIME_WAIT，这个ACK经过了MSL时间丢了，那么B中肯定RTO(RTO&amp;lt;=2MSL)时间到了，于是又回复FIN，这个包最差的情况也是进过了MSL时间之后就丢弃了。所以一来一回就是2MSL就可以保证所有的包都会在网络上消失
+​
 参考 TCP的运输连接管理</description></item><item><title>TCP协议</title><link>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</link><pubDate>Thu, 11 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</guid><description>TCP协议 面向连接、可靠的字节流传输协议 全双工 可相互传递字节流 只可用于 一对一通信 ，不能用于多播和组播 TCP 使用校验和，确认和重传机制来保证可靠传输 TCP 使用滑动窗口机制来实现流量控制，通过动态改变窗口的大小进行拥塞控制 TCP使用 (源地址，源端口，目的地址，目的端口)来标识一个连接 ​
 TCP报文 源端口和目的端口 端口大小为16位，可见端口范围为:0~2^16 也就是[0~65536]
 IP层则用ip地址来标识一台主机，TCP层用端口来标识一个应用，使用(源地址，源端口，目的地址，目的端口)唯一确定一个连接，所以对于IPV4的话单台主机最大的连接数为 2^(32+16+32+16) 个
