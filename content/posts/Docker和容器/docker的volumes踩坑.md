@@ -5,8 +5,6 @@ categories: [Docker和容器]
 tags: [docker,容器]
 ---
 
-​    
-
 ## 挂载volume的行为
 
 `volume`的挂载是 **以宿主机为主** ，主要有如下几个行为可能：

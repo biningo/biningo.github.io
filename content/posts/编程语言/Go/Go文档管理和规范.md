@@ -30,7 +30,11 @@ godoc -http=:8000 #开启本地文档服务器
 
 ### Overview
 
-用于整个项目的简单描述，是**项目中一级目录下所有包头开始的注释内容的合并**，一般将这些信息单独写在`doc.go`文件中，比如`gin`的`doc.go`下的内容为：
+用于整个项目的简单描述，又叫**包文档**
+
+**项目中一级目录下所有包头开始的注释内容的合并，这里需要注意注释和包名一行必须没有空格**
+
+一般如果包注释需要特别多的话则会将这些信息单独写在`doc.go`文件中，此文件专门用来记录包的描述信息，比如`gin`的`doc.go`下的内容为
 
 ```go
 /*
@@ -44,29 +48,48 @@ package gin // import "github.com/gin-gonic/gin"
 
 ### Index
 
-该项目列出了所有导出的结构体、函数、常量等名字以及超链接，用于索引该项目的所有函数、结构体等对象，其详细内容在相应的详细内容上，点击链接就可以看到详细内容
+该项目列出了所有导出的结构体、函数、常量等名字以及超链接，用于索引该项目的所有函数、结构体等对象，其详细内容在相应的详细内容上，点击链接就可以看到具体函数详细的注释内容
+
+### Constants
+
+`const`不可变得常量，需要注释在`const`之上
+
+```go
+//My Name
+const (
+	NAME="lyer"
+    AGE=18
+)
+```
+
+### Variables
+
+`var`全局变量，和`const`注释规则一致
+
+```go
+//My Name
+var(
+	NAME="lyer"
+	AGE=18
+)
+```
 
 ### 具体内容注释
 
-比如有一个函数、结构体、常量、全局变量等，注释在函数声明的上面，并且不能有空行这样才会显示在文档上
+比如有一个函数、结构体、常量、全局变量等，注释在函数声明的上面，并且不能有空行这样才会显示在文档上，结构体也仅仅会展示公共属性
 
 ```go 
+//BSTree is an ordered set items
+type BSTree struct {
+	root   *node 
+	Length int                        //number of nodes
+	comp   func(a, b interface{}) int //comparison function <0 0 >0 < = >
+}
+
 //Say Hello func
 func SayHello() {
 	log.Println("hello")
 }
-
-//Doc常量
-const (
-	SName = "lyer"
-	SAge = 18
-)
-
-//var name遍历
-/*
-dsdad这样也可
-*/
-var Vname = "dsa"
 ```
 
 ​    
