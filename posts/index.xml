@@ -1,4 +1,24 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 19 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>Nginx中server_name和HTTP协议中的Host</title><link>/2021/05/19/nginx%E4%B8%ADserver_name%E5%92%8Chttp%E5%8D%8F%E8%AE%AE%E7%9A%84host/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/nginx%E4%B8%ADserver_name%E5%92%8Chttp%E5%8D%8F%E8%AE%AE%E7%9A%84host/</guid><description><![CDATA[HTTP协议中的Host HTTP请求头部有一个Host字段可以指定目标主机的域名或则主机名，但是最终域名不是需要转化为IP:Port吗？IP:Port不就是可以标识唯一应用了吗？ 那为啥HTTP请求头还需要一个Host字段来标识出域名呢？
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - lyer's blog</title><link>/posts/</link><description>所有文章 | lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 21 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/posts/" rel="self" type="application/rss+xml"/><item><title>github上的docker镜像仓库</title><link>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</link><pubDate>Fri, 21 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</guid><description>github镜像仓库 github上也提供了docker镜像仓库服务，分为两类:
+docker.pkg.github.com 仓库关联的镜像仓库，必须对应一个仓库 ghcr.io 仓库无关的镜像仓库，和用户关联 tag格式分别为:
+docker.pkg.github.com/OWNER/REPOSITORY/IMAGE_NAME:VERSION ghcr.io/OWNER/IMAGE_NAME:VERSION 登入的密码就是github上创建的TOKEN，注意token必须有读写package的相关权限，我把token记录在了环境变量中，也可以记录在指定的文件里，将echo替换为cat即可
+echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://docker.pkg.github.com -u biningo --password-stdin echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://ghcr.io -u biningo --password-stdin ​
+参考 Working with the Docker registry
+Working with the Container registry</description></item><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>lazydocker https://github.com/jesseduffield/lazydocker
+终端界面管理Docker
+portainer https://github.com/portainer/portainer
+Web界面可视化管理Docker和Kubernetes集群
+harbor https://github.com/goharbor/harbor
+企业级docker私有仓库
+DockerSlim https://github.com/docker-slim/docker-slim
+Docker镜像瘦身，镜像安全等
+ctop https://github.com/bcicen/ctop
+Docker终端容器监控工具
+参考 推荐5款好用的开源Docker工具</description></item><item><title>ResilioSync共享文件</title><link>/2021/05/20/resiliosync%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/resiliosync%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6/</guid><description>参考 使用 Resilio Sync 进行同步</description></item><item><title>netcat和socat网络小工具</title><link>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>netcat网络瑞士军刀 netcat是一个网络小工具，可以用来监听端口，数据回发(简单的echo)，TCP端口扫描，探测网络，网络测速等
+echo监听端口和连接端口
+#server -l表示监听 nc -l 8000 #监听8000端口 #client nc localhost 8000 #连接本地的8000端口 #然后直接输入数据对方就可以收到了 #监听UDP端口 nc -u -l 8080 #请求UDP端口 nc -u localhost 8080 传输文件
+#server nc -l 1234 &amp;gt; filename.out #client nc -N localhost 1234 &amp;lt; filename.in #-N表示如果接受到EOF则断开 端口扫描和检测端口
+# -z表示只是检测端口 不需要发送数据 # -v表示显示详细信息 # -w表示指定超时时间s nc -zv host.example.com 20-30 #[20,30] nc -zv icepan.cloud 9000 #端口检测 telnet效果一样 nc -zv -w 5 icepan.cloud 1111 #检测端口设置超时时间为5s 结合pv网络测速（pv用于测量任何操作的数度，可以以管道符来测量）
+#server nc -l 8080 &amp;lt; /dev/zero #给这个传输无限多个空白字符串 #client nc icepan.</description></item><item><title>Nginx中server_name和HTTP协议中的Host</title><link>/2021/05/19/nginx%E4%B8%ADserver_name%E5%92%8Chttp%E5%8D%8F%E8%AE%AE%E7%9A%84host/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/nginx%E4%B8%ADserver_name%E5%92%8Chttp%E5%8D%8F%E8%AE%AE%E7%9A%84host/</guid><description><![CDATA[HTTP协议中的Host HTTP请求头部有一个Host字段可以指定目标主机的域名或则主机名，但是最终域名不是需要转化为IP:Port吗？IP:Port不就是可以标识唯一应用了吗？ 那为啥HTTP请求头还需要一个Host字段来标识出域名呢？
 这里涉及到 虚拟主机 的概念，即一台主机(一个IP) 可以拥有多个域名，每个域名都可以在80同端口下部署HTTP应用，客户端看访问应用则以为应用是一台独立的主机一样，但是实际上多个应用是共享同一台主机，只不过他们对应的域名不一样罢了，所以也叫虚拟主机
 如果一个请求发送到服务器上的80端口，那么监听在80端口上的应用服务器会判断HTTP请求报文中的Host是不是自己的，如果是则接收并且响应，不是则丢弃。或则直接部署一个网关(Nginx)，网关捕获所有请求然后检查HTTP请求头的Host字段根据配置的 Host规则 转发到不同的后端服务器上即可
 当然也可以将多个应用分别部署到不同的端口上，只是这样比较麻烦并且占用了端口，有时候还违背了一些默认规则，比如HTTP应用的默认端口80，如果我有两个网站那么我就不得不将其他网站的端口给修改了，这样会造成用户访问不方便
@@ -38,48 +58,4 @@ unsafe.Pointer指针相当于void*，其它所有类型的指针都可以转化�
 #备份 lyer test 库 mysqldump -uroot -p lyer --databases lyer test &gt; ./db.sql 备份指定数据库中的表，恢复时必须use到指定的数据库下
 #备份test库中的a b c 表 mysqldump -uroot -p test a b c &gt; ./db.sql 恢复数据
 mysql&gt; source /home/lyer/tmp/temp/db.sql ​
-MySql备份脚本 #!/bin/bash # ------------------------------------------------------------------------------- # FileName: mysql_backup.sh  # Describe: Used for database backup # Revision: 1.0 # Date: 2020/08/11 # Author: wang # 设置mysql的登录用户名和密码(根据实际情况填写) mysql_user = &#34;root&#34; mysql_password = &#34;yourpassword&#34; mysql_host = &#34;localhost&#34; mysql_port = &#34;3306&#34; backup_dir = /data/mysql_backup dt=date +&#39;%Y%m%d_%H%M&#39; echo &#34;Backup Begin Date:&#34; $(date +&#34;%Y-%m-%d %H:%M:%S&#34;) # 备份全部数据库 mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password -R -E --all-databases --single-transaction &gt; $backup_dir/mysql_backup_$dt.]]></description></item><item><title>MySql运维</title><link>/2021/05/09/mysql%E8%BF%90%E7%BB%B4/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E8%BF%90%E7%BB%B4/</guid><description><![CDATA[MySql数据目录初始化 第一次启动MySql的时候需要进行初始化，也就是初始化数据存放的目录（注意这个目录必须为空，或则不存在）这个目录路径可以在配置文件里面配置
-[mysqld] port=3306 datadir=/home/lyer/tmp/data 默认的数据存放路径是:
-$MYSQL_HOME/data MySql服务器启动会读取配置文件my.cnf，配置文件查找顺序为:
-/etc/my.cnf /etc/mysql/my.cnf $MYSQL_HOME/my.cnf --default-extra-file #命令行自定配置文件路径 ~/.my.cnf 服务器会依次查找这些路径去读取并且合并配置
-下面是数据库初始化命令
-mysqld --initialize #初始化 会打印初始的root密码在终端 第一次登入需要密码 mysqld --initialize-insecure #初始化并且设置root密码为空 也就是初次不需要密码 初始化之后我们需要登入到数据库，并且需要修改root密码为自定义的密码
-mysql -uroot -p #没有密码则回车即可 有初始密码则需要输入 alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;55555&#39;; 如果觉得每次输入用户密码指定host麻烦的话则可以在my.conf里面配置客户端
-[client] host=127.0.0.1 user=root password=55555 这样的话直接输入mysql就会读取客户端配置，这样就不需要输入密码了
-​
-MySql服务启动、停止 一般通过$MYSQL_HOME/support-files/mysql.server服务启动脚本启动，此脚本还会启动一个监控进程mysqld-safe，此进程会监控mysql服务的运行状态，如果出错了则会将错误日志记录起来xxx.err，还会帮助mysql服务重启
-$MYSQL_HOME/support-files/mysql.server #不带参数执行可以查看Useage mysql.server start #启动 (第一次启动服务器需要首先初始化数据库) mysql.server status #查看mysql服务状态 mysql.server stop ​
-用户管理 和用户相关的信息都保存在mysql.user表中，密码都是加密存储的
-select host,user from user; User列表示用户名，Host列表示允许连接的客户端主机地址，为localhost则表示只允许本地连接
-创建一个用户
-create user lyer identified by &#39;66666&#39;; --不指定host的话默认全部可以连 create user &#39;lyer&#39;@&#39;%&#39; identified by &#39;55555&#39;; --%表示允许全部IP连接 create user &#39;lyer&#39;@&#39;112.]]></description></item><item><title>基于Redis分布式锁实现思路</title><link>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</link><pubDate>Wed, 05 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</guid><description>为什么需要分布式锁 单机应用中(也就是一台机器中)的锁用于控制当前程序多个线程并发而引发的资源争夺问题，但是当应用场景扩展到了分布式环境就不一样了，这样的锁就没用了。因为每台机器都是独立的，如果还是之前的锁的话只能保证本机器不会引发资源竞争问题，分布式环境下相当于每台机器都有一个自己独立的锁，所以无法避免资源竞争问题
-这个时候就需要将这把锁保存到第三方中 （比如Redis），多台机器同时到Redis中取抢锁，这就可以保证分布式环境下争抢的是同一把锁
-​
-Redis分布式锁实现思路 首先，Redis里面并没有锁的概念。所谓的锁其实就是Redis里的一个key，加锁就是设置这个key，释放锁就是删除这个key
-一个进程如果在请求加锁的过程中发现这个key已经存在了则表示加锁失败，这个锁已经被别人持有了。如果发现这个key不存在则表示这个锁没有被人持有
-Redis中可以借助如下命令来实现判断如果没有锁再加锁操作:
-#此命令表示如果key不存才会设置key并且返回1 如果是普通的set则会覆盖 setnx lock 1 单纯的这样实现分布式锁貌似太简单了，并且有个问题: 死锁
-也就是说如果一台机器设置了锁，在执行过程中宕机了或出错了，那么这把锁将永远得不到释放，其他机器进程就永远无法获取到锁，引发死锁问题
-于是我们可以借助Redis的key过期功能来给锁设置一个过期时间，这样就不用怕锁永远得不到释放了。同时需要注意设置key以及对应的过期时间这一系列动作应该是原子的，否则在设置key时还没来得及设置过期时间这台机器又宕机了还是会引发死锁问题。
-综上，我们使用Redis提供的set命令以及参数来实现
-#如果key不存在则设置lock并且过期时间为10s (nx表示不存在才会设置 存在则失败返回0) set lock 1 ex 10 nx 但是这样还会引发一个锁被错误释放问题
-想象一下下面的场景:
-A加锁执行，但是在莫个操作上面阻塞很久，此时锁过期了被自动释放 B获得锁继续执行 在B执行过程中A从阻塞中恢复了，并且A执行完毕了 于是A再次释放了锁（注意此时A释放的是B设置的锁）但是此时B还在执行中 此时C过来了，于是C就抢到锁了 这样就引发了一个错误: 在B加锁执行过程中，B的锁被错误的释放了
-为了解决锁被错误释放的问题，我们需要给锁设置一个唯一标识，这个锁标识了是哪个进程加的锁，并且只有加锁的进程本身才能释放这把锁
-set lock &amp;lt;uuid&amp;gt; ex 10 nx 实现思路就是线程在释放锁的时候获取一下key对应的value也就是锁的标识，判断一下是否是自己的那把锁。
-如果不是自己的说明自己的锁已经超时被自动释放了则不会再次释放别人的锁，如果是自己的则进行释放
-完整代码:
-//redis分布式锁的实现 type Lock struct { RedisClient *redis.Client Key string UUID string Expire time.Duration } func NewLock(key string, expire time.Duration) *Lock { uuid, err := exec.</description></item><item><title>C的柔性数组</title><link>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</link><pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/01/c%E7%9A%84%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/</guid><description><![CDATA[什么是柔性数组  结构中最后一个元素允许是未知大小的数组，这个数组就是柔性数组
- 但结构中的柔性数组前面必须至少一个其他成员,柔性数组成员允许结构中包含一个大小可变的数组，sizeof返回的这种结构大小不包括柔性数组的内存。包含柔数组成员的结构体用malloc函数进行内存的动态分配,且分配的内存应该大于结构的大小以适应柔性数组的预期大小
-​
-为什么需要柔性数组 C中的结构体都是固定大小的，但是有些时候我们需要一个可变大小的结构体，比如有时候需要在结构体中存放一个长度动态的字符串
-typedef struct mystr { int len; //记录字符串长度  char *data;//底层的char数组指针 }mystr; 我们需要为data malloc一段内存，然后通过这个指针访问这段内存。
-首先我们按照常规的做法，不做任何处理，直接malloc，如下
-typedef struct mystr { int len; char* data; }mystr; int main(int argc, char const *argv[]) { char* c = &#34;hello,world&#34;; //分别分配内存  mystr* s = (mystr*)malloc(sizeof(mystr)); s-&gt;data = (char*)malloc(strlen(c)+1); //+1是为\0分配的 strlen不会将\0计算进来  strcpy(s-&gt;data,c); s-&gt;len = strlen(s-&gt;data); printf(&#34;len:%d data:%s\n&#34;,s-&gt;len,s-&gt;data); //11 hello,world  //分别释放空间  free(s-&gt;data); free(s); return 0; } 可以看到上面的操作比较麻烦，结构体和内部的data指针分配内存和释放内存操作都是分开的，data数据区和结构体不是连续的两块内存，这样会带来两个问题:]]></description></item><item><title>git原理</title><link>/2021/04/30/git%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/30/git%E5%8E%9F%E7%90%86/</guid><description>git三大对象 git三大对象分别为:
-blob tree commit 下面来讲述这些对象的细节:
-blob 记录了文件的实际内容，每次add都会为每个文件生成一个blob，暂存区有个index指针会指向最新add到暂存区的几个blob 每次进行commit时都会生成两个对象: tree和commit
-tree 记录了index指针指向的几个blob的hash值还有对应的文件信息和文件权限
-commit记录了此次commit的作者信息和对应的tree节点，同时还会记录上一个commits
-​
-参考 这才是真正的Git——Git内部原理
-三道 google 风格 git 面试题及其解答</description></item></channel></rss>
+MySql备份脚本 #!/bin/bash # ------------------------------------------------------------------------------- # FileName: mysql_backup.sh  # Describe: Used for database backup # Revision: 1.0 # Date: 2020/08/11 # Author: wang # 设置mysql的登录用户名和密码(根据实际情况填写) mysql_user = &#34;root&#34; mysql_password = &#34;yourpassword&#34; mysql_host = &#34;localhost&#34; mysql_port = &#34;3306&#34; backup_dir = /data/mysql_backup dt=date +&#39;%Y%m%d_%H%M&#39; echo &#34;Backup Begin Date:&#34; $(date +&#34;%Y-%m-%d %H:%M:%S&#34;) # 备份全部数据库 mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password -R -E --all-databases --single-transaction &gt; $backup_dir/mysql_backup_$dt.]]></description></item></channel></rss>
