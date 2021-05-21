@@ -1,4 +1,14 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker和容器 - 分类 - lyer's blog</title><link>/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/</link><description>Docker和容器 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 07 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker和容器 - 分类 - lyer's blog</title><link>/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/</link><description>Docker和容器 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 20 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>lazydocker https://github.com/jesseduffield/lazydocker
+终端界面管理Docker
+portainer https://github.com/portainer/portainer
+Web界面可视化管理Docker和Kubernetes集群
+harbor https://github.com/goharbor/harbor
+企业级docker私有仓库
+DockerSlim https://github.com/docker-slim/docker-slim
+Docker镜像瘦身，镜像安全等
+ctop https://github.com/bcicen/ctop
+Docker终端容器监控工具
+参考 推荐5款好用的开源Docker工具</description></item><item><title>Docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
    host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
 将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
  docker cp命令先将容器内的数据copy到宿主机然后再进行挂载 在docker-entrypoint.sh等脚本中执行创建文件和文件夹等相关命令，因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了  ​

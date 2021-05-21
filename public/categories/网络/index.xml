@@ -1,4 +1,9 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 14 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>TTL和MSL</title><link>/2021/05/14/ttl%E5%92%8Cmsl/</link><pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/14/ttl%E5%92%8Cmsl/</guid><description>TTL Time To Live 指定了IP包允许跳转(允许通过的最大网段数量)的路由器数量，最大值为255，推荐值为64
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 分类 - lyer's blog</title><link>/categories/%E7%BD%91%E7%BB%9C/</link><description>网络 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 19 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>netcat和socat网络小工具</title><link>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>netcat网络瑞士军刀 netcat是一个网络小工具，可以用来监听端口，数据回发(简单的echo)，TCP端口扫描，探测网络，网络测速等
+echo监听端口和连接端口
+#server -l表示监听 nc -l 8000 #监听8000端口 #client nc localhost 8000 #连接本地的8000端口 #然后直接输入数据对方就可以收到了 #监听UDP端口 nc -u -l 8080 #请求UDP端口 nc -u localhost 8080 传输文件
+#server nc -l 1234 &amp;gt; filename.out #client nc -N localhost 1234 &amp;lt; filename.in #-N表示如果接受到EOF则断开 端口扫描和检测端口
+# -z表示只是检测端口 不需要发送数据 # -v表示显示详细信息 # -w表示指定超时时间s nc -zv host.example.com 20-30 #[20,30] nc -zv icepan.cloud 9000 #端口检测 telnet效果一样 nc -zv -w 5 icepan.cloud 1111 #检测端口设置超时时间为5s 结合pv网络测速（pv用于测量任何操作的数度，可以以管道符来测量）
+#server nc -l 8080 &amp;lt; /dev/zero #给这个传输无限多个空白字符串 #client nc icepan.</description></item><item><title>TTL和MSL</title><link>/2021/05/14/ttl%E5%92%8Cmsl/</link><pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/14/ttl%E5%92%8Cmsl/</guid><description>TTL Time To Live 指定了IP包允许跳转(允许通过的最大网段数量)的路由器数量，最大值为255，推荐值为64
 TTL在IP数据包中表示
 IP数据包每经过一个路由器其值就会-1，一旦TTL=0路由器就会将该IP数据包丢弃，并向IP包的发送者发送 ICMP time exceeded消息
 TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，一旦出现循环跳转的话就会比较浪费网络资源
@@ -96,12 +101,4 @@ ARP响应
 ​
 相关命令 arp命令
 arp -a #获取本机的ARP缓存 cat /proc/net/arp #也可以获取本机ARP缓存 查看本机MAC地址的方法
-cat /sys/class/net/eth0/address ifconfig ​</description></item><item><title>DNS协议</title><link>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</link><pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/26/dns%E5%8D%8F%E8%AE%AE/</guid><description>DNS作用 解析域名为IP (网络上只能通过IP通讯) 负载均衡 (一个域名绑定多个IP,采用轮询方式访问多个IP) 灵活配置IP (当要更换IP时直接换IP,依旧不影响原来域名的访问) ​
-DNS记录类型 下面列出常见的记录类型
-类型 解释 A IP地址记录Address 记录域名对应的IP AAAA IPV6的地址记录 NS DNS服务器记录（Name Server），记录上一级DNS服务器地址，该记录只能设置为域名，不能设置为IP地址 CNAME 规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转 SRV 用于服务发现和负载均衡 ​
-DNS查询过程 ​
-本地接受到DNS查询返回的报文之后就会调用操作系统的DNS报文解析程序glibc/musl来解析报文获取IP地址，其配置文件为/etc/resolv.conf
-本地还有/etc/hosts文件也可以记录IP和域名的映射关系，查询DNS服务器之前会先查询这个文件以及本地DNS缓存
-​
-dig命令 该命令是dns查询工具，类似的工具还有nslookup
-dig cname www.baidu.com #查询www.baidu.com的CNAME跳转到那个URL dig ns baidu.com #查询哪个DNS服务器记录了这个域名解析地址 dig baidu.com #查询baidu.com的IP地址(A记录) dig +shore baidu.com #返回简短信息 dig +trace +additional baidu.</description></item></channel></rss>
+cat /sys/class/net/eth0/address ifconfig ​</description></item></channel></rss>
