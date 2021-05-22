@@ -108,6 +108,10 @@ $ go test -covermode=count -coverprofile=../src/cover/count.out
 $ go tool cover -html=../src/cover/count.out #web页面展示
 ```
 
+```bash
+go test -race -coverprofile=coverage -covermode=atomic -v
+```
+
 下面看一个案例:
 
 ```go

@@ -3,7 +3,7 @@ title: ResilioSync共享文件
 date: 2021-05-20
 categories: [小工具]
 tags: [Linux,工具]
-defat: true
+draft: true
 ---
 
 ## 参考
