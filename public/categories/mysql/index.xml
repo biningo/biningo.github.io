@@ -1,4 +1,31 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Mysql - 分类 - lyer's blog</title><link>/categories/mysql/</link><description>Mysql - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 09 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mysql/" rel="self" type="application/rss+xml"/><item><title>MySql备份与恢复</title><link>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid><description><![CDATA[mysqldump备份与恢复 备份所有数据库--all-databases
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Mysql - 分类 - lyer's blog</title><link>/categories/mysql/</link><description>Mysql - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mysql/" rel="self" type="application/rss+xml"/><item><title>MySql事务和锁</title><link>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</guid><description>为什么需要有事务 事务的出现就是为了 保障数据一致性，将多条逻辑相关的SQL语句当做一件事情来做，要么都成功要么都失败
+最经典的场景就是转账业务: 当A给B转账时，B账户余额增加的同时必须保证A账户余额减少，也就是说必须保证A和B账户的总钱款大小前后一致，两个账户的钱总量不会多也不会少
+事务的执行过程中最需要关注的就是 事务并行和事务隔离 问题，就是说多个事务必须是隔离的，事务A不能影响事务B的执行，这也是事务中最难处理和最难理解的一部分
+​
+事务四大特性ACID 原子性 Atomicity
+事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
+一致性 Consistency
+一致性是指事务将数据库从一种一致性状态变为下一种一致性状态，在事务开始之前和之后，数据库的完整性约束没有被破坏
+比如转账的例子，两个账户的钱款总量在转账前后还是一致的，如果B余额增加了但是A余额没有扣除那么就会凭白无故多出一部分钱来，这就引发钱款不一致的状况了
+再比如A的余额为0了，此时A还要给别人转账就不合适了，因为余额必须&amp;gt;=0。如果余额出现负数，这也导致了数据不一致状况
+还有年龄不能为负数，红绿灯只有三种颜色，人民币最大面值为100等，这些约束都必须要符合真实世界的情况，都必须和真实世界保持一致性
+隔离性 Isolation
+每个事务都是隔离的，互相不影响，一共有4个隔离级别
+持久性 Durability
+事务一旦提交，它对数据库中的数据的改变就应该是永久性的，必须持久化到磁盘
+​
+四大隔离级别 1、读未提交 Read Uncommitted
+一个事务还没提交时，它做的变更对他事务可见
+脏读 不可重复读 幻读 2、读已提交 Read Committed Oracle默认的隔离级别
+一个事务只有提交时它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况，也就是不可重复读
+不可重复读 幻读 3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
+一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读问题
+但是还是存在 幻读问题
+4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
+​
+事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
+A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
+时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item><item><title>MySql备份与恢复</title><link>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid><description><![CDATA[mysqldump备份与恢复 备份所有数据库--all-databases
 #备份所有数据库 mysqldump -uroot -p --all-databases &gt; ./all.sql 备份指定的数据库
 #备份 lyer test 库 mysqldump -uroot -p lyer --databases lyer test &gt; ./db.sql 备份指定数据库中的表，恢复时必须use到指定的数据库下
 #备份test库中的a b c 表 mysqldump -uroot -p test a b c &gt; ./db.sql 恢复数据
@@ -17,27 +44,7 @@ $MYSQL_HOME/support-files/mysql.server #不带参数执行可以查看Useage mys
 用户管理 和用户相关的信息都保存在mysql.user表中，密码都是加密存储的
 select host,user from user; User列表示用户名，Host列表示允许连接的客户端主机地址，为localhost则表示只允许本地连接
 创建一个用户
-create user lyer identified by &#39;66666&#39;; --不指定host的话默认全部可以连 create user &#39;lyer&#39;@&#39;%&#39; identified by &#39;55555&#39;; --%表示允许全部IP连接 create user &#39;lyer&#39;@&#39;112.]]></description></item><item><title>MySql事务</title><link>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E4%BA%8B%E5%8A%A1/</guid><description>更新中&amp;hellip;
-事务四大特性ACID 原子性 Atomicity
-事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
-一致性 Consistency
-同一个事务中所有操作要么全部成功，要么全部失败
-隔离性 Isolation
-每个事务都是隔离的，互相不影响，一共有4个隔离级别
-持久性 Durability
-事务一旦提交，它对数据库中的数据的改变就应该是永久性的，不能回滚
-​
-四大隔离级别 1、读未提交 Read Uncommitted
-一个事务还没提交时，它做的变更对他事务可见
-脏读、脏写、不可重复读、幻读 2、读已提交 Read Committed Oracle默认的隔离级别
-一个事务只有提交时WW候它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况
-不可重复读 幻读 3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
-一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读、幻读问题
-4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
-​
-事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
-A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
-时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item><item><title>MySql约束</title><link>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</guid><description><![CDATA[约束分类 约束就是给字段设置一定的规则，约束这个字段 主要有如下几类约束
+create user lyer identified by &#39;66666&#39;; --不指定host的话默认全部可以连 create user &#39;lyer&#39;@&#39;%&#39; identified by &#39;55555&#39;; --%表示允许全部IP连接 create user &#39;lyer&#39;@&#39;112.]]></description></item><item><title>MySql约束</title><link>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</link><pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/19/mysql%E7%BA%A6%E6%9D%9F/</guid><description><![CDATA[约束分类 约束就是给字段设置一定的规则，约束这个字段 主要有如下几类约束
  主键约束 外键约束 非空约束 唯一约束 默认值约束 检查约束  ​
 主键约束 主键约束是非空的，最好使用 AUTO_INCREMENT来自动增加防止重复，并且能用int就不要用 bigint ，因为这和索引有关系，主键数据越小越好 如果一张表没有设置主键，那么Mysql就会拿一个非空约束字段当做主键，如果都没有则会自己生成一个RowID的列作主键
 CREATE TABLE tb( id int PRIMARY KEY AUTO_INCREMENT ) CREATE TABLE tb( id int AUTO_INCREMENT, name varchar(20), PRIMARY KEY pk(id) ) #添加主键约束 ALTER TABLE 表名 ADD CONSTRAINT 约束名 PRIMARY KEY(列名); #删除主键约束 ALTER TABLE 表名 DROP PRIMARY KEY 约束名; ​
