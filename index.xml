@@ -1,9 +1,43 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 22 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Go中的slice</title><link>/2021/05/22/go%E4%B8%AD%E7%9A%84slice/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/22/go%E4%B8%AD%E7%9A%84slice/</guid><description>数组 数组值拷贝
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Go处理error</title><link>/2021/05/23/go%E5%A4%84%E7%90%86error/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/go%E5%A4%84%E7%90%86error/</guid><description><![CDATA[大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
+ errors.go wrap.go  go的error也就是通过创建一个错误提示的字符串的方式，然后通过返回值来返回这个错误，除非这个函数能保证一定能执行成功，否则每个函数都必须返回一个error
+func f() error{ return errors.New(&#34;error&#34;) //返回error接口 } 下面来看下errors/errors.go的源码，不过10行左右
+func New(text string) error { return &amp;errorString{text} //返回errorString指针 } //实现了error接口 type errorString struct { s string } //获取错误字符串的方法 func (e *errorString) Error() string { return e.s } ​
+自定义error 我们只需要实现error接口也就是重写Error()方法即可自定义错误
+type ZeroDivisionError struct { msg string code int } func (e ZeroDivisionError) Error() string { return fmt.Sprintf(&#34;[%d]:%s&#34;, e.code, e.msg) } type NullPointerError struct { msg string } func (e NullPointerError) Error() string { return fmt.]]></description></item><item><title>MySql事务和锁</title><link>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</guid><description>为什么需要有事务 事务的出现就是为了 保障数据一致性，将多条逻辑相关的SQL语句当做一件事情来做，要么都成功要么都失败
+最经典的场景就是转账业务: 当A给B转账时，B账户余额增加的同时必须保证A账户余额减少，也就是说必须保证A和B账户的总钱款大小前后一致，两个账户的钱总量不会多也不会少
+事务的执行过程中最需要关注的就是 事务并行和事务隔离 问题，就是说多个事务必须是隔离的，事务A不能影响事务B的执行，这也是事务中最难处理和最难理解的一部分
+​
+事务四大特性ACID 原子性 Atomicity
+事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
+一致性 Consistency
+一致性是指事务将数据库从一种一致性状态变为下一种一致性状态，在事务开始之前和之后，数据库的完整性约束没有被破坏
+比如转账的例子，两个账户的钱款总量在转账前后还是一致的，如果B余额增加了但是A余额没有扣除那么就会凭白无故多出一部分钱来，这就引发钱款不一致的状况了
+再比如A的余额为0了，此时A还要给别人转账就不合适了，因为余额必须&amp;gt;=0。如果余额出现负数，这也导致了数据不一致状况
+还有年龄不能为负数，红绿灯只有三种颜色，人民币最大面值为100等，这些约束都必须要符合真实世界的情况，都必须和真实世界保持一致性
+隔离性 Isolation
+每个事务都是隔离的，互相不影响，一共有4个隔离级别
+持久性 Durability
+事务一旦提交，它对数据库中的数据的改变就应该是永久性的，必须持久化到磁盘
+​
+四大隔离级别 1、读未提交 Read Uncommitted
+一个事务还没提交时，它做的变更对他事务可见
+脏读 不可重复读 幻读 2、读已提交 Read Committed Oracle默认的隔离级别
+一个事务只有提交时它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况，也就是不可重复读
+不可重复读 幻读 3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
+一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读问题
+但是还是存在 幻读问题
+4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
+​
+事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
+A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
+时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</description></item><item><title>Go中的slice</title><link>/2021/05/22/go%E4%B8%AD%E7%9A%84slice/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/22/go%E4%B8%AD%E7%9A%84slice/</guid><description>数组 数组值拷贝
 func main(){ a1:=[...]int{1,2,3} a2:=a1 log.Println(a1,a1[0]) log.Println(a2,a2[0]) //也可以通过下标访问 a2[0] = 10 log.Println(a) //a[0]=1 } 数组指针传递
 //通过指针访问数组 func main(){ a:=[...]int{1,2,3} a2:=&amp;amp;a log.Println(a,a[0]) log.Println(a2,a2[0]) a2[0] = 10 log.Println(a) //a[0]=10 } ​
 len和cap的区别 len 代表底层数组可访问的范围，用索引访问不可越过这个界限
 cap 代表底层数组的实际空间长度，不可用索引访问，如果append 元素时没有超过这个cap，则不再创建底层数组，直接在len空间后面扩展。否则开辟新的空间，同时增大cap（这里有一个增大规则），所以如果要频繁的扩容，适当设置大一些的cap能减少开销的，设置大的cap是为了防止多次扩容拷贝造成开销
-func main(){ slice1 := []int{1,2,3} //len=3 cap=3 slice2 := make([]int,2) //len=2 cap=2 slice3 := make([]int,2,4) //len=2 cap=4 } func main(){ arr:=make([]int,2,10) // len=2 cap=10 arr[0]=1 arr[1]=2 //arr[2]=3 //报错 // len=6 cap=10 arr = arr[:6] //扩容,不会再申请空间 arr[2]=3 // [1,2,3,0,0,0] //会在len后面添加,如果len&amp;gt;cap则会进行扩容 此处不会扩容 arr = append(arr,888) // len=7 cap=10 //arr=arr[:11] //报错 超过cap的大小，此时必须用过append进行扩容 } func main(){ //下面的切片引用切片 指向同一个底层数组 cap右界限都是和父亲一样的 a1 :=[]int{1,2,3,4,5,6,7,8} // len=8 cap=8 a2 :=a1[:3] //[1,2,3] len=3 cap=8 a3 :=a1[:5] //[1,2,3,4,5] len=5 cap=8 } ​</description></item><item><title>github上的docker镜像仓库</title><link>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</link><pubDate>Fri, 21 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</guid><description>github镜像仓库 github上也提供了docker镜像仓库服务，分为两类:
+func main(){ slice1 := []int{1,2,3} //len=3 cap=3 slice2 := make([]int,2) //len=2 cap=2 slice3 := make([]int,2,4) //len=2 cap=4 } func main(){ arr:=make([]int,2,10) // len=2 cap=10 arr[0]=1 arr[1]=2 //arr[2]=3 //报错 // len=6 cap=10 arr = arr[:6] //扩容,不会再申请空间 arr[2]=3 // [1,2,3,0,0,0] //会在len后面添加,如果len&amp;gt;cap则会进行扩容 此处不会扩容 arr = append(arr,888) // len=7 cap=10 //arr=arr[:11] //报错 超过cap的大小，此时必须用过append进行扩容 } func main(){ //下面的切片引用切片 指向同一个底层数组 cap右界限都是和父亲一样的 a1 :=[]int{1,2,3,4,5,6,7,8} // len=8 cap=8 a2 :=a1[:3] //[1,2,3] len=3 cap=8 a3 :=a1[:5] //[1,2,3,4,5] len=5 cap=8 } ​</description></item><item><title>Go并发模式和channel</title><link>/2021/05/22/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E5%92%8Cchannel/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/22/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E5%92%8Cchannel/</guid><description><![CDATA[channel实现互斥锁 传统的sync.Mutex互斥锁
+//如果不加锁那么最终结果可能不是10000 func main() { count := 0 wg := sync.WaitGroup{} mu := sync.Mutex{} for i := 0; i &lt; 10000; i++ { wg.Add(1) go func() { mu.Lock() count++ mu.Unlock() wg.Done() }() } wg.Wait() fmt.Println(count) //10000 } channel实现互斥锁
+func main() { count := 0 wg := sync.WaitGroup{} //channel的大小表示资源数量 1表示只允许一个goroutine加锁 	lock := make(chan struct{}, 1) for i := 0; i &lt; 10000; i++ { wg.Add(1) go func() { lock &lt;- struct{}{} //加锁 	count++ &lt;-lock //解锁 	wg.]]></description></item><item><title>github上的docker镜像仓库</title><link>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</link><pubDate>Fri, 21 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</guid><description>github镜像仓库 github上也提供了docker镜像仓库服务，分为两类:
 docker.pkg.github.com 仓库关联的镜像仓库，必须对应一个仓库 ghcr.io 仓库无关的镜像仓库，和用户关联 tag格式分别为:
 docker.pkg.github.com/OWNER/REPOSITORY/IMAGE_NAME:VERSION ghcr.io/OWNER/IMAGE_NAME:VERSION 登入的密码就是github上创建的TOKEN，注意token必须有读写package的相关权限，我把token记录在了环境变量中，也可以记录在指定的文件里，将echo替换为cat即可
 echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://docker.pkg.github.com -u biningo --password-stdin echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://ghcr.io -u biningo --password-stdin ​
@@ -38,30 +72,4 @@ TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，
 MSL Maximum Segment Lifetime最大报文段生存时间，此时间应该是略大于TTL跳转的时间的，也就是说一旦IP包只要送到对方的机器上，那么此包就一定不会超过MSL，想象一下如果MSL小于TTL那么IP包送到了但是TCP包超时了那么就会比较浪费资源，并且因为TCP包是包含在IP包上的，里面的时间按逻辑上就应该大于等于TTL的
 所以只要经过了MSL时间，那么TCP包就肯定已经被传输线路上的路由器给丢弃了
 ​
-参考 TCP/IP</description></item><item><title>Go工具链</title><link>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E5%B7%A5%E5%85%B7%E9%93%BE/</guid><description>go get和go install go1.6之后，go get命令的设计主要用于追加go.mod的依赖包，如下:
-go get github.com/go-redis/redis/v8 #如果不添加版本的话就在最新的版本 go get github.com/gin-gonic/gin@v1.7.0 #可以添加版本 当然，也可以在go.mod直接添加依赖或则删除依赖，然后使用如下命令来处理依赖
-此命令会清除项目没有使用的依赖以及项目使用的依赖会进行下载
-go mod tidy #此命令应该会很常用 go install命令用于安装二进制文件，此命令会下载对应的库到本地，然后自动执行build编译代码生成二进制文件转移到$GOPATH/bin路径下。此命令必须添加版本
-此命令是全局安装，不会修改项目的mod文件
-go install github.com/cosmtrek/air@v1.15.1 ​
-go build 将代码编译为相关平台的可执行文件，只需要编译带有main的入口文件即可
-go build #会寻找当前目录下main入口文件然后进行编译 会编译所有 go build -o main #指定生成可执行文件的名字 go build mymain.go #也可以编译指定的go文件 然后就会连一起依赖的代码都编译为一个二进制 ​
-go env 用于管理go的环境变量相关信息，go相关环境变量也可在.bashrc等文件里面设置，优先级高
-go env #打印所有go的环境变量 go env GOPROXY #打印某个环境变量的值 go env -json #json格式输出 go env -w GOPROXY=https://goproxy.cn,direct #修改某个值 这里设置了中国代理，direct表示如果代理没有则直接走go官网，可以设置多个代理网站，用逗号分割 go fmt和gofmt go fmt是对gofmt的封装，直接使用gofmt即可，格式化如果不加-w是不会改变源代码的，所以最常用的就是：
-gofmt -w .</description></item><item><title>Go指针</title><link>/2021/05/10/go%E6%8C%87%E9%92%88/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/10/go%E6%8C%87%E9%92%88/</guid><description><![CDATA[返回局部变量的指针 Go支持垃圾回收，所以当一个函数返回了局部变量的地址这是合法的。这是Go和C指针的区别之一。Go编译器会作内存逃逸分析，如果一个局部遍历的指针被返回了则会将他的内存分配到堆空间
-type Stu struct { Name string Age int } func NewStudent() *Stu { stu := Stu{} stu.Name = &#34;lyer&#34; stu.Age = 18 return &amp;stu //这是合法的 } func main() { stu:=NewStudent() stu.Age = 21 } ​
-Go指针的限制   普通类型的指针不能作算术运算
-  一个指针类型的值不能被随意转化为另外一个指针类型，也就是说每个类型的指针其实也相当于一个类型
-  指针只能在同类型比较(==、!=)
-func main() { s1:=&amp;Stu{} s1= nil s2:=&amp;Stu{} log.Println(s1==s2) //false }   指针的值不能赋给其他类型的指针
-  综上所述: Go每个类型的指针都是一个独立的类型
-任意一个类型的指针都可以转化为unsafe.Pointer类型，此类型相当于void*
-​
-unsafe.Pointer和uintptr unintptr属于一个可运算的指针类型，其长度每个平台不一样，比如64位平台则此类型必须能够表达所有的地址，所以长度为int64
-注意unintptr指向的地址不会被Go感知到，也就是说其指向的地址无法保证不被GC回收
-unsafe.Pointer指针相当于void*，其它所有类型的指针都可以转化为此类型，如果要进行运算的话则需要继续转化为uintptr]]></description></item><item><title>MySql备份与恢复</title><link>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link><pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/09/mysql%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid><description><![CDATA[mysqldump备份与恢复 备份所有数据库--all-databases
-#备份所有数据库 mysqldump -uroot -p --all-databases &gt; ./all.sql 备份指定的数据库
-#备份 lyer test 库 mysqldump -uroot -p lyer --databases lyer test &gt; ./db.sql 备份指定数据库中的表，恢复时必须use到指定的数据库下
-#备份test库中的a b c 表 mysqldump -uroot -p test a b c &gt; ./db.sql 恢复数据
-mysql&gt; source /home/lyer/tmp/temp/db.sql ​
-MySql备份脚本 #!/bin/bash # ------------------------------------------------------------------------------- # FileName: mysql_backup.sh  # Describe: Used for database backup # Revision: 1.0 # Date: 2020/08/11 # Author: wang # 设置mysql的登录用户名和密码(根据实际情况填写) mysql_user = &#34;root&#34; mysql_password = &#34;yourpassword&#34; mysql_host = &#34;localhost&#34; mysql_port = &#34;3306&#34; backup_dir = /data/mysql_backup dt=date +&#39;%Y%m%d_%H%M&#39; echo &#34;Backup Begin Date:&#34; $(date +&#34;%Y-%m-%d %H:%M:%S&#34;) # 备份全部数据库 mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password -R -E --all-databases --single-transaction &gt; $backup_dir/mysql_backup_$dt.]]></description></item></channel></rss>
+参考 TCP/IP</description></item></channel></rss>
