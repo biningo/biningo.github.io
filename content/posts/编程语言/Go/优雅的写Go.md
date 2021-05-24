@@ -6,8 +6,6 @@ tags: [Go]
 draft: true
 ---
 
-> **跟新中.....**
-
 ## 静态代码检查工具
 
 ### 1、goimports
