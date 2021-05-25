@@ -8,7 +8,7 @@ func New(text string) error { return &errorString{text} //返回errorString指�
 自定义error 我们只需要实现error接口也就是重写Error()方法即可自定义错误
 type ZeroDivisionError struct { msg string code int } func (e ZeroDivisionError) Error() string { return fmt.Sprintf("[%d]:%s", e.code, e.msg) } type NullPointerError struct { msg string } func (e NullPointerError) Error() string { return fmt.</div><div class=post-footer><a href=/2021/05/23/go%E5%A4%84%E7%90%86error/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>Go</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/>MySql事务和锁</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-05-23>2021-05-23</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/mysql/><i class="far fa-folder fa-fw"></i>Mysql</a></span></div><div class=content>为什么需要有事务 事务的出现就是为了 保障数据一致性，将多条逻辑相关的SQL语句当做一件事情来做，要么都成功要么都失败
 最经典的场景就是转账业务: 当A给B转账时，B账户余额增加的同时必须保证A账户余额减少，也就是说必须保证A和B账户的总钱款大小前后一致，两个账户的钱总量不会多也不会少
-事务的执行过程中最需要关注的就是 事务并行和事务隔离 问题，就是说多个事务必须是隔离的，事务A不能影响事务B的执行，这也是事务中最难处理和最难理解的一部分
+一个事务中包含一条或则多条逻辑相关的操作(SQL)，这些操作看作是一个整体，不可分割，当做一件事情来做。如果其中一条或多条SQL失败了则代表此次事务(这件事情)就失败了，则之前执行过的SQL必须全部失败，全部执行回滚 (原子性) 不管事务是否成功，数据必须保持一致性，不会出现错误 并发操作下，事务最难控制 事务的执行过程中最需要关注的就是 事务并行和事务隔离 问题，就是说多个事务必须是隔离的，事务A不能影响事务B的执行，这也是事务中最难处理和最难理解的一部分
 ​
 事务四大特性ACID 原子性 Atomicity
 事务是数据库的逻辑工作单位，不可分割，事务中包含的各操作要么都做，要么都不做
@@ -19,21 +19,16 @@ type ZeroDivisionError struct { msg string code int } func (e ZeroDivisionError)
 还有年龄不能为负数，红绿灯只有三种颜色，人民币最大面值为100等，这些约束都必须要符合真实世界的情况，都必须和真实世界保持一致性
 隔离性 Isolation
 每个事务都是隔离的，互相不影响，一共有4个隔离级别
+不同事务在提交的时候，必须保证最终呈现出来的效果是串行的。比如两个顾客同时买一件衣服，衣服总量只有2件了。此时顾客A买了1件提交了，顾客B买了1件也提交了。那么最终的衣服总量必须减少为0，而不是1。如果在RR隔离级别下，顾客A和B在事务没提交之前看见的衣服总量都为2，因为他们是同时开启事务的，假设A先提交了，但是B看到的余量依旧是2件(RR隔离级别)，当B再买并且提交之后，则必须还剩余0件，而不是剩余1件，必须保障数据的一致性。也就是说虽然他们看起来是并行执行的事务，但是最终的效果一定要是串行的效果。
 持久性 Durability
 事务一旦提交，它对数据库中的数据的改变就应该是永久性的，必须持久化到磁盘
 ​
-四大隔离级别 1、读未提交 Read Uncommitted
+MySql事务的实现 原子性: undo log 实现 (记录了事务修改之前的数据，当事务在执行过程中如果失败了那么当前事务就处于不一致的状态，这样可以回滚到上一个一致性的状态) 持久性: redo log 实现 隔离性: 锁+MVCC 实现 一致性: 通过原子性、持久性、隔离性实现 ​
+隔离性和四大隔离级别 1、读未提交 Read Uncommitted
 一个事务还没提交时，它做的变更对他事务可见
 脏读 不可重复读 幻读 2、读已提交 Read Committed Oracle默认的隔离级别
 一个事务只有提交时它做的变化才对其他事务可见，该级别会造成 在事务中两次读取数据不一致的情况，也就是不可重复读
-不可重复读 幻读 3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别
-一个事务开始之后，其所看见的数据就是事务开始时候的数据，相当于给数据在事务开始时拍一个快照，在事务执行过程中看见的都是这个快照，即使是其他事务做了变更提交了对此事务也不可见，解决了不可重复读问题
-但是还是存在 幻读问题
-4、串行化 事务必须串行化执行，一个事务只有等另外一个事务结束之后才可以开始，效率最低不支持并发，但是解决了事务隔离性的所有问题
-​
-事务并发读写问题 1、脏读 事务读取到了其他事务还没提交的修改
-A事务执行过程中，B事务做出的变化还没提交修改就被A事务读取到了，但是B事务的修改发生了回滚，那么A事务就读取到了脏数据
-时间线 存款事务 取款事务 1 开始事务 2 开始事务 3 查询余额500 4 取款400，余额更改为500-400=100 5 查询余额100（脏读） 6 取款操作发生错误，事务失败，执行回滚操作 rollback （使用commit或者rollback后，事务就结束了） 7 存入500，更改余额为500+100=600 8 提交事务 9 账户出错，按照正确的逻辑此时余额应该为 500+500=1000，而此时余额为600 2、不可重复读 事务读取到了其他事务已经提交的修改，导致同一个事务两次查询结果不一样</div><div class=post-footer><a href=/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a>,&nbsp;<a href=/tags/mysql/>MySql</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/05/22/go%E4%B8%AD%E7%9A%84slice/>Go中的slice</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-05-22>2021-05-22</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/><i class="far fa-folder fa-fw"></i>编程语言/Go</a></span></div><div class=content>数组 数组值拷贝
+不可重复读 幻读 3、可重复读 Repeatable Read MySql、Innodb默认的隔离级别</div><div class=post-footer><a href=/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a>,&nbsp;<a href=/tags/mysql/>MySql</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/05/22/go%E4%B8%AD%E7%9A%84slice/>Go中的slice</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-05-22>2021-05-22</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/go/><i class="far fa-folder fa-fw"></i>编程语言/Go</a></span></div><div class=content>数组 数组值拷贝
 func main(){ a1:=[...]int{1,2,3} a2:=a1 log.Println(a1,a1[0]) log.Println(a2,a2[0]) //也可以通过下标访问 a2[0] = 10 log.Println(a) //a[0]=1 } 数组指针传递
 //通过指针访问数组 func main(){ a:=[...]int{1,2,3} a2:=&a log.Println(a,a[0]) log.Println(a2,a2[0]) a2[0] = 10 log.Println(a) //a[0]=10 } ​
 len和cap的区别 len 代表底层数组可访问的范围，用索引访问不可越过这个界限
