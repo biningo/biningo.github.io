@@ -91,9 +91,11 @@ func TestAdd(t *testing.T) {
 
 ```bash
 go test -cover  #结果直接打印到屏幕 -test.run A
-go test -cover  -covermode=atomic #选择测试模式
+go test -cover  -covermode=atomic #选择测试模式 默认是set模式
 go test -cover -coverprofile=cover.out #将测试结果输出到文件中
+go test -cover  -run=Concurrent #指定测试某几个函数,写其他一部分名字即可
 
+#下面是通过覆盖率生成的文件查看覆盖率报告
 go tool cover -func=cover.out #展示每个函数的覆盖率情况 展示到屏幕中
 go tool cover -func=cover.out -o cover.txt #将情况输出到文件
 go tool cover -html=cover.out #将代码覆盖率文件以网页形式显示 会打开浏览器
@@ -104,7 +106,7 @@ go tool cover -html=cover.out -o cover.html #将覆盖率以html文件保存
 
 - `set(默认)`: 每个语句是否执行？
 - `count`: 每个语句执行了几次？
-- `atomic`: 类似于count , 但表示的是并行程序中的精确计数，并发安全
+- `atomic`: 类似于count , 并发安全
 
 下面看一个案例
 
@@ -154,7 +156,8 @@ func TestDay(t *testing.T) {
 测试
 
 ```bash
-go test -race -coverprofile=coverage -covermode=atomic -v
+# -race查看是否存在数据竞争
+go test -race -coverprofile=coverage -covermode=atomic -v 
 ```
 
 ​    

@@ -39,6 +39,26 @@ LinkedHashMap能保持插入的顺序，**HashMap+双链表** 实现
 
 在插入的时候同时给每个节点都按照插入的顺序串成一个双链表(**LinkedHashMap给之前HashMap中的链表节点多加了两个前后节点实现**)，这样遍历的时候就可以保持插入的顺序了，同时用`key`取值得时候效率还和 **HashMap** 一样
 
+下面两个
+
+```java
+  public static void main(String[] args) {
+    LinkedHashMap<String, String> m1 = new LinkedHashMap<>();
+    m1.put("name", "lyer");
+    m1.put("age", "18");
+    m1.put("score", "100");
+    m1.forEach((k, v) -> System.out.println(k + "-" + v));
+
+    System.out.println("--------------------------");
+
+    HashMap<String, String> m2 = new HashMap<>();
+    m2.put("name", "lyer");
+    m2.put("age", "18");
+    m2.put("score", "100");
+    m2.forEach((k, v) -> System.out.println(k + "-" + v));
+  }
+```
+
 ​    
 
 ## TreeMap
