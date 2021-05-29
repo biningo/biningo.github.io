@@ -1,4 +1,16 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据库 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>数据库 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="self" type="application/rss+xml"/><item><title>MySql事务和锁</title><link>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</guid><description>为什么需要有事务 事务的出现就是为了 保障数据一致性，将多条逻辑相关的SQL语句当做一件事情来做，要么都成功要么都失败
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据库 - 标签 - lyer's blog</title><link>/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>数据库 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="self" type="application/rss+xml"/><item><title>常见的开源数据库</title><link>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</guid><description>KV数据库 BoltDB go语言写的kv数据库，现在已经停止维护
+https://github.com/boltdb/bolt
+但是etcd扩展了BoltDB，重新命名叫 BBolt，作为是etcd的底层kv存储
+https://github.com/etcd-io/bbolt
+levelDB google开源的，使用c++写的kv数据库
+https://github.com/google/leveldb
+​
+时序数据库 influxDB go语言写的时序数据库，分为商业版和开源版，开源版本不支持分布式
+https://github.com/influxdata/influxdb
+TDengine 用C写的时序数据库，支持分布式，全部开源
+https://github.com/taosdata/TDengine
+关于时序数据库参考博客 时序数据库 InfluxDB（一）
+时序数据库InfluxDB使用详解</description></item><item><title>MySql事务和锁</title><link>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/</guid><description>为什么需要有事务 事务的出现就是为了 保障数据一致性，将多条逻辑相关的SQL语句当做一件事情来做，要么都成功要么都失败
 最经典的场景就是转账业务: 当A给B转账时，B账户余额增加的同时必须保证A账户余额减少，也就是说必须保证A和B账户的总钱款大小前后一致，两个账户的钱总量不会多也不会少
 一个事务中包含一条或则多条逻辑相关的操作(SQL)，这些操作看作是一个整体，不可分割，当做一件事情来做。如果其中一条或多条SQL失败了则代表此次事务(这件事情)就失败了，则之前执行过的SQL必须全部失败，全部执行回滚 (原子性) 不管事务是否成功，数据必须保持一致性，不会出现错误 并发操作下，事务最难控制 事务的执行过程中最需要关注的就是 事务并行和事务隔离 问题，就是说多个事务必须是隔离的，事务A不能影响事务B的执行，这也是事务中最难处理和最难理解的一部分
 ​
