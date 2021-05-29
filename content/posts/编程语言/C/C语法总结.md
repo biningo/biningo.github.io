@@ -5,6 +5,12 @@ categories: [编程语言/C]
 tags: [C]
 ---
 
+## 数据类型和长度
+
+
+
+
+
 ## 函数指针和回调函数
 
 - **指针函数**  返回指针的函数
@@ -97,7 +103,7 @@ int main(int argc, char const *argv[])
 }
 ```
 
-
+​    
 
 ## extern和static
 

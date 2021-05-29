@@ -21,33 +21,33 @@ tags: [TSL/SSL,网络安全,HTTPS]
 
 加密算法有 **对称加密、非对称加密** ，如果将HTTP报文采用非对称加密的话那么带来的CPU运算是非常大的，速度也相对较慢，因为HTTP报文一般数据比较大
 
-所以TSL采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 **对称密钥** 的问题了，这就是 **TSL握手** 需要解决的问题，就是生成对称密钥
+所以TSL采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 **对称密钥** 的问题了，这就是 **TSL握手** 需要解决的问题，就是双方通过握手协商生成一致的对称密钥
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img1/tsl.png)
 
-### Client Hello
+### 1、Client Hello
 
 TCP建立之后浏览器会先发送一个`Client Hello` TSL报文给服务器，目的是为了告诉服务器如下内容，重点关注如下内容:
 
 - 客户端TSL版本
-- **支持的加密套件Cipher Suites** : 使用什么加密算法等，服务器会选择一个加密算法
-- **随机字符串Random1** : 这个随机数和之后的生成对称密钥有关
-- **Session ID**  用来**恢复会话** 
-- **SessionTicket** 客户端保存的TSL的session信息
+- 支持的加密套件`Cipher Suites`  服务器会从中选择一个加密算法
+- 随机字符串`Random1` ， 这个随机数和之后的生成对称密钥有关
+- Session ID 用来**恢复会话** 
+- SessionTicket 客户端保存的TSL的session信息
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img1/ClientHello.png)
 
-### Server Hello
+### 2、Server Hello
 
 服务器接受到客户端的`Client Hello`之后就会检查客户端版本、加密套件等信息，检查通过并且符合服务器的条件则服务器会进行回复，也就是发送`Server Hello`包
 
 回复内容主要是告诉客户端如下几个重要的内容:
 
-- 服务器的TSL版本
+- 确认`SSL/TLS`协议版本，如果浏览器不⽀持，则关闭加密通信
 
-- 从`Client Hello`中选择一个加密套件，告诉服务器选择了哪个套件
-- **随机字符串Random2** 此时客户端和服务器都拥有 `Random1、Random2`
-- **Session ID** 初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗
+- 从`Client Hello`中选择一个加密套件，如选择`RSA`，并且告诉客户端选择了那个加密套件用于后面的加密
+- 随机字符串`Random2`，此时客户端和服务器都拥有两个随机数 `Random1、Random2`
+- 初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗
 
 ![](https://raw.githubusercontent.com/biningo/cdn/master/img1/ServerHello.png)
 
@@ -57,23 +57,23 @@ TCP建立之后浏览器会先发送一个`Client Hello` TSL报文给服务器�
 
 第二阶段，双方已经确定了:
 
-- **双方协商的非对称加密的算法** (比如RSA)
-- **Random1**
-- **Random2**
+- 双方协商的非对称加密的算法 (比如RSA)
+- `Random1`
+- `Random2`
 
 这一阶段中，全部都是服务器在发送消息，服务器会连发还几个包
 
-### Certificate
+### 1、Certificate
 
-服务器的证书，客户端收到之后需要进行验证，然后就可以拿到服务器证书里面的公钥了
+服务器的证书，客户端收到之后需要进行验证证书是否有效，然后就可以拿到服务器证书里面的公钥了。有了证书的证明，则此公钥就一定是服务器的
 
-### Server Key Exchange
+### 2、Server Key Exchange
 
 服务器传递计算密钥算法的一些参数，这样他们才可以根据相同的参数和算法计算出相同的 **对称密钥**
 
 这些参数用服务器自己的私钥进行加密然后传输给客户端，客户端可以用服务器的公钥进行解密获取到参数
 
-### Server Hello Done
+### 3、Server Hello Done
 
 表示服务器的信息发送完毕
 
@@ -81,27 +81,25 @@ TCP建立之后浏览器会先发送一个`Client Hello` TSL报文给服务器�
 
 ## TSL握手的第三个阶段
 
-### Client Key exchange
+### 1、Client Key exchange
 
-客户端收到算法计算公式的参数之后再次生成一个随机数`pre-master`，此随机数就必须要用服务器的公钥加密之后发给服务器，服务器收到到`pre-master`之后即可以 结合 **Random1、Random2、Pre-Master** 和加密算法的公式再次计算出 `main-master` 这个就是 **对称密钥**
-
-当然客户端也计算出了同样的`main-master`密钥，之后的通讯就直接通过这个密钥进行对称加密通讯了
+客户端收到算法计算公式的参数之后再次生成一个随机数`Pre-Master`，此随机数就必须要用服务器的公钥加密之后发给服务器，服务器收到到`pre-master`之后即可以 结合 `Random1+Random2+Pre-Master` 和加密算法的公式再次计算出 `main-master` 这个就是对称密钥，当然客户端也计算出了同样的`main-master`密钥，之后的通讯就直接通过这个密钥进行对称加密通讯了
 
 因为对称密钥协商算法的参数和第三个随机数都是进过非对称加密传输的，那么黑客就无法破解出对称密钥
 
-按道理只传输最后一个`pre-master`随机数即可，但是为什么要选择再传输前两个随机数呢？
+> 按道理只传输最后一个`pre-master`随机数即可，但是为什么要选择再传输前两个随机数呢？
 
 **选择三个随机数是为了加大随机性，三个随机数拼起来的随机性更大**
 
-### Finished和Change Cipher Spec
+### 2、Finished和Change Cipher Spec
 
-客户端发送一个 **change chipher spec** 表示随后的信息都将用双方商定的加密方法和密钥发送
+- 客户端发送一个 **change chipher spec** 表示随后的信息都将用双方商定的加密方法和密钥发送
 
-然后再发送 **finished**  目的是把之前所有发送的数据做个摘要，再加密一下，让服务器做个验证，验证通过则握手完成
+- 然后再发送 **finished**  目的是把之前所有发送的数据做个摘要，再加密一下，让服务器做个验证，验证通过则握手完成
 
-服务器也是同样的操作，发“**Change Cipher Spec**”和“**Finished**”消息，双方都验证加密解密 OK，握手正式结束，后面就收发被加密的 HTTP 请求和响应了
+服务器也是同样的操作，发**Change Cipher Spec**和**Finished**消息，双方都验证加密解密 OK，握手正式结束，后面就收发被加密的 HTTP 请求和响应了
 
-​        
+​     
 
 ## DH算法
 

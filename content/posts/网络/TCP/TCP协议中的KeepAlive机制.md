@@ -62,3 +62,9 @@ TCP的KeepAlive机制会在指定的间隔时间发送`KeepAlive`探活包，如
 #9 如果重试9次都没有响应则把此连接删除掉
 /proc/sys/net/ipv4/tcp_keepalive_probes
 ```
+
+​    
+
+## KeepAlive能携带数据吗
+
+注意，KeepAlive包的seq也是没有意义的，seq一般和初始化的seq一致，KeepAlive是不携带数据的

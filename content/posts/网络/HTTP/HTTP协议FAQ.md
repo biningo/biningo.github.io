@@ -3,6 +3,7 @@ title: HTTP协议FAQ
 date: 2021-03-20
 categories: [网络]
 tags: [HTTP]
+draft: true
 ---
 
 ## 为什么HTTP/1.1协议不支持服务器端推送
