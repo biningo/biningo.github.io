@@ -35,7 +35,8 @@ KeepAlice主要有如下几个作用:
 还有一种情况就是在接收方的窗口值为0的情况下，那么发送方就不能继续发送数据了，那么即使接收方的窗口扩大了也没有办法告诉发送方，此时就相当于死锁了双方都不会发送数据
 所以KeepAlive探测包还可以用于解决窗口值减少为0而造成死锁的情况。当接收方的窗口为0的时候，发送方可以定时的发送KeepAlive包来探测接收方的窗口是否扩大了
 ​
-Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes</description></item><item><title>netcat和socat网络小工具</title><link>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>netcat网络瑞士军刀 netcat是一个网络小工具，可以用来监听端口，数据回发(简单的echo)，TCP端口扫描，探测网络，网络测速等
+Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes ​
+KeepAlive能携带数据吗 注意，KeepAlive包的seq也是没有意义的，seq一般和初始化的seq一致，KeepAlive是不携带数据的</description></item><item><title>netcat和socat网络小工具</title><link>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/19/netcat%E5%92%8Csocat%E7%BD%91%E7%BB%9C%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>netcat网络瑞士军刀 netcat是一个网络小工具，可以用来监听端口，数据回发(简单的echo)，TCP端口扫描，探测网络，网络测速等
 echo监听端口和连接端口
 #server -l表示监听 nc -l 8000 #监听8000端口 #client nc localhost 8000 #连接本地的8000端口 #然后直接输入数据对方就可以收到了 #监听UDP端口 nc -u -l 8080 #请求UDP端口 nc -u localhost 8080 传输文件
 #server nc -l 1234 &amp;gt; filename.out #client nc -N localhost 1234 &amp;lt; filename.in #-N表示如果接受到EOF则断开 端口扫描和检测端口
@@ -48,31 +49,22 @@ TTL主要就是为了防止IP数据包在网络上出现无限的循环跳转，
 MSL Maximum Segment Lifetime最大报文段生存时间，此时间应该是略大于TTL跳转的时间的，也就是说一旦IP包只要送到对方的机器上，那么此包就一定不会超过MSL，想象一下如果MSL小于TTL那么IP包送到了但是TCP包超时了那么就会比较浪费资源，并且因为TCP包是包含在IP包上的，里面的时间按逻辑上就应该大于等于TTL的
 所以只要经过了MSL时间，那么TCP包就肯定已经被传输线路上的路由器给丢弃了
 ​
-参考 TCP/IP</description></item><item><title>HTTP协议FAQ</title><link>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</link><pubDate>Sat, 20 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/20/http%E5%8D%8F%E8%AE%AEfaq/</guid><description>为什么HTTP/1.1协议不支持服务器端推送 HTTP/1.1规定了只能是 请求-响应 模式，为什么这样设计呢，我个人认为主要有如下几个原因:
-客户端和服务器容易实现HTTP协议，简单 当时对页面的实时性，数据量没有现在大 当时并发程度不高 浏览器等客户端以及服务器都是根据HTTP协议进行设计的，所以即使HTTP/1.1能保持TCP的keep-alive一直连接并能被多个HTTP请求复用，但是依然无法实现服务器推送
-即使你自己的服务器程序实现了HTTP推送，有些浏览器不支持那也没办法，因为大家都是遵循协议来的
-即使服务器和客户端都实现了，那么还有很多代理服务器、缓存服务器、CDN服务器等也可能都没有实现这个HTTP推送，所以依赖无法实现推送
-所以有了WebSocket协议，浏览器和服务器双方根据HTTP先握手建立TCP连接，然后进行协议升级，双方就可以根据WebSocket协议进行通讯，服务器就可以拿到TCP句柄进行服务器推送了
-请求-应答模式带来了两个问题:
-队首阻塞 过多的HTTP通讯，往返延迟加大 HTTP/1.1正是因为这个 请求-应答 模式，在一个TCP连接上一个请求发送之后必须等待响应回来之后才可以用这个TCP连接发送另外一个请求，不然浏览器无法识别应答是哪个请求的应答，所以产生了 HTTP报文队首阻塞问题 只要一个请求的应答阻塞了那么这个请求就必须一直等，之后排队的请求也必须等
-为了解决 队首阻塞 问题于是浏览器就为每个用户开辟多个TCP连接来并发的发送多个HTTP请求，因为他们使用不同的TCP连接所以浏览器可以识别哪个应答属于哪个请求，但是一个用户如果TCP连接过多比如一个用户有10个TCP连接，那么1000个用户将会产生1000*10=10000个并发连接，这样会造成服务器压力变大，所以浏览器就必须限制每个用户的TCP并发连接数
-并且客户端请求一个页面，发现页面里面包含css、js等资源，于是又发起这些资源的请求，这样起码一个页面会产生多次请求，多次请求都会一个个排队等待响应，这样无形之中又加大了延迟，但是如果有服务器推送，那么在第一次客户端请求这个页面的同时就把页面还有css、js等资源一起推送过去，这样就只需要一次请求即可完成，减少了网络传输的HTTP包减少了请求次数，也降低了延迟
-​
-为什么 HTTP1.1 不能实现多路复用 HTTP不能实现多路复用是因为一个HTTP请求只能在一个TCP连接里面传输，因为HTTP的报文都是文本形式的，并且是不分帧，如果不在一个TCP连接里面传输的话浏览器就无法识别这个报文响应属于哪个请求，服务器必须将响应报文按原路返回回去
-HTTP2则可以实现一个HTTP报文可以在不同的TCP连接里面传输，因为HTTP2的报文是二进制形式将HTTP报文分为一个个的数据帧的，并且有 流 的概念来识别一个请求的响应报文</description></item><item><title>TSL(SSL)协议</title><link>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TSL协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
+参考 TCP/IP</description></item><item><title>TSL(SSL)协议</title><link>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tslssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TSL协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
 为了防止HTTP明文传输，于是可以讲HTTP报文和数据整个进行加密然后再将数据传递给下层的TCP层，传递到客户端再进行解密，TSL协议就是解决HTTP报文加密问题的，被TSL协议加密之后的HTTP协议就叫HTTPS HTTP over SSL 使用的是443端口
 TSL是SSL的改进版，现在都是使用TSL来替换SSL了，但是延续了老的叫法，所有都叫SSL 这两个其实是同一个意思
 TSL现在广泛使用的版本为TSL1.2 TSL1.3
 ​
 TSL握手第一阶段 加密算法有 对称加密、非对称加密 ，如果将HTTP报文采用非对称加密的话那么带来的CPU运算是非常大的，速度也相对较慢，因为HTTP报文一般数据比较大
-所以TSL采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 对称密钥 的问题了，这就是 TSL握手 需要解决的问题，就是生成对称密钥
-Client Hello TCP建立之后浏览器会先发送一个Client Hello TSL报文给服务器，目的是为了告诉服务器如下内容，重点关注如下内容:
-客户端TSL版本 支持的加密套件Cipher Suites : 使用什么加密算法等，服务器会选择一个加密算法 随机字符串Random1 : 这个随机数和之后的生成对称密钥有关 Session ID 用来恢复会话 SessionTicket 客户端保存的TSL的session信息 Server Hello 服务器接受到客户端的Client Hello之后就会检查客户端版本、加密套件等信息，检查通过并且符合服务器的条件则服务器会进行回复，也就是发送Server Hello包
+所以TSL采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 对称密钥 的问题了，这就是 TSL握手 需要解决的问题，就是双方通过握手协商生成一致的对称密钥
+1、Client Hello TCP建立之后浏览器会先发送一个Client Hello TSL报文给服务器，目的是为了告诉服务器如下内容，重点关注如下内容:
+客户端TSL版本 支持的加密套件Cipher Suites 服务器会从中选择一个加密算法 随机字符串Random1 ， 这个随机数和之后的生成对称密钥有关 Session ID 用来恢复会话 SessionTicket 客户端保存的TSL的session信息 2、Server Hello 服务器接受到客户端的Client Hello之后就会检查客户端版本、加密套件等信息，检查通过并且符合服务器的条件则服务器会进行回复，也就是发送Server Hello包
 回复内容主要是告诉客户端如下几个重要的内容:
-服务器的TSL版本
-从Client Hello中选择一个加密套件，告诉服务器选择了哪个套件
-随机字符串Random2 此时客户端和服务器都拥有 Random1、Random2
-Session ID 初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗</description></item><item><title>WebSocket协议</title><link>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</guid><description>WebSocket要解决的问题 由于HTTP是请求应答模式，所以如果是聊天室这样的项目的话，那么为了立即获取到信息浏览器就必须进行不断的轮询服务器，不仅效率低下，而且还无法立即获取到数据
+确认SSL/TLS协议版本，如果浏览器不⽀持，则关闭加密通信
+从Client Hello中选择一个加密套件，如选择RSA，并且告诉客户端选择了那个加密套件用于后面的加密
+随机字符串Random2，此时客户端和服务器都拥有两个随机数 Random1、Random2
+初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗
+​
+TSL握手第二阶段 第二阶段，双方已经确定了:</description></item><item><title>WebSocket协议</title><link>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/websocket%E5%8D%8F%E8%AE%AE/</guid><description>WebSocket要解决的问题 由于HTTP是请求应答模式，所以如果是聊天室这样的项目的话，那么为了立即获取到信息浏览器就必须进行不断的轮询服务器，不仅效率低下，而且还无法立即获取到数据
 于是就有了WebSocket协议，WebSocket是通过HTTP协议进行握手然后再进行通讯的，因为浏览器无法同服务器直接建立TCP连接，所以只能先通过HTTP协议建立一个TCP连接通道，之后再升级协议采用WebSocket协议，这样WebSocket就和HTTP采用相同的端口进行和服务器通讯了
 ws://www.chrono.com ws://www.chrono.com:8080/srv wss://www.chrono.com:445/im?user_id=xxx #加密的websocket协议 ​
 WebSocket握手 WebSocket握手是通过HTTP协议进行的
@@ -105,6 +97,20 @@ GET /note/ef1b6cee.html HTTP/1.1 Host: www.ru23.com Connection: keep-alive Cache
 然后还需要一个空行
 如果有响应体的化就需要一个响应体，没有的话空行也是必须的
 HTTP/1.1 200 OK Server: nginx/1.16.1 Date: Sun, 04 Oct 2020 02:27:01 GMT Last-Modified: Sun, 30 Aug 2020 14:12:42 GMT Content-Type: text/html Content-Length: 40846 Accept-Ranges: bytes &amp;lt;!</description></item><item><title>网络分层和协议栈总览</title><link>/2021/03/05/%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E5%92%8C%E5%8D%8F%E8%AE%AE%E6%A0%88%E6%80%BB%E8%A7%88/</link><pubDate>Fri, 05 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/05/%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E5%92%8C%E5%8D%8F%E8%AE%AE%E6%A0%88%E6%80%BB%E8%A7%88/</guid><description>OSI七层模型和TCP/IP五层模型 ​
-为什么网络要分层 复杂的计算机程序都需要通过分层来设计，这是一种设计模式，通过分层每层各司其职，每层都可以独立升级和维护
+为什么网络要分层 复杂的计算机程序都需要通过分层来设计，这是一种设计模式 通过分层每层各司其职，每层都可以独立升级和维护 每一层只需要专注于做自己负责的事情即可 每一层都有专门特殊的网络设备，所以网络设备不需要设计的很复杂，只需要设计为他所负责的那一层即可，便于网络设备的部署和维护 ​
+TCP/IP协议栈 应用层 协议 全名 功能 基于/端口 HTTP Hypertext Transfer Protocol web TCP/80 HTTPS Hypertext Transfer Protocol Secure 加密的HTTP SSL/TSL/443 SSL/TSL Secure Socket Layer/Transport Layer Security 加密协议 FTP File Transfer Protocol 传输文件 TCP/21(控制)/20(数据传输) SSH Secure Shell 连接远程Linux主机 TCP/22 SFTP SSH File Transfer Protocol SSH加密的FTP SSH/22 DNS Domain Name System IP和域名的解析转化 UDP/TCP/53 SMTP Simple Mail Transfer Protocol 邮件收发 TCP/25 POP3 Post Office Protocol-Version 3 收邮件 TCP/110 RPC Remote Procedure Call 调用远程的函数 TCP/随机 DHCP Dynamic Host Configuration Protocol 在局域网中动态分配IP UDP/67(接收)/68(请求) 传输层 协议 全名 功能 TCP Transmission Control Protoco 可靠的传递网络数据包 QUIC Quick UDP Internet Connections Google研发的基于UDP的传输层协议，用于替换TCP 网络层 协议 全名 功能 IP Internet Protocol 广域网传递数据包 ARP Address Resolution Protocol 根据IP获取MAC ICMP Internet Control Message Protocol 传递网络控制信息，需要加上IP报头组成IP数据报发送 ​</description></item><item><title>数据链路层和以太网</title><link>/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/</guid><description>局域网和以太网的区别 局域网需要解决的就是网内多对多的通讯，局域网内所有的主机都可以进行通讯，一个简单粗暴的办法就是给每台PC都连接到网内任何一台PC的网线这不现实，每加入一台PC就需要给网内的每台PC加一条网线太不现实了，所以就需要一些 局域网拓扑结构 来解决这个问题
+局域网拓扑结构有很多种，有星型、环形、总线型等，大多数的局域网都是 星型 局域网内的主机都连接到比如 集线器 的物理设备中进行通讯，所有信息都经过集线器然后再进行转发，这样局域网内的主机就可以和网内所有的主机进行通讯了，这种 星型 类型的局域网叫做 以太网
+综上: 以太网是一种局域网
 ​
-TCP/IP协议栈 1、应用层 协议 全名 功能 基于/端口 HTTP Hypertext Transfer Protocol web TCP/80 HTTPS Hypertext Transfer Protocol Secure 加密的HTTP SSL/TSL/443 SSL/TSL Secure Socket Layer/Transport Layer Security 加密协议 FTP File Transfer Protocol 传输文件 TCP/21(控制)/20(数据传输) SSH Secure Shell 连接远程Linux主机 TCP/22 SFTP SSH File Transfer Protocol SSH加密的FTP SSH/22 DNS Domain Name System IP和域名的解析转化 UDP/TCP/53 SMTP Simple Mail Transfer Protocol 邮件收发 TCP/25 POP3 Post Office Protocol-Version 3 收邮件 TCP/110 RPC Remote Procedure Call 调用远程的函数 TCP/随机 DHCP Dynamic Host Configuration Protocol 在局域网中动态分配IP UDP/67(接收)/68(请求) 2、传输层 协议 全名 功能 TCP Transmission Control Protoco 可靠的传递网络数据包 QUIC Quick UDP Internet Connections Google研发的基于UDP的传输层协议，用于替换TCP 2、网络层 协议 全名 功能 IP Internet Protocol 广域网传递数据包 ARP Address Resolution Protocol 根据IP获取MAC ICMP Internet Control Message Protocol 传递网络控制信息，需要加上IP报头组成IP数据报发送 ​</description></item></channel></rss>
+MAC地址 24:41:8c:28:e2:ea MAC地址由:分割，每个单元都由一个16进制表示，大小为8byte，MAC地址是全球唯一的
+前 24 位是设备制造商的标识符，由IEEE组织分配，也就是组织唯一标识符，后24位由设备制造商自己内部分配，必须要保证唯一
+​
+数据链路层 数据链路层需要将上层 网络层 传递下来的 IP数据报 封装层帧（也就是加上一些报头和报尾）然后将数据帧在 局域网/以太网 中传播，在数据链路层/以太网中 MAC地址 唯一标识一台网络设备
+为什么有了IP还需要MAC ? 为什么有了MAC还需要IP?
+现在基本的局域网都是 以太网 ，所以最常见的链路层的数据帧是 Enthernet || 格式
+的数据帧，也叫 MAC帧 (因为该帧的特点是通过MAC地址进行通讯)
+链路层主要有两种类型的信道:
+1对1信道，比如 PPP协议 广播信道，比如以太网 链路层主要解决下列3个问题:
+封装成帧: 比如 Ehthernet || 数据帧 ，并且需要对一些特殊字符(比如报文信息中出现了和数据帧控制字符一样的字节)进行转义处理，并且需要加入一些头部控制信息，比如目标的MAC地址和源地址，以及数据帧内容的类型，是IP数据报还是ARP报文、ICMP报文等其他类型的数据帧 差错检测: 如果数据帧在传输过程被干扰出现错误，那么就需要丢弃这个数据帧，所以在接受到之前需要进行检测 透明传输: 因为之前插入了一些转义处理的字节，所以在接受到时需要去除这些冗余的字节，这些多余的字节必须不影响原来数据包的传播，看起来就像是透明的 ​
+Ehthernet ||帧格式 没有VLAN的格式
+有VLAN格式</description></item></channel></rss>

@@ -1,0 +1,13 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>数据库 - 分类 - lyer's blog</title><link>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>数据库 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="self" type="application/rss+xml"/><item><title>常见的开源数据库</title><link>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</guid><description>KV数据库 BoltDB go语言写的kv数据库，现在已经停止维护
+https://github.com/boltdb/bolt
+但是etcd扩展了BoltDB，重新命名叫 BBolt，作为是etcd的底层kv存储
+https://github.com/etcd-io/bbolt
+levelDB google开源的，使用c++写的kv数据库
+https://github.com/google/leveldb
+​
+时序数据库 influxDB go语言写的时序数据库，分为商业版和开源版，开源版本不支持分布式
+https://github.com/influxdata/influxdb
+TDengine 用C写的时序数据库，支持分布式，全部开源
+https://github.com/taosdata/TDengine
+关于时序数据库参考博客 时序数据库 InfluxDB（一）
+时序数据库InfluxDB使用详解</description></item></channel></rss>

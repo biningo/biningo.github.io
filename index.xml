@@ -1,4 +1,35 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 27 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>TCP半连接和全连接队列</title><link>/2021/05/27/tcp%E5%8D%8A%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/</link><pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/27/tcp%E5%8D%8A%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/</guid><description>什么是半连接和全连接队列 操作系统在listen开启监听时就会建立两个队列
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Go文件读写和IO操作</title><link>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</guid><description><![CDATA[IO接口 io.Reader 读IO接口
+type Reader interface { Read(p []byte) (n int, err error) } io.Writer 写IO接口
+type Writer interface { Write(p []byte) (n int, err error) } io.Closer 关闭IO接口
+type Closer interface { Close() error } ​
+文件读取 方式一: 无缓冲直接读取
+func fileDemo1() { file, err := os.Open(&#34;/go-test-learn/io/t1.go&#34;) CheckError(&#34;&#34;, err) defer file.Close() content := []byte{} buf := make([]byte, 100) //每次读取的最大byte数组 	for { n, err := file.Read(buf) //返回真实读取的数据字节大小 (&lt;=len(buf)) 	if err == io.]]></description></item><item><title>一致性Hash</title><link>/2021/05/29/%E4%B8%80%E8%87%B4%E6%80%A7hash/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/%E4%B8%80%E8%87%B4%E6%80%A7hash/</guid><description>分布式缓存 为了提高Redis缓存的读写能力，一般会建一个Redis集群，此时我们就需要通过hash算法将key存储到指定的一台节点中，这样每次取这个key的时候到key对应的节点中去获取即可
+假如现在有10台Redis，计算key对应的节点的hash公式如下:
+node = hash(key)%10 静态分配策略在集群节点数量固定的时候是没问题的，但是当集群节点数量进行动态扩缩的情况下就会出现 缓存雪崩 问题
+比如现在新加了10个节点，那么上面的公式就变成了如下:
+node = hash(key)%20 也就是说之前所有的key计算出的节点在集群扩大的时候再次计算时就可能不是同一个节点，那么就无法在对应节点中获取到key的缓存。如果这样的key数量很多的话就会造成缓存雪崩问题，那么后端数据库的压力就会在集群扩容的时候剧增
+为了解决这个问题，于是就有了后面的 一致性Hash算法
+​
+一致性Hash算法 一致性hash算法将节点映射到这个环上，同时也将key映射到一个2^32大小的环上，并且沿着key所在的位置顺时针查找，找到的第一个节点就是这个key要保存的节点
+如果加了一个node或则减少了一个node，那么只会影响环上的node顺时针对应的前一个node之间的数据
+​
+节点倾斜问题 当hash环上的节点数量较少时就可能造成节点倾斜问题，比如所有节点都被映射到了同一边的一个角落，那么就会有大量的key只存在一个node上，而其他node则没有多少key
+为了解决节点倾斜问题，引入了 虚拟节点 。 就是在每个实际的节点下虚拟出几个不存在的节点将其映射到hash环上，让hash环上节点分布的比较均匀。如果key保存在虚拟节点上，则实际上是保存在这个虚拟节点对应的实际节点中。通过虚拟节点就解决了数据倾斜问题
+​
+参考 好刚: 7分钟视频详解一致性hash 算法
+一致性hash</description></item><item><title>常见的开源数据库</title><link>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/</guid><description>KV数据库 BoltDB go语言写的kv数据库，现在已经停止维护
+https://github.com/boltdb/bolt
+但是etcd扩展了BoltDB，重新命名叫 BBolt，作为是etcd的底层kv存储
+https://github.com/etcd-io/bbolt
+levelDB google开源的，使用c++写的kv数据库
+https://github.com/google/leveldb
+​
+时序数据库 influxDB go语言写的时序数据库，分为商业版和开源版，开源版本不支持分布式
+https://github.com/influxdata/influxdb
+TDengine 用C写的时序数据库，支持分布式，全部开源
+https://github.com/taosdata/TDengine
+关于时序数据库参考博客 时序数据库 InfluxDB（一）
+时序数据库InfluxDB使用详解</description></item><item><title>TCP半连接和全连接队列</title><link>/2021/05/27/tcp%E5%8D%8A%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/</link><pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/27/tcp%E5%8D%8A%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/</guid><description>什么是半连接和全连接队列 操作系统在listen开启监听时就会建立两个队列
 半连接 全连接 半连接队列存放的就是一些还没建立TCP连接，并且还在三次握手过程中的客户端连接
 全连接队列存放的就是一些已经完全建立TCP连接但是还没被应用层取走的连接，每次应用层调用accept时就会从全连接队列里取一个连接去处理，但是如果队列中没有连接就会阻塞
 ​
@@ -35,7 +66,8 @@ KeepAlice主要有如下几个作用:
 还有一种情况就是在接收方的窗口值为0的情况下，那么发送方就不能继续发送数据了，那么即使接收方的窗口扩大了也没有办法告诉发送方，此时就相当于死锁了双方都不会发送数据
 所以KeepAlive探测包还可以用于解决窗口值减少为0而造成死锁的情况。当接收方的窗口为0的时候，发送方可以定时的发送KeepAlive包来探测接收方的窗口是否扩大了
 ​
-Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes</description></item><item><title>Redis事务</title><link>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</link><pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</guid><description>TODO</description></item><item><title>面试常见问题总结</title><link>/2021/05/26/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/26/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</guid><description>MySql MySql索引说说看? InnoDB索引使用什么数据结构?
+Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes ​
+KeepAlive能携带数据吗 注意，KeepAlive包的seq也是没有意义的，seq一般和初始化的seq一致，KeepAlive是不携带数据的</description></item><item><title>Redis事务</title><link>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</link><pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</guid><description>TODO</description></item><item><title>面试常见问题总结</title><link>/2021/05/26/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/26/%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</guid><description>MySql MySql索引说说看? InnoDB索引使用什么数据结构?
 MyISAM和InnoDB索引的区别?
 什么是聚集索引，什么是非聚集索引?
 什么时候适合建索引?
@@ -92,22 +124,4 @@ func main(){ a1:=[...]int{1,2,3} a2:=a1 log.Println(a1,a1[0]) log.Println(a2,a2[
 //通过指针访问数组 func main(){ a:=[...]int{1,2,3} a2:=&amp;amp;a log.Println(a,a[0]) log.Println(a2,a2[0]) a2[0] = 10 log.Println(a) //a[0]=10 } ​
 len和cap的区别 len 代表底层数组可访问的范围，用索引访问不可越过这个界限
 cap 代表底层数组的实际空间长度，不可用索引访问，如果append 元素时没有超过这个cap，则不再创建底层数组，直接在len空间后面扩展。否则开辟新的空间，同时增大cap（这里有一个增大规则），所以如果要频繁的扩容，适当设置大一些的cap能减少开销的，设置大的cap是为了防止多次扩容拷贝造成开销
-func main(){ slice1 := []int{1,2,3} //len=3 cap=3 slice2 := make([]int,2) //len=2 cap=2 slice3 := make([]int,2,4) //len=2 cap=4 } func main(){ arr:=make([]int,2,10) // len=2 cap=10 arr[0]=1 arr[1]=2 //arr[2]=3 //报错 // len=6 cap=10 arr = arr[:6] //扩容,不会再申请空间 arr[2]=3 // [1,2,3,0,0,0] //会在len后面添加,如果len&amp;gt;cap则会进行扩容 此处不会扩容 arr = append(arr,888) // len=7 cap=10 //arr=arr[:11] //报错 超过cap的大小，此时必须用过append进行扩容 } func main(){ //下面的切片引用切片 指向同一个底层数组 cap右界限都是和父亲一样的 a1 :=[]int{1,2,3,4,5,6,7,8} // len=8 cap=8 a2 :=a1[:3] //[1,2,3] len=3 cap=8 a3 :=a1[:5] //[1,2,3,4,5] len=5 cap=8 } ​</description></item><item><title>Go并发模式和channel</title><link>/2021/05/22/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E5%92%8Cchannel/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/22/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E5%92%8Cchannel/</guid><description><![CDATA[channel实现互斥锁 传统的sync.Mutex互斥锁
-//如果不加锁那么最终结果可能不是10000 func main() { count := 0 wg := sync.WaitGroup{} mu := sync.Mutex{} for i := 0; i &lt; 10000; i++ { wg.Add(1) go func() { mu.Lock() count++ mu.Unlock() wg.Done() }() } wg.Wait() fmt.Println(count) //10000 } channel实现互斥锁
-func main() { count := 0 wg := sync.WaitGroup{} //channel的大小表示资源数量 1表示只允许一个goroutine加锁 	lock := make(chan struct{}, 1) for i := 0; i &lt; 10000; i++ { wg.Add(1) go func() { lock &lt;- struct{}{} //加锁 	count++ &lt;-lock //解锁 	wg.]]></description></item><item><title>github上的docker镜像仓库</title><link>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</link><pubDate>Fri, 21 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/21/github%E4%B8%8A%E7%9A%84docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93/</guid><description>github镜像仓库 github上也提供了docker镜像仓库服务，分为两类:
-docker.pkg.github.com 仓库关联的镜像仓库，必须对应一个仓库 ghcr.io 仓库无关的镜像仓库，和用户关联 tag格式分别为:
-docker.pkg.github.com/OWNER/REPOSITORY/IMAGE_NAME:VERSION ghcr.io/OWNER/IMAGE_NAME:VERSION 登入的密码就是github上创建的TOKEN，注意token必须有读写package的相关权限，我把token记录在了环境变量中，也可以记录在指定的文件里，将echo替换为cat即可
-echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://docker.pkg.github.com -u biningo --password-stdin echo $GITHUB_DOCKER_IMAGE_TOKEN | docker login https://ghcr.io -u biningo --password-stdin ​
-参考 Working with the Docker registry
-Working with the Container registry</description></item><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>lazydocker https://github.com/jesseduffield/lazydocker
-终端界面管理Docker
-portainer https://github.com/portainer/portainer
-Web界面可视化管理Docker和Kubernetes集群
-harbor https://github.com/goharbor/harbor
-企业级docker私有仓库
-DockerSlim https://github.com/docker-slim/docker-slim
-Docker镜像瘦身，镜像安全等
-ctop https://github.com/bcicen/ctop
-Docker终端容器监控工具
-podman 一个和Docker命令兼容的Linux容器工具，被誉为下一代容器工具
-参考 推荐5款好用的开源Docker工具</description></item></channel></rss>
+func main(){ slice1 := []int{1,2,3} //len=3 cap=3 slice2 := make([]int,2) //len=2 cap=2 slice3 := make([]int,2,4) //len=2 cap=4 } func main(){ arr:=make([]int,2,10) // len=2 cap=10 arr[0]=1 arr[1]=2 //arr[2]=3 //报错 // len=6 cap=10 arr = arr[:6] //扩容,不会再申请空间 arr[2]=3 // [1,2,3,0,0,0] //会在len后面添加,如果len&amp;gt;cap则会进行扩容 此处不会扩容 arr = append(arr,888) // len=7 cap=10 //arr=arr[:11] //报错 超过cap的大小，此时必须用过append进行扩容 } func main(){ //下面的切片引用切片 指向同一个底层数组 cap右界限都是和父亲一样的 a1 :=[]int{1,2,3,4,5,6,7,8} // len=8 cap=8 a2 :=a1[:3] //[1,2,3] len=3 cap=8 a3 :=a1[:5] //[1,2,3,4,5] len=5 cap=8 } ​</description></item></channel></rss>

@@ -35,7 +35,8 @@ KeepAlice主要有如下几个作用:
 还有一种情况就是在接收方的窗口值为0的情况下，那么发送方就不能继续发送数据了，那么即使接收方的窗口扩大了也没有办法告诉发送方，此时就相当于死锁了双方都不会发送数据
 所以KeepAlive探测包还可以用于解决窗口值减少为0而造成死锁的情况。当接收方的窗口为0的时候，发送方可以定时的发送KeepAlive包来探测接收方的窗口是否扩大了
 ​
-Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes</description></item><item><title>TCP协议</title><link>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</link><pubDate>Thu, 11 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</guid><description>TCP协议 面向连接、可靠的字节流传输协议 全双工 可相互传递字节流 只可用于 一对一通信 ，不能用于多播和组播 TCP 使用校验和，确认和重传机制来保证可靠传输 TCP 使用滑动窗口机制来实现流量控制，通过动态改变窗口的大小进行拥塞控制 TCP使用 (源地址，源端口，目的地址，目的端口)来标识一个连接 ​
+Linux中KeepAlive相关配置 #7200 每7200s发送KeepAlive包 /proc/sys/net/ipv4/tcp_keepalive_time #75 如果75s内没有收到KeepAlive的ACK则再次发送 /proc/sys/net/ipv4/tcp_keepalive_intvl #9 如果重试9次都没有响应则把此连接删除掉 /proc/sys/net/ipv4/tcp_keepalive_probes ​
+KeepAlive能携带数据吗 注意，KeepAlive包的seq也是没有意义的，seq一般和初始化的seq一致，KeepAlive是不携带数据的</description></item><item><title>TCP协议</title><link>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</link><pubDate>Thu, 11 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/11/tcp%E5%8D%8F%E8%AE%AE/</guid><description>TCP协议 面向连接、可靠的字节流传输协议 全双工 可相互传递字节流 只可用于 一对一通信 ，不能用于多播和组播 TCP 使用校验和，确认和重传机制来保证可靠传输 TCP 使用滑动窗口机制来实现流量控制，通过动态改变窗口的大小进行拥塞控制 TCP使用 (源地址，源端口，目的地址，目的端口)来标识一个连接 ​
 TCP报文 源端口和目的端口 端口大小为16位，可见端口范围为:0~2^16 也就是[0~65536]
 IP层则用ip地址来标识一台主机，TCP层用端口来标识一个应用，使用(源地址，源端口，目的地址，目的端口)唯一确定一个连接，所以对于IPV4的话单台主机最大的连接数为 2^(32+16+32+16) 个
 序号 每个TCP包都有一个序号，编号是为了解决TCP包乱序问题，给每个包编上序号就知道了每个包的顺序，这样就可以完整的拼好所有的TCP包了而不造成乱序，TCP给个字节都有一个序号，序号是整个TCP包数据段的第一个字节的序号，比如现在一个包的起始序号为101，数据长度为500byte ，那么最后一个字节的序号就为600，这个TCP包的序号为第一个字节的序号101 ，所以下一个TCP包的第一个字节的序号应该为601，也就是下一个TCP包的序号为601
