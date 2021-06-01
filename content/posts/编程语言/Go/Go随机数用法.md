@@ -13,7 +13,6 @@ go随机数在`math/rand`包下，go的随机数需要先给他一个`Seed`，`S
 rand.Seed(time.Now().UnixNano())
 r:=rand.Intn(10) //[0,10) 返回int类型
 r=rand.Int63n(10) //返回int64
-....
 ```
 
 如果要生成指定范围的随机整数，如下生成`[min,max)`之间的随机整数：
@@ -21,7 +20,7 @@ r=rand.Int63n(10) //返回int64
 ```go
 rand.Seed(time.Now().UnixNano())
 max:=10;min:=-10
-rand.Intn(max-min)+min) //[-10,10)
+rand.Intn(max-min)+min //[-10,10)
 ```
 
 ​    
@@ -62,3 +61,69 @@ func main() {
 }
 ```
 
+​    
+
+## cryptp包中的随机数
+
+生成随机字节数组
+
+```go
+import (
+	"crypto/rand"
+    "encoding/base64"
+	"encoding/hex"
+    "math/big"
+)
+func main() {
+	
+	d64 := make([]byte, 64)
+	rand.Read(d64) //传入的byte数组大小是多少就生成多少
+	
+    //序列化为16进制字符串
+	h := hex.EncodeToString(d64) //128 每个字节是2位16进制
+	fmt.Println(h)
+	
+    //序列化为base64
+	b64 := base64.StdEncoding.EncodeToString(d64)
+	fmt.Println(b64)
+}
+```
+
+生成均匀分布的随机数字
+
+```go
+func main() {
+    // [0,n)
+	n1, _ := rand.Int(rand.Reader, big.NewInt(2)) 
+    
+    // [min,max)
+    max := 3;min := -1
+	n, _ := rand.Int(rand.Reader, big.NewInt(int64(max-min)))
+	n2 := n.Int64() + int64(min) //生成的随机数
+}
+```
+
+​    
+
+## 加密解密和序列化
+
+```go
+import (
+	"crypto/rand"
+    "encoding/base64"
+	"encoding/hex"
+)
+func main(){
+	d64 := make([]byte, 64)
+	rand.Read(d64)
+	h := hex.EncodeToString(d64) //128 每个字节是2位16进制
+	b64 := base64.StdEncoding.EncodeToString(d64)
+   
+    //序列化为sha256  返回256位(32byte)的加密字符串
+	s256 := sha256.Sum256([]byte("hello,world")) 
+	
+    //将加密字符串序列化
+    h = hex.EncodeToString(s256[:]) //使用fmt.Sprintf也可
+	b64 = base64.StdEncoding.EncodeToString(s256[:])
+}
+```

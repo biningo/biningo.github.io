@@ -24,3 +24,6 @@ draft: true
 
 > https://github.com/dundee/gdu
 
+`vault` 密码、安全、证书管理等
+
+> https://github.com/hashicorp/vault

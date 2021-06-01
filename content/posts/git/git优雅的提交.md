@@ -1,7 +1,7 @@
 ---
 title: git优雅的提交
 date: 2021-04-29
-categories: [DevOps和CICD]
+categories: [git]
 tags: [git]
 ---
 

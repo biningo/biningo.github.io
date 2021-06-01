@@ -1,7 +1,7 @@
 ---
 title: HTTP协议FAQ
 date: 2021-03-20
-categories: [网络]
+categories: [网络/HTTP]
 tags: [HTTP]
 draft: true
 ---

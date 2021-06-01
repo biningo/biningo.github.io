@@ -1,7 +1,7 @@
 ---
 title: git总结
 date: 2021-02-08
-categories: [DevOps和CICD]
+categories: [git]
 tags: [git]
 ---
 
@@ -86,6 +86,25 @@ git commit --amend -m "新的提交信息"
 
 ​    
 
+## commit日志查看
+
+```bash
+git log --oneline #以短格式显示
+git log -2 #查看最近的2次提交
+git log --graph #显示图形
+
+# 列出提交者贡献数量, 只会打印作者和贡献数量
+git shortlog -sn
+# 列出提交者贡献数量, 会提交者的详细commit记录
+git shortlog -n
+git shortlog -e #-e列出邮箱
+
+# 查看 README.md 文件的修改历史记录，包括时间、作者以及内容
+git blame README.md
+```
+
+​    
+
 ## 分支管理
 
 查看分支
@@ -154,25 +173,6 @@ git merge a b #将b合并到a
 
 ```bash
 git status -s #以短格式输出 M:表示有变更 A:表示已经添加到暂存库 D:表示删除
-```
-
-​    
-
-## commit日志查看
-
-```bash
-git log --oneline #以短格式显示
-git log -2 #查看最近的2次提交
-git log --graph #显示图形
-
-# 列出提交者贡献数量, 只会打印作者和贡献数量
-git shortlog -sn
-# 列出提交者贡献数量, 会提交者的详细commit记录
-git shortlog -n
-git shortlog -e #-e列出邮箱
-
-# 查看 README.md 文件的修改历史记录，包括时间、作者以及内容
-git blame README.md
 ```
 
 ​    

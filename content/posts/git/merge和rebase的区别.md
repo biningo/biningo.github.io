@@ -1,7 +1,7 @@
 ---
 title: merge和rebase的区别
 date: 2021-04-29
-categories: [DevOps和CICD]
+categories: [git]
 tags: [git]
 ---
 

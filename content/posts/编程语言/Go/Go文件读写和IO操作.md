@@ -180,6 +180,46 @@ func writeDemo4() {
 
 ​    
 
+## 几个特殊的IO方法
+
+`io.ReadAll()` 读取reader中的全部数据
+
+```go
+content, _ := io.ReadAll(file) //ioutil.ReadAll(file)同理
+```
+
+`io.ReadFull` 填充传入的字节数组，返回读取的字节数
+
+- 如果传入的字节数组空间足够大则`error`为`ErrUnexpectedEOF`，并且返回实际读取的字节数
+- 如果传入的字节数组不足，则`error`为`nil`，并且返回实际读取的字节数
+
+```go
+func main() {
+	file, _ := os.Open("/a.txt")
+	data := make([]byte, 20)
+	n, err := io.ReadFull(file, data)
+	fmt.Println(string(data), n, err == io.ErrUnexpectedEOF)
+}
+```
+
+`io.Copy` 负责在两个IO之间copy数据
+
+```go
+func main() {
+	file1, _ := os.Open("/a.txt")
+	file2, _ := os.OpenFile("/b.txt",os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
+	defer file1.Close()
+	defer file2.Close()
+
+	reader := bufio.NewReader(file1)
+	writer := bufio.NewWriter(file2)
+    //文件复制: 将file1的内容copy到file2中
+	n, err := io.Copy(writer, reader) //返回copy的字节数
+}
+```
+
+​    
+
 ## 参考
 
 [Golang 读、写文件](https://segmentfault.com/a/1190000017918542)

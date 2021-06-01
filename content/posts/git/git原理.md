@@ -1,7 +1,7 @@
 ---
 title: git原理
 date: 2021-04-30
-categories: [DevOps和CICD]
+categories: [git]
 tags: [git]
 ---
 
