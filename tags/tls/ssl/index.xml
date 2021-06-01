@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>TLS/SSL - 标签 - lyer's blog</title><link>/tags/tls/ssl/</link><description>TLS/SSL - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><atom:link href="/tags/tls/ssl/" rel="self" type="application/rss+xml"/><item><title>TLS(SSL)协议</title><link>/2021/03/16/tlsssl%E5%8D%8F%E8%AE%AE/</link><pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/16/tlsssl%E5%8D%8F%E8%AE%AE/</guid><description>什么是TLS协议 因为HTTP传输都是明文传输的，如果被中间人截获，那么报文内容就会被盗取
+为了防止HTTP明文传输，于是可以讲HTTP报文和数据整个进行加密然后再将数据传递给下层的TCP层，传递到客户端再进行解密，TLS协议就是解决HTTP报文加密问题的，被TLS协议加密之后的HTTP协议就叫HTTPS HTTP over SSL 使用的是443端口
+TLS是SSL的改进版，现在都是使用TLS来替换SSL了，但是延续了老的叫法，所有都叫SSL 这两个其实是同一个意思
+TLS现在广泛使用的版本为TLS1.2 TLS1.3
+加密算法有对称加密、非对称加密 ，如果将HTTP报文采用非对称加密的话那么带来的CPU运算是非常大的，速度也相对较慢，因为HTTP报文一般数据比较大
+所以TLS采用对称加密的方式来加密HTTP报文加快加密解密的速度，但是这里就涉及到如何传递 对称密钥 的问题了，这就是 TLS握手 需要解决的问题
+TLS握手的作用:
+商定双方使用的非对称加密算法和TLS版本 传输非对称加密算法所需的参数和随机数，随机数的作用是加大解密的难度 传输证书和公钥 (非对称加密算法需要使用公私钥) ​
+TLS握手第一阶段 1、Client Hello TCP建立之后浏览器会先发送一个Client Hello 报文给服务器，目的是为了告诉服务器如下内容，重点关注如下内容:
+客户端TLS版本 支持的加密套件Cipher Suites 服务器会从中选择一个加密算法 随机字符串Random1 ， 这个随机数和之后的生成对称密钥有关 Session ID 用来恢复会话 SessionTicket 客户端保存的TLS的session信息 2、Server Hello 服务器接受到客户端的Client Hello之后就会检查客户端版本、加密套件等信息，检查通过并且符合服务器的条件则服务器会进行回复，也就是发送Server Hello包
+回复内容主要是告诉客户端如下几个重要的内容:
+确认SSL/TLS协议版本，如果浏览器不⽀持，则关闭加密通信
+从Client Hello中选择一个加密套件，如选择RSA，并且告诉客户端选择了那个加密套件用于后面的加密
+随机字符串Random2，此时客户端和服务器都拥有两个随机数 Random1、Random2
+初次握手服务器会返回一个Session ID，客户端会保存这个ID，之后再进行握手发送Client Hello的时候就会携带上这个Session ID，服务器就会直接查询Session ID对应的信息比如对称加密的密钥，这样就可以直接复用了就不需要再次生成了，因为生成过程也有一定的消耗</description></item></channel></rss>

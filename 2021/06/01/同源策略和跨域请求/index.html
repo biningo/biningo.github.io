@@ -1,0 +1,114 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>同源策略和跨域请求 - lyer's blog</title><meta name=Description content><meta property="og:title" content="同源策略和跨域请求"><meta property="og:description" content="何为同源，何为跨域 首先需要知道什么是 同源和非同源
+同源: 域名、协议、端口 完全一致就是同源头
+不同源之间相互访问就叫 跨域访问
+google.com www.google.com #域名不一致 不同源 google.com:8080 google.com:9090 #端口不一致 不同源 http://google.com https://google.com #协议不一致 不同源 google.com/b.html google.com/c.html #同源 ​
+什么是同源策略 浏览器对于非同源请求做出了如下限制，也就是同源策略
+  无法读取非同源的 Cookie、LocalStorage IndexDB等内容
+  无法读取和修改非同源的DOM
+  无法发送非同源的AJAX，如果发送了非同源请求就会被浏览器拦截
+  无法发送非同源的请求
+  ​
+为什么需要同源策略 如果没有同源策略，那么假如小明在A网站登入了，如果小明在没有注销期间访问了B网站，B网站中携带了js脚本向A网站发起了模拟用户的请求，那么此请求会携带上浏览器保存的Cookie，这样B网站的js脚本就可以模拟小明随意操作了，这就是 CSRF跨站脚本伪造攻击
+​
+跨域请求 在前后端分离的应用中需要规避这个同源策略，因为这是我们主动发起的跨域请求，自认为是安全的，例如前端地址为abc.com:8080,后端API为abc.com:9090 直接访问API会触发同源策略被浏览器拦截，所以需要想办法跨过去
+主要有如下几个跨域请求的方法:
+  CORS 跨域资源共享
+HTTP设置了跨域专用的请求头，后端API服务器abc.com:9090 告诉浏览器特定URL abc.com:8080的ajax请求可以直接使用，不会激活同源策略
+  nginx反向代理
+前端通过指定路径 abc.com:8080/api 访问后端请求，nginx配置此前缀的URL反向代理到abc.com:8080
+  所有拥有src属性的 <script>、<img>、<iframe> 以及<a>标签等，是不会经过同源策略，因为这些标签肯定是网站主动引用外部资源的所以不需要规定同源策略，例如baidu.com引用了CDN的jquery
+所以我通过调用js脚本的方式，从服务器上获取JSON数据绕过同源策略"><meta property="og:type" content="article"><meta property="og:url" content="/2021/06/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E5%92%8C%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/"><meta property="article:published_time" content="2021-06-01T00:00:00+00:00"><meta property="article:modified_time" content="2021-06-01T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="同源策略和跨域请求"><meta name=twitter:description content="何为同源，何为跨域 首先需要知道什么是 同源和非同源
+同源: 域名、协议、端口 完全一致就是同源头
+不同源之间相互访问就叫 跨域访问
+google.com www.google.com #域名不一致 不同源 google.com:8080 google.com:9090 #端口不一致 不同源 http://google.com https://google.com #协议不一致 不同源 google.com/b.html google.com/c.html #同源 ​
+什么是同源策略 浏览器对于非同源请求做出了如下限制，也就是同源策略
+  无法读取非同源的 Cookie、LocalStorage IndexDB等内容
+  无法读取和修改非同源的DOM
+  无法发送非同源的AJAX，如果发送了非同源请求就会被浏览器拦截
+  无法发送非同源的请求
+  ​
+为什么需要同源策略 如果没有同源策略，那么假如小明在A网站登入了，如果小明在没有注销期间访问了B网站，B网站中携带了js脚本向A网站发起了模拟用户的请求，那么此请求会携带上浏览器保存的Cookie，这样B网站的js脚本就可以模拟小明随意操作了，这就是 CSRF跨站脚本伪造攻击
+​
+跨域请求 在前后端分离的应用中需要规避这个同源策略，因为这是我们主动发起的跨域请求，自认为是安全的，例如前端地址为abc.com:8080,后端API为abc.com:9090 直接访问API会触发同源策略被浏览器拦截，所以需要想办法跨过去
+主要有如下几个跨域请求的方法:
+  CORS 跨域资源共享
+HTTP设置了跨域专用的请求头，后端API服务器abc.com:9090 告诉浏览器特定URL abc.com:8080的ajax请求可以直接使用，不会激活同源策略
+  nginx反向代理
+前端通过指定路径 abc.com:8080/api 访问后端请求，nginx配置此前缀的URL反向代理到abc.com:8080
+  所有拥有src属性的 <script>、<img>、<iframe> 以及<a>标签等，是不会经过同源策略，因为这些标签肯定是网站主动引用外部资源的所以不需要规定同源策略，例如baidu.com引用了CDN的jquery
+所以我通过调用js脚本的方式，从服务器上获取JSON数据绕过同源策略"><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/06/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E5%92%8C%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/><link rel=prev href=/2021/05/31/http%E7%BC%93%E5%AD%98/><link rel=next href=/2021/06/01/xss%E5%92%8Ccsrf%E6%94%BB%E5%87%BB/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"同源策略和跨域请求","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/06\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E5%92%8C%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82\/"},"genre":"posts","keywords":"网络安全, HTTP","wordcount":218,"url":"\/2021\/06\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E5%92%8C%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82\/","datePublished":"2021-06-01T00:00:00+00:00","dateModified":"2021-06-01T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">同源策略和跨域请求</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BD%91%E7%BB%9C/http/><i class="far fa-folder fa-fw"></i>网络/HTTP</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-06-01>2021-06-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 218 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#何为同源何为跨域>何为同源，何为跨域</a></li><li><a href=#什么是同源策略>什么是同源策略</a></li><li><a href=#为什么需要同源策略>为什么需要同源策略</a></li><li><a href=#跨域请求>跨域请求</a></li><li><a href=#cors跨域资源共享>CORS跨域资源共享</a></li><li><a href=#jsonp跨域>JSONP跨域</a></li></ul></nav></div></div><div class=content id=content><h2 id=何为同源何为跨域>何为同源，何为跨域</h2><p>首先需要知道什么是 <strong>同源和非同源</strong></p><p>同源: <strong>域名、协议、端口</strong> 完全一致就是同源头</p><p>不同源之间相互访问就叫 <strong>跨域访问</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>google.com www.google.com <span class=c1>#域名不一致 不同源</span>
+google.com:8080 google.com:9090 <span class=c1>#端口不一致 不同源</span>
+http://google.com https://google.com <span class=c1>#协议不一致 不同源</span>
+google.com/b.html google.com/c.html <span class=c1>#同源</span>
+</code></pre></div><p>​</p><h2 id=什么是同源策略>什么是同源策略</h2><p>浏览器对于非同源请求做出了如下限制，也就是同源策略</p><ul><li><p>无法读取非同源的 <code>Cookie、LocalStorage IndexDB</code>等内容</p></li><li><p>无法读取和修改非同源的<code>DOM</code></p></li><li><p>无法发送非同源的<code>AJAX</code>，如果发送了非同源请求就会被浏览器拦截</p></li><li><p>无法发送非同源的请求</p></li></ul><p>​</p><h2 id=为什么需要同源策略>为什么需要同源策略</h2><p>如果没有同源策略，那么假如小明在A网站登入了，如果小明在没有注销期间访问了B网站，B网站中携带了js脚本向A网站发起了模拟用户的请求，那么此请求会携带上浏览器保存的Cookie，这样B网站的js脚本就可以模拟小明随意操作了，这就是 <code>CSRF</code>跨站脚本伪造攻击</p><p>​</p><h2 id=跨域请求>跨域请求</h2><p>在前后端分离的应用中需要规避这个同源策略，因为这是我们主动发起的跨域请求，自认为是安全的，例如前端地址为<code>abc.com:8080</code>,后端API为<code>abc.com:9090</code> 直接访问API会触发同源策略被浏览器拦截，所以需要想办法跨过去</p><p>主要有如下几个跨域请求的方法:</p><ul><li><p><strong>CORS 跨域资源共享</strong></p><p>HTTP设置了跨域专用的请求头，后端API服务器<code>abc.com:9090</code> 告诉浏览器特定URL <code>abc.com:8080</code>的ajax请求可以直接使用，不会激活同源策略</p></li><li><p><strong>nginx反向代理</strong></p><p>前端通过指定路径 <code>abc.com:8080/api</code> 访问后端请求，nginx配置此前缀的URL反向代理到<code>abc.com:8080</code></p></li><li><p>所有拥有<code>src</code>属性的 <code>&lt;script>、&lt;img>、&lt;iframe></code> 以及<code>&lt;a></code>标签等，是不会经过同源策略，因为这些标签肯定是网站主动引用外部资源的所以不需要规定同源策略，例如<code>baidu.com</code>引用了CDN的<code>jquery</code></p><p>所以我通过调用js脚本的方式，从服务器上获取JSON数据绕过同源策略</p><p>此规则会引发 <strong>CSRF攻击</strong></p></li><li><p><code>JSONP</code> 方式，使用回调函数来获取数据</p></li></ul><p>​</p><h2 id=cors跨域资源共享>CORS跨域资源共享</h2><p>浏览器通过 Header 响应请求头告诉浏览器允许哪些URL、哪些请求方法允许跨域请求，这样浏览器就允许指定URL进行跨域请求了</p><p>跨域过程如下:</p><ul><li>客户端进行跨域之前都会发送一个<code>OPTIONS</code>请求通知服务器 “我要跨域了，告诉我允许跨域那些访问”</li><li><code>OPTIONS</code>请求会带上一些客户端信息，比如<code>Origin</code> 然后服务器会进行检查和权限严重等操作</li><li>如果服务器检查通过则设置允许跨域的相关HTTP头部告诉浏览器允许跨域</li></ul><p>下面请看一些跨域相关的请求头</p><p><code>Origin</code> 客户端告诉服务器该请求来自哪个域，服务器通过这个字段进行校验检查客户端是否合法，如果合法则设置 <code>Access-x</code>相关头部通知浏览器允许跨域，不合法则拒绝跨域</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>Origin: abc.com:8080
+</code></pre></div><p><code>Access-x</code> 允许跨域的相关请求头</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#1、服务器告诉浏览器那些域允许范围 *表示所有域都可</span>
+Access-Control-Allow-Origin: abc.com:8080
+<span class=c1>#2、允许那些请求方法跨域</span>
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+<span class=c1>#3、请求允许携带的头部</span>
+Access-Control-Allow-Headers: Content-Type
+<span class=c1>#4、告知浏览器哪些响应头部可以供客户端使用认情况下只有 Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 可供使用</span>
+Access-Control-Expose-Headers: Content-Encoding,Conent-Length
+<span class=c1>#5、告知浏览器该响应的信息可以缓存多久</span>
+Access-Control-Max-Age:1800
+<span class=c1>#6、告知浏览器是否可以将 Credentials 暴露给客户端使用，Credentials 包含 cookie、authorization 类头部、TLS证书等</span>
+Access-Control-Allow-Credentials:true
+</code></pre></div><p>下面是设置跨域的标准代码</p><div class=highlight><pre class=chroma><code class=language-go data-lang=go><span class=c1>// 处理跨域请求,支持options访问
+</span><span class=c1></span><span class=kd>func</span> <span class=nf>Cors</span><span class=p>()</span> <span class=nx>gin</span><span class=p>.</span><span class=nx>HandlerFunc</span> <span class=p>{</span>
+	<span class=k>return</span> <span class=kd>func</span><span class=p>(</span><span class=nx>c</span> <span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span> <span class=p>{</span>
+		<span class=nx>method</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Method</span>
+		<span class=nx>origin</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;Origin&#34;</span><span class=p>)</span>
+		<span class=nx>c</span><span class=p>.</span><span class=nf>Header</span><span class=p>(</span><span class=s>&#34;Access-Control-Allow-Origin&#34;</span><span class=p>,</span> <span class=nx>origin</span><span class=p>)</span>
+		<span class=nx>c</span><span class=p>.</span><span class=nf>Header</span><span class=p>(</span><span class=s>&#34;Access-Control-Allow-Headers&#34;</span><span class=p>,</span> <span class=s>&#34;Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id&#34;</span><span class=p>)</span>
+		<span class=nx>c</span><span class=p>.</span><span class=nf>Header</span><span class=p>(</span><span class=s>&#34;Access-Control-Allow-Methods&#34;</span><span class=p>,</span> <span class=s>&#34;POST, GET, OPTIONS,DELETE,PUT&#34;</span><span class=p>)</span>
+		<span class=nx>c</span><span class=p>.</span><span class=nf>Header</span><span class=p>(</span><span class=s>&#34;Access-Control-Expose-Headers&#34;</span><span class=p>,</span> <span class=s>&#34;Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type&#34;</span><span class=p>)</span>
+		<span class=nx>c</span><span class=p>.</span><span class=nf>Header</span><span class=p>(</span><span class=s>&#34;Access-Control-Allow-Credentials&#34;</span><span class=p>,</span> <span class=s>&#34;true&#34;</span><span class=p>)</span>
+
+		<span class=c1>// 放行所有OPTIONS方法
+</span><span class=c1></span>		<span class=k>if</span> <span class=nx>method</span> <span class=o>==</span> <span class=s>&#34;OPTIONS&#34;</span> <span class=p>{</span>
+			<span class=nx>c</span><span class=p>.</span><span class=nf>AbortWithStatus</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusNoContent</span><span class=p>)</span>
+		<span class=p>}</span>
+		<span class=c1>// 处理请求
+</span><span class=c1></span>		<span class=nx>c</span><span class=p>.</span><span class=nf>Next</span><span class=p>()</span>
+	<span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>​</p><h2 id=jsonp跨域>JSONP跨域</h2><p>原理就是定义一个<code>js</code>函数，然后用<code>src</code>引入的方式请求不同域的js资源，然后服务器就会返回一个 <strong>函数调用的字符串，包括转入的json参数</strong> ，浏览器会直接解析这个字符串为js代码进行调用，这样就可以间接获取到服务区传入的json数据了</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>&lt;!DOCTYPE html&gt;
+&lt;html <span class=nv>lang</span><span class=o>=</span><span class=s2>&#34;en&#34;</span>&gt;
+&lt;head&gt;
+    &lt;meta <span class=nv>charset</span><span class=o>=</span><span class=s2>&#34;UTF-8&#34;</span>&gt;
+    &lt;meta http-equiv<span class=o>=</span><span class=s2>&#34;X-UA-Compatible&#34;</span> <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;IE=edge&#34;</span>&gt;
+    &lt;meta <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;viewport&#34;</span> <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;script&gt;
+    <span class=k>function</span> hello<span class=o>(</span>data<span class=o>){</span>
+        console.log<span class=o>(</span>data<span class=o>)</span><span class=p>;</span>
+    <span class=o>}</span>
+&lt;/script&gt;
+&lt;script <span class=nv>src</span><span class=o>=</span><span class=s2>&#34;http:localhost:8080/js?callback=hello&#34;</span>&gt;&lt;/script&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div><p>远程服务器</p><div class=highlight><pre class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+   <span class=nx>r</span> <span class=o>:=</span> <span class=nx>gin</span><span class=p>.</span><span class=nf>Default</span><span class=p>()</span>
+
+   <span class=nx>r</span><span class=p>.</span><span class=nf>GET</span><span class=p>(</span><span class=s>&#34;/js&#34;</span><span class=p>,</span> <span class=kd>func</span><span class=p>(</span><span class=nx>context</span> <span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span> <span class=p>{</span>
+      <span class=nx>callback</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>Query</span><span class=p>(</span><span class=s>&#34;callback&#34;</span><span class=p>)</span> <span class=c1>//获取约定的回调函数名
+</span><span class=c1></span>      <span class=nx>data</span> <span class=o>:=</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>{</span>
+         <span class=s>&#34;name&#34;</span><span class=p>:</span> <span class=s>&#34;lyer&#34;</span><span class=p>,</span>
+         <span class=s>&#34;age&#34;</span><span class=p>:</span>  <span class=s>&#34;19&#34;</span><span class=p>,</span>
+      <span class=p>}</span>
+      <span class=nx>jsonData</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>data</span><span class=p>)</span>
+      <span class=nx>context</span><span class=p>.</span><span class=nf>String</span><span class=p>(</span><span class=mi>200</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;%s(%s)&#34;</span><span class=p>,</span> <span class=nx>callback</span><span class=p>,</span> <span class=nx>jsonData</span><span class=p>))</span>
+      <span class=c1>//context.JSONP(200, data)
+</span><span class=c1></span>   <span class=p>})</span>
+
+   <span class=nx>r</span><span class=p>.</span><span class=nf>Run</span><span class=p>(</span><span class=s>&#34;:8080&#34;</span><span class=p>)</span>
+<span class=p>}</span>    
+</code></pre></div><p>​</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-06-01</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/>网络安全</a>,&nbsp;<a href=/tags/http/>HTTP</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/05/31/http%E7%BC%93%E5%AD%98/ class=prev rel=prev title=HTTP缓存><i class="fas fa-angle-left fa-fw"></i>HTTP缓存</a>
+<a href=/2021/06/01/xss%E5%92%8Ccsrf%E6%94%BB%E5%87%BB/ class=next rel=next title=XSS和CSRF攻击>XSS和CSRF攻击<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-06-01T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"同源策略和跨域请求"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

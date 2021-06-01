@@ -1,0 +1,42 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>git - 分类 - lyer's blog</title><link>/categories/git/</link><description>git - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/git/" rel="self" type="application/rss+xml"/><item><title>git原理</title><link>/2021/04/30/git%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/30/git%E5%8E%9F%E7%90%86/</guid><description>git三大对象 git三大对象分别为:
+blob tree commit 下面来讲述这些对象的细节:
+blob 记录了文件的实际内容，每次add都会为每个文件生成一个blob，暂存区有个index指针会指向最新add到暂存区的几个blob 每次进行commit时都会生成两个对象: tree和commit
+tree 记录了index指针指向的几个blob的hash值还有对应的文件信息和文件权限
+commit记录了此次commit的作者信息和对应的tree节点，同时还会记录上一个commits
+​
+参考 这才是真正的Git——Git内部原理
+三道 google 风格 git 面试题及其解答</description></item><item><title>git三大区域</title><link>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</guid><description><![CDATA[git三大区域 工作区
+工作区就是我们的本地目录
+暂存区
+暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区，然后我继续修改这个文件&hellip;&hellip;
+改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了，我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
+git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 本地仓库
+如果确保此次修改就是最终版本，那么我们可以讲暂存区域中的内容提交到本地仓库，此时三大区域就一致了，一次提交就相当于一次版本的发布，以后可以回退到此版本
+所以在提交之前需要确保暂存区的内容就是确定了的不会再修改了的
+git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退之后 三大区域也是一致的 git reset a112c #也可以指定特定的版本号 ​]]></description></item><item><title>git优雅的提交</title><link>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</guid><description><![CDATA[git commit命令 git commit #进入vi界面编辑 git commit -m &#34;message&#34; #直接输入剪短信息 git commit --amend -m &#34;new a&#34; #修改最近一次的commit信息 ​
+commit规范 &lt;type&gt;[optional scope]: &lt;description&gt; &lt;BLANK LINE&gt; [optional body] &lt;BLANK LINE&gt; [optional footer(s)]  标题行: 必填, 描述主要修改的type类型和desc简短描述 主题内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路等详细注释，这是可选的 页脚注释: 放 Breaking Changes 或 Closed Issues 这也是可选的  type 提交类型
+   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 影响范围]]></description></item><item><title>merge和rebase的区别</title><link>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</guid><description>merge和rebase的区别 假如下面的分支如下
+E---F dev / A---B---C---D master 使用rebase的场景 此时dev为了和master保持同步，则在dev中使用rebase操作，rebase就是寻找公共父节点
+C---D--E--F dev / A---B---C---D master 实际上现在的分支图变成了这样
+E--F dev / A---B---C---D master 此时在master分支中不管是执行rebase还是merge都是一条线，其实就是将master指针移动到dev指针处
+A---B---C---D---E---F dev,master 使用merge的场景 dev为了和master保持同步，于是使用merge
+E---F---G dev / / A---B---C---D master 现在master使用merge合并dev
+E---F---G dev / / \ A---B---C---D---H master 此时master又开发了几个版本，dev也开发了几个版本
+E---F---G---L---M dev / / \ A---B---C---D---H---I---J master 此时dev又要进行和master同步
+E---F---G---L---M----K dev / / \ / A---B---C---D---H---I---J master 此时dev需要合并到master中
+E---F---G---L---M----K dev / / \ / \ A---B---C---D---H---I---J---P master 看上面merge的图，分支一多就显的很乱</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
+同时也会在所有用户的本地也会保存所有版本
+这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
+使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
+在使用git的时候，时刻需要保持一个理念：
+  你的每次commit都是一个版本
+  提交版本的时候就会标注上 user.name、user.email 指示出这是谁提交的版本
+  只要是一个版本，那么在以后就都可以回滚到这个版本中
+  ​
+三大区域 工作区： 直接写代码，修改文件的地方
+暂存区： 将工作区的当前映象暂存起来以准备提交到版本库中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：
+ 我删除了a，并且add到暂存区 现在我添加了b，添加完之后就觉得还是a好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了a 最终我觉得就a了，不再修改了，于是就add+commit将最终的版本提交了  版本库： 存放最终的版本
+远程仓库： 供多人协作用，本地仓库的版本最终需要push到远程仓库，并且在push之前需要和远程仓库保持 同步 这要所有人才可以看到版本信息
+​
+三大区域变更 暂存区-&gt;工作区
+#1、将暂存区文件覆盖工作区 git restore &lt;file&gt; ... #2、取消暂存 git restore --staged &lt;file&gt;... #3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file git rm a #4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b git mv a b 版本库-&gt;工作区]]></description></item></channel></rss>
