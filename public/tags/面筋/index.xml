@@ -23,4 +23,15 @@ GC知道吗？go使用了gc算法说说看
 go1.14之后的抢占式调度知道吗
 操作系统 线程和进程的区别
 操作系统进程调度说说看
-其他 设计模式知道吗? 常见的设计模式说说看?</description></item></channel></rss>
+Docker namespace和cgroup
+cgroup的路径
+Dockerfile中CMD和Entrypoint区别
+Dockerfile中的ADD和COPY命令，为什么ADD不建议使用
+k8s pod和deployment
+OAM
+Linux命令 查看进程命令
+查看端口对应的进程命令
+设计模式 设计模式知道吗? 常见的设计模式说说看?
+设计模式在Go中有使用过吗
+其他 Java和Go的区别
+Go如何实现继承</description></item></channel></rss>

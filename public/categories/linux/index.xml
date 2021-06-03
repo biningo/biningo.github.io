@@ -1,4 +1,20 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Linux - 分类 - lyer's blog</title><link>/categories/linux/</link><description>Linux - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/linux/" rel="self" type="application/rss+xml"/><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Linux - 分类 - lyer's blog</title><link>/categories/linux/</link><description>Linux - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 03 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/linux/" rel="self" type="application/rss+xml"/><item><title>Linux权限和用户</title><link>/2021/06/03/linux%E7%94%A8%E6%88%B7%E5%92%8C%E6%9D%83%E9%99%90/</link><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/03/linux%E7%94%A8%E6%88%B7%E5%92%8C%E6%9D%83%E9%99%90/</guid><description>用户和用户组 一个用户必须属于某个组，创建新用户的时候如果没有指定用户组则会创建一个同名的默认用户组
+用户组和用户的关系是多对多的关系，一个组里可以有多个用户，同理一个用户也可以属于多个用户组，但是每个用户都会有一个默认组，而其他组则是附加组在/etc/passwd文件中记录的用户组就是用户所属的默认组，而在/etc/group中会记录每个用户组里面的其它用户成员列表(用户组的主成员不记录在此)
+/etc/passwd记录的是用户相关的一些信息，每个用户占用一行
+用户名:口令(都为x):用户ID:用户组ID:用户注释:用户家目录:shell解释器 testuser:x:1001:1001:TmpUser:/home/testuser:/bin/sh /etc/group记录的是用户组相关的信息，每个用户组占一行
+组名:口令(都为x):用户组ID:组内用户列表 audio:x:29:pulse,pb #主用户不会记录在这里 /etc/shadow 记录的是用户加密之后的密码信息
+/etc/default/useradd 新用户默认设置的配置文件
+SHELL=/bin/sh #新用户的默认shell EXPIRE=2020/06/08 #新用户的默认过期时间 不配置则永久 .... ​
+用户和用户组相关的Linux命令 我们直接修改配置文件也是可以的，但是Linux也为我们提供了一些命令，本质上都是修改底层的配置文件
+新建/删除/修改用户
+useradd/userdel/usermod 用户组增删改
+groupadd/groupdel/groupmod 修改用户密码
+passwd 为用户添加到指定的组中 (直接修改/etc/group命令也可)
+#添加用户到指定的用户组中 不加-a则表示替换 #这里需要注意: 用户的默认组是不会被修改掉的 这个操作只能修改附加组 usermod -a -G g1,g2,g3 查看用户信息
+id/who/users/whoami/last/lastb ​
+sudo命令和sudoers配置 sudo的作用是一个用户借用其它用户的权限来执行相关命令，需要配置/etc/sudoers文件，Linux会判断是否符合sudo文件的配置才会决定是否能够借权
+用户名 主机=(用户:用户组) NOPASSWD:命令列表 #pb用户可以在 所有主机登入 执行 所有用户:所有组 的所有命令 并且不需要输入密码 pb ALL=(ALL:ALL) NOPASSWD:ALL #表示admin组内的用户规则 %admin ALL=(ALL:ALL) ALL 下面再来看几个案例
+#相当于(root:root) peter ALL=(root) NOPASSWD: ALL lucy ALL=(ALL) chown,chmod,useradd papi ALL=/usr/sbin/*,/sbin/*,!</description></item><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
  全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
 readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
 name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
