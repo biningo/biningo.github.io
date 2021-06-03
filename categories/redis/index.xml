@@ -1,4 +1,29 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Redis - 分类 - lyer's blog</title><link>/categories/redis/</link><description>Redis - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 26 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/redis/" rel="self" type="application/rss+xml"/><item><title>Redis事务</title><link>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</link><pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/26/redis%E4%BA%8B%E5%8A%A1/</guid><description>TODO</description></item><item><title>基于Redis分布式锁实现思路</title><link>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</link><pubDate>Wed, 05 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</guid><description>为什么需要分布式锁 单机应用中(也就是一台机器中)的锁用于控制当前程序多个线程并发而引发的资源争夺问题，但是当应用场景扩展到了分布式环境就不一样了，这样的锁就没用了。因为每台机器都是独立的，如果还是之前的锁的话只能保证本机器不会引发资源竞争问题，分布式环境下相当于每台机器都有一个自己独立的锁，所以无法避免资源竞争问题
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Redis - 分类 - lyer's blog</title><link>/categories/redis/</link><description>Redis - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Wed, 02 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/redis/" rel="self" type="application/rss+xml"/><item><title>缓存一致性</title><link>/2021/06/02/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/</link><pubDate>Wed, 02 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/02/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/</guid><description>什么是缓存一致性 操作缓存比操作Mysql数据库要快，如果流量大的话可以先将数据保存在缓存中，等空闲的时候再将缓存中的数据持久化到数据库中
+还有一些热点数据我们也可以预先从数据库中加载到缓存中，那样在流量大的时候就不需要每次都从数据库里面去读取数据了
+因为缓存和数据库是两个不同的地方，最容易出现的问题就是缓存的数据和数据库中的数据不一致问题: 可能从缓存中读取的数据是旧值，又或者我们保存在缓存中的数据还没有持久化到Mysql数据库中
+为了保证缓存一致性，减少数据不一致的情况，我们必须合理的使用缓存
+​
+不更新缓存，而是删除缓存 后端数据库如果改变的话，我们不应该更新缓存而应该删除缓存，直到下一次数据读取的时候再加载数据库中最新的缓存
+如果数据改变了，我们如果去更新缓存的话则会出现很多问题
+一、线程安全，脏数据问题
+下面有两个并发请求A、B同时更新了数据库
+A更新数据库 B更新数据库 B更新缓存 A更新缓存 由于网络原因，虽然A是先于B更新数据库，但是此时A却后于B更新缓存，此时的缓存的数据就是A的数据而不是最新的数据B，这样就造成了数据不一致的问题
+如果我们在更新数据时直接删除数据，此下次再来读取的时候加载一次数据库即可，那么加载的数据一定是最新的
+二、频繁更新缓存造成不必要的浪费
+如果在写多读少的场景下，缓存数据会进行频繁更新，但是读数据却很少，则会造成资源浪费，还不如直接将缓存删除，下次读的时候只需要一次cache miss的消耗
+同时如果数据需要进过复杂的运算和逻辑处理才能写入缓存，那么频繁的更新缓存也会造成不必要的消耗
+​
+先操作数据库，再删除缓存 在写数据的时候，我们一般是先写数据库，再删除缓存 这样才能减少数据不一致的问题
+先删除缓存，再操作数据库
+此方案在并发读写的时候也会造成数据不一致性的问题
+假设有线程A、B
+线程A请求写操作，于是线程A会删除缓存数据再进行数据库写操作 此时线程B在A写操作的过程中进行读操作，引发一次cache miss 由于B是在A写事务执行过程中来读取的，于是B加载到缓存中的数据还是之前的老数据 此时A写操作完成，这样就造成了缓存和数据库的数据不一致性，如果缓存的数据没有过期时间的话则其他客户端读取到的数据就一直都是脏数据直到下次 发生数据写操作删除缓存 先更新数据库，再删除缓存
+这种方案不会引发上面的缓存不一致的问题，一旦数据库的数据更新完毕之后就会立即删除缓存中的数据，则下次再读取时就会引发一次cache miss就能读取到最新的数据
+但是也会有很小的概率会发生数据不一致的状态
+假设有两个并发线程A、B
+A请求读取数据，此时缓存凑巧失效了，A引发cache miss之后读取数据 B请求在A读取数据的同时在写入新值到数据库中，并且写入完成之后删除了缓存 此时A又将读取到的旧值加载到了缓存中，引发数据不一致的问题 上面的情况发生的概率是比较小的
+​
+参考 缓存一致性问题</description></item><item><title>基于Redis分布式锁实现思路</title><link>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</link><pubDate>Wed, 05 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/05/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</guid><description>为什么需要分布式锁 单机应用中(也就是一台机器中)的锁用于控制当前程序多个线程并发而引发的资源争夺问题，但是当应用场景扩展到了分布式环境就不一样了，这样的锁就没用了。因为每台机器都是独立的，如果还是之前的锁的话只能保证本机器不会引发资源竞争问题，分布式环境下相当于每台机器都有一个自己独立的锁，所以无法避免资源竞争问题
 这个时候就需要将这把锁保存到第三方中 （比如Redis），多台机器同时到Redis中取抢锁，这就可以保证分布式环境下争抢的是同一把锁
 ​
 Redis分布式锁实现思路 首先，Redis里面并没有锁的概念。所谓的锁其实就是Redis里的一个key，加锁就是设置这个key，释放锁就是删除这个key

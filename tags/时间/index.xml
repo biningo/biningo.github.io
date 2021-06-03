@@ -1,0 +1,12 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>时间 - 标签 - lyer's blog</title><link>/tags/%E6%97%B6%E9%97%B4/</link><description>时间 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 03 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%97%B6%E9%97%B4/" rel="self" type="application/rss+xml"/><item><title>性能指标QPS</title><link>/2021/06/03/%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87qps/</link><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/03/%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87qps/</guid><description>TPS每秒事务数 Transactions Per Second 每秒处理的事务数目，一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程
+比如我请求访问twitter页面，则twitter服务器会返回一个twitter完整的页面给我，这个页面可能还包括一些css、js、各种数据的请求，这一整个页面的访问和全部数据的响应就叫TPS
+TPS过程包括: 客户端请求服务端+服务端内部处理+服务端返回客户端
+tps=处理事务数/秒 ​
+QPS每秒查询率 Queries Per Second 每秒查询率，表示一台服务器每秒能够响应的查询次数，代表的是服务器的机器的性能最大吞吐能力
+qps基本类似于 tps，但是不同的是对于一个页面的一次访问，形成一个 TPS，但一次页面请求，可能产生多次对服务器的请求，服务器对这些请求就可计入QPS之中
+简单来说QPS就是对每个后端请求的度量，比如一个页面要请求多个接口，那么对每个接口的请求可以归结为QPS，当用户请求页面到页面完整的展示给用户这一个过程可以归结为TPS
+也就是说如果一个页面只会访问一个接口一个请求，则TPS=QPS
+qps=能处理的请求数/秒 ​
+PV页面浏览量 page view 页面浏览量，用户每次对页面的访问都计入PV，比如我对一个页面刷新了5次那么PV就加5
+​
+UV独立访客数 Unique Visitor 独立访客访问数，可以理解为IP访问次数，比如我对一个页面刷新了100次，但是UV还是只加1，因为IP还是我</description></item></channel></rss>
