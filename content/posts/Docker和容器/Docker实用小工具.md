@@ -5,6 +5,12 @@ categories: [Docker和容器]
 tags: [docker,容器]
 ---
 
+## docker-compose
+
+> https://github.com/docker/compose
+
+单机下的容器排编工具，使用Python编写
+
 ## lazydocker
 
 > https://github.com/jesseduffield/lazydocker
@@ -35,9 +41,23 @@ Docker镜像瘦身，镜像安全等
 
 Docker终端容器监控工具
 
-## podman
+## podman、buildah、skopeo
 
-一个和Docker命令兼容的Linux容器工具，被誉为下一代容器工具
+`podman` Docker命令兼容的Linux容器工具，被誉为下一代容器工具，用来运行容器
+
+`buildah` 专注于构建符合OCI规范的镜像，相当于Dockerfile和docker build命令
+
+`kopeo` 镜像管理工具，负责从远程仓库中拉取镜像、推送镜像等
+
+## cadvisor
+
+> https://github.com/google/cadvisor
+
+容器资源监控，监控容器的资源使用情况
+
+## Prometheus + cAdvisor + grafana
+
+容器应用监控和可视化三剑客
 
 ## 参考
 
