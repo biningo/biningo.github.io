@@ -10,9 +10,10 @@ DockerSlim https://github.com/docker-slim/docker-slim
 Docker镜像瘦身，镜像安全等
 ctop https://github.com/bcicen/ctop
 Docker终端容器监控工具
-podman、buildah、skopeo podman Docker命令兼容的Linux容器工具，被誉为下一代容器工具，用来运行容器
+podman、buildah、skopeo、podman-compose podman Docker命令兼容的Linux容器工具，被誉为下一代容器工具，用来运行容器
 buildah 专注于构建符合OCI规范的镜像，相当于Dockerfile和docker build命令
 kopeo 镜像管理工具，负责从远程仓库中拉取镜像、推送镜像等
+podman-compose podman中的docker-compose
 cadvisor https://github.com/google/cadvisor
 容器资源监控，监控容器的资源使用情况
 Prometheus + cAdvisor + grafana 容器应用监控和可视化三剑客

@@ -1,42 +1,34 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>git - 标签 - lyer's blog</title><link>/tags/git/</link><description>git - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git/" rel="self" type="application/rss+xml"/><item><title>git原理</title><link>/2021/04/30/git%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/30/git%E5%8E%9F%E7%90%86/</guid><description>git三大对象 git三大对象分别为:
-blob tree commit 下面来讲述这些对象的细节:
-blob 记录了文件的实际内容，每次add都会为每个文件生成一个blob，暂存区有个index指针会指向最新add到暂存区的几个blob 每次进行commit时都会生成两个对象: tree和commit
-tree 记录了index指针指向的几个blob的hash值还有对应的文件信息和文件权限
-commit记录了此次commit的作者信息和对应的tree节点，同时还会记录上一个commits
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>git - 标签 - lyer's blog</title><link>/tags/git/</link><description>git - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 05 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git/" rel="self" type="application/rss+xml"/><item><title>git三大区域和远程仓库</title><link>/2021/06/05/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/</guid><description><![CDATA[git三大区域 ​
+工作区 工作区就是我们的本地目录
 ​
-参考 这才是真正的Git——Git内部原理
-三道 google 风格 git 面试题及其解答</description></item><item><title>git三大区域</title><link>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F/</guid><description><![CDATA[git三大区域 工作区
-工作区就是我们的本地目录
-暂存区
-暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区，然后我继续修改这个文件&hellip;&hellip;
-改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了，我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
-git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 本地仓库
-如果确保此次修改就是最终版本，那么我们可以讲暂存区域中的内容提交到本地仓库，此时三大区域就一致了，一次提交就相当于一次版本的发布，以后可以回退到此版本
-所以在提交之前需要确保暂存区的内容就是确定了的不会再修改了的
-git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退之后 三大区域也是一致的 git reset a112c #也可以指定特定的版本号 ​]]></description></item><item><title>git优雅的提交</title><link>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/git%E4%BC%98%E9%9B%85%E7%9A%84%E6%8F%90%E4%BA%A4/</guid><description><![CDATA[git commit命令 git commit #进入vi界面编辑 git commit -m &#34;message&#34; #直接输入剪短信息 git commit --amend -m &#34;new a&#34; #修改最近一次的commit信息 ​
-commit规范 &lt;type&gt;[optional scope]: &lt;description&gt; &lt;BLANK LINE&gt; [optional body] &lt;BLANK LINE&gt; [optional footer(s)]  标题行: 必填, 描述主要修改的type类型和desc简短描述 主题内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路等详细注释，这是可选的 页脚注释: 放 Breaking Changes 或 Closed Issues 这也是可选的  type 提交类型
-   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 影响范围]]></description></item><item><title>merge和rebase的区别</title><link>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</link><pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/04/29/merge%E5%92%8Crebase%E7%9A%84%E5%8C%BA%E5%88%AB/</guid><description>merge和rebase的区别 假如下面的分支如下
-E---F dev / A---B---C---D master 使用rebase的场景 此时dev为了和master保持同步，则在dev中使用rebase操作，rebase就是寻找公共父节点
-C---D--E--F dev / A---B---C---D master 实际上现在的分支图变成了这样
-E--F dev / A---B---C---D master 此时在master分支中不管是执行rebase还是merge都是一条线，其实就是将master指针移动到dev指针处
-A---B---C---D---E---F dev,master 使用merge的场景 dev为了和master保持同步，于是使用merge
-E---F---G dev / / A---B---C---D master 现在master使用merge合并dev
-E---F---G dev / / \ A---B---C---D---H master 此时master又开发了几个版本，dev也开发了几个版本
-E---F---G---L---M dev / / \ A---B---C---D---H---I---J master 此时dev又要进行和master同步
-E---F---G---L---M----K dev / / \ / A---B---C---D---H---I---J master 此时dev需要合并到master中
-E---F---G---L---M----K dev / / \ / \ A---B---C---D---H---I---J---P master 看上面merge的图，分支一多就显的很乱</description></item><item><title>git总结</title><link>/2021/02/08/git%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 08 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/08/git%E6%80%BB%E7%BB%93/</guid><description><![CDATA[什么是git  版本控制工具 分布式  git在中心仓库保存所有的版本信息
-同时也会在所有用户的本地也会保存所有版本
-这样就做到了 分布式，git在中心仓库挂了之后依然可以在本地提交版本，等中心仓库恢复之后再一起push上去
-使用git分布式版本管理工具的最重要的就是要解决多人协作的 版本冲突 问题
-在使用git的时候，时刻需要保持一个理念：
-  你的每次commit都是一个版本
-  提交版本的时候就会标注上 user.name、user.email 指示出这是谁提交的版本
-  只要是一个版本，那么在以后就都可以回滚到这个版本中
-  ​
-三大区域 工作区： 直接写代码，修改文件的地方
-暂存区： 将工作区的当前映象暂存起来以准备提交到版本库中，简单来说就是可以在提交最终的版本之前还可以继续修改反悔等，举个简单的例子：
- 我删除了a，并且add到暂存区 现在我添加了b，添加完之后就觉得还是a好，于是反悔了，将上次暂存区中的文件又覆盖了工作区，也就是说现在又回到了a 最终我觉得就a了，不再修改了，于是就add+commit将最终的版本提交了  版本库： 存放最终的版本
-远程仓库： 供多人协作用，本地仓库的版本最终需要push到远程仓库，并且在push之前需要和远程仓库保持 同步 这要所有人才可以看到版本信息
-​
+暂存区 暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区
+然后我继续修改这个文件&hellip;&hellip;
+改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了
+我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
+git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 ​
+本地仓库 如果确保此次修改就是最终版本，那么我们可以将暂存区域中的内容提交到本地仓库。此时暂存区的内容就被提交为一个版本，暂存区中的内容也会被清空
+一次提交就相当于一次版本的发布，所有人都可以看到此版本所做的变更，并且以后可以回退到此版本
+git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退 git reset a112c #回退到特定的版本号 ​
 三大区域变更 暂存区-&gt;工作区
-#1、将暂存区文件覆盖工作区 git restore &lt;file&gt; ... #2、取消暂存 git restore --staged &lt;file&gt;... #3、直接删除暂存区和本地文件 等同于:手动删除文件 + git add file git rm a #4、直接同时修改暂存区和本地文件名字 等同于:mv a b + git rm a + git add b git mv a b 版本库-&gt;工作区]]></description></item></channel></rss>
+git restore #将暂存区文件恢复到工作区 git restore --staged #取消暂存 git rm #直接删除暂存区和本地文件 git mv #同时修改暂存区和工作区的文件 版本库-&gt;工作区
+#将工作区代码回滚到指定版本,此时暂存区内容也会清空 git reset &lt;版本号&gt; #可以通过HEAD来指定 HEAD表示当前版本 HEAD^上一个版本 HEAD^^上上个版本.... git reset --hard HEAD git reset --hard HEAD^ #~指定版本 假设v1 v2 v3 v4 v5 则现在HEAD在v5 命令之后:HEAD=v3 git reset --hard HEAD~2 #可以所有的版本号 以便回到过去还可以回到将来 git reflog ​]]></description></item><item><title>git分支和工作流</title><link>/2021/06/05/git%E5%88%86%E6%94%AF%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B5%81/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/git%E5%88%86%E6%94%AF%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid><description><![CDATA[分支管理 查看分支
+git branch #查看本地所有分支 -v则显示commit信息 git branch -r # 查看远端分支 git branch -a # 查看所有分支 创建分支
+git branch &lt;new&gt; &lt;old&gt; git branch dev #基于当前分支,创建dev分支 git branch feat dev #基于本地的dev分支，创建feat git branch dev origin/dev #基于远程origin/dev分支，创建dev git checkout -b dev #基于当前分支创建新分支,同时切换到新创建的分支 git checkout -b dev origin/dev #基于远程分支origin/dev中创建dev分支,同时切换 切换分支
+git checkout - # 切换上一个分支 git switch dev #切换到一个已经存在的本地分支 git checkout dev #能切换到任意(本地分支/远程分支/某个commit/某个tag) 删除分支
+git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了 git branch -d -r origin/dev #删除本地保留的远端分支 git push origin -d dev #删除远端的dev分支 重命名分支]]></description></item><item><title>git配置</title><link>/2021/06/05/git%E9%85%8D%E7%BD%AE/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/git%E9%85%8D%E7%BD%AE/</guid><description>gitconfig配置文件 gitconfig配置文件优先级顺序如下
+/etc/gitconfig ~/.gitconfig .git/config ​
+gitconfig作用域 global全局作用域，修改的是~/.gitconfig
+git config --global user.name lyer local 本地作用域，修改的是.git/config
+git config user.name lyer ​
+查看gitconfig 查看所有作用域下的gitconfig
+git config --list 只查看local下的gitconfig
+git config --list --local 只查看global下的gitconfig
+git config --list --global 查看某个配置
+git config user.email ​
+配置git命令别名 git config alias.st status #git st</description></item><item><title>git优雅的commit和日志查看</title><link>/2021/06/04/git%E4%BC%98%E9%9B%85%E7%9A%84commit%E5%92%8C%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B/</link><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/04/git%E4%BC%98%E9%9B%85%E7%9A%84commit%E5%92%8C%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B/</guid><description><![CDATA[commit命令 git commit #进入vi界面编辑 git commit -m &#34;message&#34; #直接输入剪短信息 git commit --amend -m &#34;new a&#34; #修改最近一次的commit信息 git show ce05f93 #展示commit的变更详细信息 ​
+commit规范 &lt;type&gt;[optional scope]: &lt;description&gt; &lt;BLANK LINE&gt; [optional body] &lt;BLANK LINE&gt; [optional footer(s)]  标题行: 必填, 描述主要修改的type类型和desc简短描述 body内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路等详细注释，这是可选的 页脚注释: 放一些额外的信息，比如参考的issue、pr、review的人等  fix(dao): correct minor typos in code see the issue for details on typos fixed. Reviewed-by: Z Refs #133 type 提交类型
+   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 变更作用的层次和范围]]></description></item><item><title>submodule子模块</title><link>/2021/06/04/git%E5%AD%90%E6%A8%A1%E5%9D%97/</link><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/04/git%E5%AD%90%E6%A8%A1%E5%9D%97/</guid><description>git submodule子模块 子模块主要有如下几个作用:
+将多个分离的项目统一放在一个文件夹下进行管理 将另外一个独立的项目导入到当前项目中，但是导入的项目不需要你自己来管理，由别人来管理 一个git仓库下面某个文件夹的来源可以跟本库的来源不同，这个文件夹连接着别的库，这样你可以让这个文件夹通过别的库来管理，主库唯一需要知道的信息是这个子模块当前最新的 commit，如果别人的项目更新了，主库可以决定自己是否需要跟新还是继续用旧版本。如果你一直不更新子模块，那么就永远是老的版本，子模块的更新需要你主动进行，注意，主库是不追踪子模块的变化的，如果你修改了子模块，需要进子模块的目录下进行commit和push
+添加子模块到当前项目:
+git submodule add https://github.com/biningo/biningo 如果子模块发生更改，仓库不会察觉到，需要我们手动进到子模块里去commit和push，如果子模块执行了commit，那么主库就会察觉到子模块发生了commit，提示执行status的时候就会提示子模块发生了变化，此时主库需要执行一次commit来提交更新
+git submodule update #将子模块和远程仓库保持同步,也可以到子模块目录下手动merge或则rebase clone`带有子模块的仓库不会拉取子模块相关代码，需要加上`--recurse-submodules`参数，或则执行`git submodule update git clone --recurse-submodules https://github.com/chaconinc/MainProject</description></item></channel></rss>

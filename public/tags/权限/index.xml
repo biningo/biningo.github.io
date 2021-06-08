@@ -11,7 +11,7 @@ useradd/userdel/usermod 用户组增删改
 groupadd/groupdel/groupmod 修改用户密码
 passwd 为用户添加到指定的组中 (直接修改/etc/group命令也可)
 #添加用户到指定的用户组中 不加-a则表示替换 #这里需要注意: 用户的默认组是不会被修改掉的 这个操作只能修改附加组 usermod -a -G g1,g2,g3 查看用户信息
-id/who/users/whoami/last/lastb ​
+id/who/users/whoami/last/lastb/groups ​
 sudo命令和sudoers配置 sudo的作用是一个用户借用其它用户的权限来执行相关命令，需要配置/etc/sudoers文件，Linux会判断是否符合sudo文件的配置才会决定是否能够借权
 用户名 主机=(用户:用户组) NOPASSWD:命令列表 #pb用户可以在 所有主机登入 执行 所有用户:所有组 的所有命令 并且不需要输入密码 pb ALL=(ALL:ALL) NOPASSWD:ALL #表示admin组内的用户规则 %admin ALL=(ALL:ALL) ALL 下面再来看几个案例
 #相当于(root:root) peter ALL=(root) NOPASSWD: ALL lucy ALL=(ALL) chown,chmod,useradd papi ALL=/usr/sbin/*,/sbin/*,!</description></item></channel></rss>

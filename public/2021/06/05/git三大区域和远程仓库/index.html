@@ -1,0 +1,95 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>git三大区域和远程仓库 - lyer's blog</title><meta name=Description content><meta property="og:title" content="git三大区域和远程仓库"><meta property="og:description" content="git三大区域 ​
+工作区 工作区就是我们的本地目录
+​
+暂存区 暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区
+然后我继续修改这个文件&mldr;&mldr;
+改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了
+我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
+git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 ​
+本地仓库 如果确保此次修改就是最终版本，那么我们可以将暂存区域中的内容提交到本地仓库。此时暂存区的内容就被提交为一个版本，暂存区中的内容也会被清空
+一次提交就相当于一次版本的发布，所有人都可以看到此版本所做的变更，并且以后可以回退到此版本
+git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退 git reset a112c #回退到特定的版本号 ​
+三大区域变更 暂存区->工作区
+git restore #将暂存区文件恢复到工作区 git restore --staged #取消暂存 git rm #直接删除暂存区和本地文件 git mv #同时修改暂存区和工作区的文件 版本库->工作区
+#将工作区代码回滚到指定版本,此时暂存区内容也会清空 git reset <版本号> #可以通过HEAD来指定 HEAD表示当前版本 HEAD^上一个版本 HEAD^^上上个版本.... git reset --hard HEAD git reset --hard HEAD^ #~指定版本 假设v1 v2 v3 v4 v5 则现在HEAD在v5 命令之后:HEAD=v3 git reset --hard HEAD~2 #可以所有的版本号 以便回到过去还可以回到将来 git reflog ​"><meta property="og:type" content="article"><meta property="og:url" content="/2021/06/05/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/"><meta property="article:published_time" content="2021-06-05T00:00:00+00:00"><meta property="article:modified_time" content="2021-06-05T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="git三大区域和远程仓库"><meta name=twitter:description content="git三大区域 ​
+工作区 工作区就是我们的本地目录
+​
+暂存区 暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区
+然后我继续修改这个文件&mldr;&mldr;
+改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了
+我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了
+git add a.txt git restore a.txt #将上次暂存的文件覆盖到工作区 git restore --staged a.txt #取消暂存 也就是清空暂存区 ​
+本地仓库 如果确保此次修改就是最终版本，那么我们可以将暂存区域中的内容提交到本地仓库。此时暂存区的内容就被提交为一个版本，暂存区中的内容也会被清空
+一次提交就相当于一次版本的发布，所有人都可以看到此版本所做的变更，并且以后可以回退到此版本
+git commit a.txt -m &#34;new a&#34; git reset --hard HEAD^ #回退 git reset a112c #回退到特定的版本号 ​
+三大区域变更 暂存区->工作区
+git restore #将暂存区文件恢复到工作区 git restore --staged #取消暂存 git rm #直接删除暂存区和本地文件 git mv #同时修改暂存区和工作区的文件 版本库->工作区
+#将工作区代码回滚到指定版本,此时暂存区内容也会清空 git reset <版本号> #可以通过HEAD来指定 HEAD表示当前版本 HEAD^上一个版本 HEAD^^上上个版本.... git reset --hard HEAD git reset --hard HEAD^ #~指定版本 假设v1 v2 v3 v4 v5 则现在HEAD在v5 命令之后:HEAD=v3 git reset --hard HEAD~2 #可以所有的版本号 以便回到过去还可以回到将来 git reflog ​"><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/06/05/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/><link rel=prev href=/2021/06/05/git%E5%88%86%E6%94%AF%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B5%81/><link rel=next href=/2021/06/05/awk%E5%B7%A5%E5%85%B7/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"git三大区域和远程仓库","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/06\/05\/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93\/"},"genre":"posts","keywords":"git","wordcount":280,"url":"\/2021\/06\/05\/git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F%E5%92%8C%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93\/","datePublished":"2021-06-05T00:00:00+00:00","dateModified":"2021-06-05T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">git三大区域和远程仓库</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/git/><i class="far fa-folder fa-fw"></i>git</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-06-05>2021-06-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 280 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#git三大区域>git三大区域</a></li><li><a href=#工作区>工作区</a></li><li><a href=#暂存区>暂存区</a></li><li><a href=#本地仓库>本地仓库</a></li><li><a href=#三大区域变更>三大区域变更</a></li><li><a href=#状态查看>状态查看</a></li><li><a href=#gitignore文件>.gitignore文件</a></li><li><a href=#远程仓库>远程仓库</a></li></ul></nav></div></div><div class=content id=content><h2 id=git三大区域>git三大区域</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg data-srcset="https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg, https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg 1.5x, https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg 2x" data-sizes=auto alt=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg title=https://raw.githubusercontent.com/biningo/cdn/master/img/20171127144357194.jpg></p><p>​</p><h2 id=工作区>工作区</h2><p>工作区就是我们的本地目录</p><p>​</p><h2 id=暂存区>暂存区</h2><p>暂存区用于暂时存放我们工作区域的更改，比如我们工作区域修改了一个文件，此时就可以先放入暂存区</p><p>然后我继续修改这个文件&mldr;&mldr;</p><p>改完之后我突然觉得文件这样修改不是很好，还是原来的比较好，想要恢复回原来的样子，此时暂存区就发挥作用了</p><p>我们可以将暂存区域的文件覆盖回工作区域，这样就又回到上次暂存的样子了，恢复之后此时暂存区的内容又和工作区域一致了</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git add a.txt
+git restore a.txt <span class=c1>#将上次暂存的文件覆盖到工作区</span>
+git restore --staged a.txt <span class=c1>#取消暂存 也就是清空暂存区</span>
+</code></pre></div><p>​</p><h2 id=本地仓库>本地仓库</h2><p>如果确保此次修改就是最终版本，那么我们可以将暂存区域中的内容提交到本地仓库。此时暂存区的内容就被提交为一个版本，暂存区中的内容也会被清空</p><p>一次提交就相当于一次版本的发布，所有人都可以看到此版本所做的变更，并且以后可以回退到此版本</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git commit a.txt  -m <span class=s2>&#34;new a&#34;</span>
+git reset --hard HEAD^ <span class=c1>#回退</span>
+git reset a112c <span class=c1>#回退到特定的版本号</span>
+</code></pre></div><p>​</p><h2 id=三大区域变更>三大区域变更</h2><p>暂存区->工作区</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git restore <span class=c1>#将暂存区文件恢复到工作区</span>
+git restore --staged <span class=c1>#取消暂存</span>
+git rm <span class=c1>#直接删除暂存区和本地文件</span>
+git mv <span class=c1>#同时修改暂存区和工作区的文件</span>
+</code></pre></div><p>版本库->工作区</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#将工作区代码回滚到指定版本,此时暂存区内容也会清空</span>
+git reset &lt;版本号&gt;
+
+<span class=c1>#可以通过HEAD来指定 HEAD表示当前版本 HEAD^上一个版本 HEAD^^上上个版本....</span>
+git reset --hard HEAD
+git reset --hard HEAD^
+<span class=c1>#~指定版本  假设v1 v2 v3 v4 v5 则现在HEAD在v5 命令之后:HEAD=v3</span>
+git reset --hard HEAD~2
+
+<span class=c1>#可以所有的版本号 以便回到过去还可以回到将来</span>
+git reflog
+</code></pre></div><p>​</p><h2 id=状态查看>状态查看</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># M:表示有变更 </span>
+<span class=c1># A:表示已经添加到暂存库</span>
+<span class=c1># D:表示删除</span>
+git status -s
+</code></pre></div><p>​</p><h2 id=gitignore文件>.gitignore文件</h2><p>此文件由于告诉git哪些文件不需要进行git托管</p><ul><li>以斜杠 <code>“/”</code> 结尾表示目录</li><li>以星号 <code>“*”</code> 通配多个字符</li><li>以问号 <code>“?”</code> 通配单个字符</li></ul><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>*.a <span class=c1>#忽略全部 .a 文件  包括子目录</span>
+!lib.a <span class=c1>#但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件</span>
+build/ <span class=c1>#忽略 build/ 文件夹下的所有文件</span>
+build <span class=c1>#忽略build文件</span>
+doc/*.txt <span class=c1># 只忽略doc一级路径下的txt文件</span>
+doc/**/*.pdf <span class=c1># 忽略所有的 .pdf 文件 在 doc/ directory 下的</span>
+*.<span class=o>[</span>oa<span class=o>]</span> <span class=c1>#忽略所有以&#34;.o&#34;或&#34;.a&#34;结尾</span>
+<span class=o>[</span>0-9<span class=o>]</span>.txt <span class=c1>#忽略0~9.txt结尾的文件</span>
+</code></pre></div><p>可以查看这个模板：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2Fgithub%2Fgitignore" target=_blank rel="noopener noreffer">https://github.com/github/gitignore</a></p><p>​</p><h2 id=远程仓库>远程仓库</h2><p><code>clone</code>仓库</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#clone指定在本地创建的关联分支 默认是main或者master</span>
+git clone -b dev https://github.com/ajd/test
+
+<span class=c1># 递归克隆，如果项目包含子模块就非常有用</span>
+git clone --recursive git@github.com:xjh22222228/git-manual.git
+</code></pre></div><p><code>branch</code>查看保存在本地的远程仓库分支</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git branch -r <span class=c1>#查看远程仓库的分支 -rv则显示详细信息</span>
+git branch -a <span class=c1>#查看所有分支(本地+远程)</span>
+git branch -vv <span class=c1>#查看追踪关系</span>
+</code></pre></div><p><code>remote</code>远程仓库相关操作</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git remote <span class=c1>#查看远程仓库 -v则显示链接</span>
+git remote add origin https://github.com/ajd/test <span class=c1>#添加远程仓库 名字:origin</span>
+git remote rm origin <span class=c1>#删除远程仓库</span>
+git remote set-url origin https://github.com/ajd/dsads <span class=c1>#修改远程仓库的地址</span>
+</code></pre></div><p><code>fetch</code>拉取远程仓库的代码</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git fetch <span class=c1>#将所有远程主机仓库全部更新到本地</span>
+git fetch origin <span class=c1>#将指定远程仓库的所有分支的更新全部取回本地</span>
+git fetch origin dev <span class=c1>#指定远程仓库中dev分支取到本地</span>
+</code></pre></div><p>下面几种命令可以将本地分支和远程分支建立 <strong>追踪关系</strong></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git push -u &lt;远程主机&gt; &lt;本地分支&gt;:&lt;远程分支&gt;
+git push --set-upstream &lt;远程主机&gt; &lt;本地分支&gt;:&lt;远程分支&gt;
+git branch --set-upstream-to<span class=o>=</span>&lt;远程主机名&gt;/&lt;远程分支名&gt; &lt;本地分支名&gt;
+git checkout -b &lt;本地分支名&gt; &lt;远程主机名&gt;/&lt;远程分支名&gt;
+git branch &lt;本地分支名&gt; &lt;远程主机名&gt;/&lt;远程分支名&gt;
+
+<span class=c1>#将本地分支推送到远程仓库的指定分支 如果远程分支不存在则会在远端创建</span>
+git push &lt;远程主机名&gt;  &lt;本地分支名&gt;:&lt;远程分支名&gt; 
+<span class=c1>#相当于 git push origin dev:dev</span>
+git push origin dev
+</code></pre></div><p>要从远程拉去代码很本地合并则只需要<code>pull</code>，但是也可以自己进行合并，即先<code>fetch</code>远程分支到本地，然后再将本地分支和拉去下来的远程分支代码进行合并即可，如下：</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git pull origin dev <span class=c1>#git fetch + git merge</span>
+</code></pre></div><p>推送<code>tag</code></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>git push origin v1.0 <span class=c1>#上传指定标签到远程仓库</span>
+git push origin --tags <span class=c1>#把本地所有不在远程仓库的标签全部上传</span>
+git push origin :refs/tags/v1.0 <span class=c1>#删除远程tag</span>
+</code></pre></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-06-05</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/git/>git</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2021/06/05/git%E5%88%86%E6%94%AF%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=prev rel=prev title=git分支和工作流><i class="fas fa-angle-left fa-fw"></i>git分支和工作流</a>
+<a href=/2021/06/05/awk%E5%B7%A5%E5%85%B7/ class=next rel=next title=awk工具>awk工具<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://icepan.cloud target=_blank>lyer</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["biningo"],"clientID":"c8f473d59880800a7453","clientSecret":"7aa3dd0bcf966dee0a057e06eaf205caeb86b8e0","id":"2021-06-05T00:00:00Z","owner":"biningo","repo":"hugo-blog-gittalk","title":"git三大区域和远程仓库"}},"search":{"algoliaAppID":null,"algoliaIndex":null,"algoliaSearchKey":null,"highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
