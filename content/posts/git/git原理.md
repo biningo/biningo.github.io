@@ -3,6 +3,7 @@ title: git原理
 date: 2021-04-30
 categories: [git]
 tags: [git]
+draft: true
 ---
 
 ## git三大对象

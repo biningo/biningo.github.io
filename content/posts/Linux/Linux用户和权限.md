@@ -70,7 +70,7 @@ usermod -a -G g1,g2,g3
 查看用户信息
 
 ```bash
-id/who/users/whoami/last/lastb
+id/who/users/whoami/last/lastb/groups
 ```
 
 ​         

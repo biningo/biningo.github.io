@@ -41,13 +41,15 @@ Docker镜像瘦身，镜像安全等
 
 Docker终端容器监控工具
 
-## podman、buildah、skopeo
+## podman、buildah、skopeo、podman-compose
 
 `podman` Docker命令兼容的Linux容器工具，被誉为下一代容器工具，用来运行容器
 
 `buildah` 专注于构建符合OCI规范的镜像，相当于Dockerfile和docker build命令
 
 `kopeo` 镜像管理工具，负责从远程仓库中拉取镜像、推送镜像等
+
+`podman-compose` podman中的`docker-compose`
 
 ## cadvisor
 
