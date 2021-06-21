@@ -1,9 +1,9 @@
 ---
-title: submodule子模块
+title: git submodule子模块
 date: 2021-06-04
 categories: [git]
 tags: [git]
-drfat: true
+draft: true
 ---
 
 ## git submodule子模块

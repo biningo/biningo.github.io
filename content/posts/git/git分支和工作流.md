@@ -39,6 +39,7 @@ git checkout dev #能切换到任意(本地分支/远程分支/某个commit/某�
 
 ```bash
 git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了
+git branch -D dev #强制删除
 git branch -d -r origin/dev #删除本地保留的远端分支
 git push origin -d dev #删除远端的dev分支
 ```

@@ -9,7 +9,7 @@ tags: [docker,容器]
 
 > https://github.com/docker/compose
 
-单机下的容器排编工具，使用Python编写
+单机容器排编工具，使用Python编写
 
 ## lazydocker
 
@@ -51,7 +51,7 @@ Docker终端容器监控工具
 
 `podman-compose` podman中的`docker-compose`
 
-## cadvisor
+## cAdvisor
 
 > https://github.com/google/cadvisor
 
@@ -60,6 +60,12 @@ Docker终端容器监控工具
 ## Prometheus + cAdvisor + grafana
 
 容器应用监控和可视化三剑客
+
+## rancher
+
+> https://github.com/rancher/rancher
+
+k8s集群和容器管理平台
 
 ## 参考
 

@@ -24,7 +24,15 @@ tags: [书单]
 ## Linux
 
 - **鸟哥的Linux私房菜**
-- Linux命令(老男孩)
+- 老男孩系列
+
+## Linux原理和内核
+
+Linux/Unix系统编程手册
+
+UNIX环境高级编程（第3版）
+
+奔跑吧Linux内核系列
 
 ## Redis
 
@@ -76,6 +84,7 @@ tags: [书单]
 - 算法第四版
 - why we sleep
 - 程序员面试金典(第6版)
+- 提问的智慧、学会提问
 
 ## Android和Kotlin
 

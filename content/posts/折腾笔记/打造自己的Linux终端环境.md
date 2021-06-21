@@ -181,3 +181,6 @@ Plug '~/.vim/plugged/YouCompleteMe'
 ## 参考
 
 - https://vimjc.com/vim-plug.html
+
+[Vim 4 常用插件](https://juejin.cn/post/6844903859152928775)
+

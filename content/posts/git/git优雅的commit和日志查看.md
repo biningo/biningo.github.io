@@ -132,7 +132,7 @@ git ls-remote --tags origin  # 列出远程所有标签
 ```bash
 git tag v1.0 #为HEAD创建轻量标签,名字随便填(一般以v开头)
 git tag v0.9 ce05f93 #为特定的commit创建tag
-git tag -a v2.0 -m 'desc' #创建注释标签
+git tag -a v2.0 -m 'desc' #创建总重量型注释标签，会创建tag对象
 ```
 
 删除tag

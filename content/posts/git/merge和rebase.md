@@ -22,7 +22,7 @@ git merge dev --squash
 git commit -m "E"
 ```
 
-​         
+​     
 
 ## rebase命令
 

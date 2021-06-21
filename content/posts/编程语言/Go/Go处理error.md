@@ -12,7 +12,9 @@ go的错误处理就只有一个`errors`包和一个`error`接口，这个接口
 - `errors.go`
 - `wrap.go`
 
-go的error也就是通过创建一个错误提示的字符串的方式，然后通过返回值来返回这个错误，除非这个函数能保证一定能执行成功，否则每个函数都必须返回一个`error`
+go通过返回值来返回错误而不是通过`try/catch`，除非函数能保证一定能执行成功，否则每个函数都必须返回一个`error`
+
+并且go的error建议只处理一次，也就是说如果你处理过了错误那么就不需要返回给上层了，如果将已经处理过的错误继续返回给上层则这个错误可能会被重复处理
 
 ```go
 func f() error{
@@ -72,6 +74,15 @@ func main(){
 }
 ```
 
+也可以直接设置一个全局变量来表示error
+
+```go
+var (
+	ErrOpenFile = errors.New("open file error")
+	ErrReadFile = errors.New("read file error")
+)
+```
+
 ​    
 
 ## panic和recover
@@ -83,17 +94,19 @@ func main(){
 - `panic` 允许在 `defer` 中嵌套多次调用
 
 ```go
-defer func() {
-    e := recover() //panic传入什么 这里就接受什么
-    err := e.(error) //都是interface类型
-    log.Println(err)
-}()
-//....
-panic(errors.New("panic error"))
-//....
+func main(){
+    defer func() {
+        e := recover() //panic传入什么 这里就接受什么
+        err := e.(error) //都是interface类型
+        log.Println(err)
+    }()
+    //....
+    panic(errors.New("panic error"))
+    //....
+}
 ```
 
-`panic`只会在当前`goroutinue`中生效，下面只会打印`"goroutine"`就引发`panic`结束进程了，并不会执行`"main"`：
+`panic`只会在当前`goroutinue`中生效，下面的panic并不会被捕获，`main`不会被打印
 
 ```go
 func main() {
@@ -102,14 +115,13 @@ func main() {
         recover()
     }
 	go func() {
-		defer log.Println("goroutine")
 		panic("panic")
 	}()
 	time.Sleep(time.Second)
 }
 ```
 
-​    
+​     
 
 ## 优雅处理error
 
@@ -133,15 +145,9 @@ if err := e(); err != nil {
 }
 ```
 
-我们可以使用如下方式优雅处理`error`
+可以将所有相同的错误处理代码都封装为一个check函数
 
 ```go
-func main() {
-	if err := task(); err != nil {
-		log.Fatal(err)
-	}
-}
-
 //复杂检查是否有error 如果有则引发panic
 func check(err error) {
 	if err != nil {
@@ -151,7 +157,6 @@ func check(err error) {
 
 //panic() + recover()
 func task() (err error) {
-
 	defer func() {
 		if r := recover(); r != nil {
 			return
@@ -194,9 +199,28 @@ func d() error {
 
 ​    
 
-## Go1.13之后的error
+## 只处理一次error
 
-Go1.13之后，允许我们嵌套的将多个`error`合并为一个，将最终的`error`返回给最上层，其源代码在`errors/wrap.go`中，一共有三个方法: 
+我们要么不处理错误直接返回给上层，要么只处理一次错误，下面的错误处理是不正确的，当前已经处理了还返回error的话则上层还会再处理一次或则多次，正确的写法应该返回`nil`
+
+```go
+func f() error {
+	//....
+	f, err := os.Open("abc")
+	if err != nil {
+		log.Println(err) 
+		return err //返回nil  或则不处理错误直接返回error
+	}
+	f.Name()
+	return nil
+}
+```
+
+​    
+
+## Wrap包装error
+
+Go1.13之后，允许我们嵌套的将多个`error`合并为一个，将最终的`error`返回给最上层，其源代码在`errors/wrap.go`中
 
 - `Is`：判断一个error对象是否是另外一个error对象的封装，大的是小的，小的不是大的
 - `Unwrap`：去除一层`error`封装
@@ -209,7 +233,7 @@ func main() {
 	e3 := fmt.Errorf("%w->c", e2) // c->b->a
 	e2 = errors.Unwrap(e3)        // b->a
 	e1 = errors.Unwrap(e2)        // a
-    //true
+    //true true true
 	fmt.Println(errors.Is(e2, e1), errors.Is(e3, e2), errors.Is(e3, e1))
 }
 ```
@@ -218,6 +242,7 @@ func main() {
 
 ## 参考
 
-- https://coolshell.cn/articles/21140.html
-- https://www.flysnow.org/2019/09/06/go1.13-error-wrapping.html
-- https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover
+[GO 编程模式：错误处理](https://coolshell.cn/articles/21140.html)
+
+[Go语言技巧 - 2.【错误处理】谈谈Go Error的前世今生](https://www.bilibili.com/video/BV1vN411Z7Rv?from=search&seid=171776842596520823)
+

@@ -16,6 +16,14 @@ draft: true
 
 > https://github.com/chebyrash/promise
 
+`zap` Go日志库
+
+>  https://github.com/uber-go/zap
+
+`sqlx` 操作数据库的库，在`database/sql`上的封装
+
+> https://github.com/jmoiron/sqlx
+
 ​    
 
 ## 工具
@@ -27,6 +35,10 @@ draft: true
 `vault` 密码、安全、证书管理等
 
 > https://github.com/hashicorp/vault
+
+`goreman` 进程管理工具
+
+> https://github.com/mattn/goreman
 
 ​    
 
@@ -53,3 +65,10 @@ draft: true
 > https://www.bilibili.com/video/BV1st411Y7QW?p=1 【B站视频教程】
 
 参考: https://www.liwenzhou.com/posts/Go/benchmark_tool
+
+
+
+## 参考
+
+[Go每日一库](https://github.com/darjun/go-daily-lib)
+

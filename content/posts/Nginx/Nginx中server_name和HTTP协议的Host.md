@@ -17,9 +17,11 @@ HTTP请求头部有一个`Host`字段可以指定目标主机的域名或则主�
 
 ​    
 
-## Nginx中的server_name
+## 一台主机多域名
 
 我们可以配置`server_name`规则来让Nginx检查`Host`字段并且转发到相应的服务器上
+
+域名前缀
 
 ```nginx
 server {
@@ -32,7 +34,11 @@ server {
 		';
 	}
 }
- 
+```
+
+完整域名
+
+```nginx
 server {
 	listen  80;
 	server_name www.lyer.com;
@@ -43,7 +49,11 @@ server {
 		';        
 	}
 }
- 
+```
+
+域名正则匹配
+
+```nginx
 server {
 	listen 80;
 	server_name www.lyer.*;
@@ -52,21 +62,11 @@ server {
 		content_by_lua '
 			ngx.say("<p>www.lyer.*</p>")
 		';
- 
 	}
 }
- 
-server {
-	listen 80;
-	server_name ~\w+.com;
-	location / {
-		default_type text/html;
-		content_by_lua '
-			ngx.say("<p>~\w+.com</p>")
-		';        
-	}
-}
- 
+```
+
+```nginx
 server {
 	listen 80;
 	server_name ~.*lyer.com;
@@ -77,9 +77,24 @@ server {
 		';
 	}
 }
+```
 
-#如果前面都匹配不到则转发到标注了default的server上
-#如果没有default server则转发到第一个server上
+```nginx
+server {
+	listen 80;
+	server_name ~\w+.com;
+	location / {
+		default_type text/html;
+		content_by_lua '
+			ngx.say("<p>~\w+.com</p>")
+		';        
+	}
+}
+```
+
+如果前面都匹配不到则转发到标注了default的server上，如果没有default server则转发到第一个server上
+
+```nginx
 server {
 	listen 80 default;
 	location / {
@@ -91,7 +106,7 @@ server {
 }
 ```
 
-server_name与host匹配优先级如下：
+server_name与host匹配优先级如下:
 
 - 完全匹配
 
@@ -108,6 +123,38 @@ server_name与host匹配优先级如下：
 - 找到匹配listen端口的第一个server块
 
 ​    
+
+## 一台主机多IP
+
+上面的`server_name`不仅仅可以配置域名，还可以指定IP，如果我们一台主机有多个IP则访问不同的IP会出现不同的效果
+
+```nginx
+server {
+    listen 8080;
+    server_name 127.0.0.1;
+    error_page 404 /404.html;
+    error_page 500 https://github.com;
+    location / {
+        root /home/pb/program/nginx/conf/myconfig;
+        autoindex on;
+    }
+}
+```
+
+```nginx
+server {
+    listen 8080;
+    server_name 127.0.0.2;
+    error_page 404 /404.html;
+    error_page 500 https://github.com;
+    location / {
+        root /home/pb/program/nginx/conf;
+        autoindex on;
+    }
+}
+```
+
+​     
 
 ## 参考
 
