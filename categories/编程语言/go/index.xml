@@ -4,7 +4,8 @@ type Writer interface { Write(p []byte) (n int, err error) } io.Closer 关闭IO�
 type Closer interface { Close() error } ​
 文件读取 方式一: 无缓冲直接读取
 func fileDemo1() { file, err := os.Open(&#34;/go-test-learn/io/t1.go&#34;) CheckError(&#34;&#34;, err) defer file.Close() content := []byte{} buf := make([]byte, 100) //每次读取的最大byte数组 	for { n, err := file.Read(buf) //返回真实读取的数据字节大小 (&lt;=len(buf)) 	if err == io.]]></description></item><item><title>Go处理error</title><link>/2021/05/23/go%E5%A4%84%E7%90%86error/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/go%E5%A4%84%E7%90%86error/</guid><description><![CDATA[大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
- errors.go wrap.go  go的error也就是通过创建一个错误提示的字符串的方式，然后通过返回值来返回这个错误，除非这个函数能保证一定能执行成功，否则每个函数都必须返回一个error
+ errors.go wrap.go  go通过返回值来返回错误而不是通过try/catch，除非函数能保证一定能执行成功，否则每个函数都必须返回一个error
+并且go的error建议只处理一次，也就是说如果你处理过了错误那么就不需要返回给上层了，如果将已经处理过的错误继续返回给上层则这个错误可能会被重复处理
 func f() error{ return errors.New(&#34;error&#34;) //返回error接口 } 下面来看下errors/errors.go的源码，不过10行左右
 func New(text string) error { return &amp;errorString{text} //返回errorString指针 } //实现了error接口 type errorString struct { s string } //获取错误字符串的方法 func (e *errorString) Error() string { return e.s } ​
 自定义error 我们只需要实现error接口也就是重写Error()方法即可自定义错误

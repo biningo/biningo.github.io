@@ -1,5 +1,5 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>容器 - 标签 - lyer's blog</title><link>/tags/%E5%AE%B9%E5%99%A8/</link><description>容器 - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 20 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>docker-compose https://github.com/docker/compose
-单机下的容器排编工具，使用Python编写
+单机容器排编工具，使用Python编写
 lazydocker https://github.com/jesseduffield/lazydocker
 终端界面管理Docker
 portainer https://github.com/portainer/portainer
@@ -14,9 +14,11 @@ podman、buildah、skopeo、podman-compose podman Docker命令兼容的Linux容�
 buildah 专注于构建符合OCI规范的镜像，相当于Dockerfile和docker build命令
 kopeo 镜像管理工具，负责从远程仓库中拉取镜像、推送镜像等
 podman-compose podman中的docker-compose
-cadvisor https://github.com/google/cadvisor
+cAdvisor https://github.com/google/cadvisor
 容器资源监控，监控容器的资源使用情况
 Prometheus + cAdvisor + grafana 容器应用监控和可视化三剑客
+rancher https://github.com/rancher/rancher
+k8s集群和容器管理平台
 参考 推荐5款好用的开源Docker工具</description></item><item><title>Docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
    host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
 将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：

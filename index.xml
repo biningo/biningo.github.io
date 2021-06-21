@@ -1,4 +1,29 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 05 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>awk工具</title><link>/2021/06/05/awk%E5%B7%A5%E5%85%B7/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/awk%E5%B7%A5%E5%85%B7/</guid><description><![CDATA[awk和sed区别 他们都是Linux下的 流处理工具
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>tcpdump抓包</title><link>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</link><pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</guid><description>TODO
+巨人肩膀 超详细的网络抓包神器 tcpdump 使用指南</description></item><item><title>Linux静态路由表</title><link>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</link><pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</guid><description>查看路由表 route -n netstat -rn Destination是0.0.0.0表示是默认路由，只有其他路由都匹配不到时才会走这个路由
+Gateway为0.0.0.0表示没有网关，静态路由表中的网关只能配置一个，配置多个则只会使用其中一个
+​
+路由转发流程 工具目标IP个子网掩码匹配静态路由表中的条目 如果匹配到了则将数据包发送到路由表项对应的网卡上 如果路由表项都匹配不成功则走默认路由，也就是Destinaion为0.0.0.0的路由表项，因为默认路由配置了网关所以数据包会从网关发送出去，而在局域网内的通讯则不会走网关 比如我现在要访问172.17.0.10，则会匹配到docker0这个虚拟网桥，然后将数据包转发到docker0中由docker0进行转发
+如果我现在要访问192.168.0.10，则会匹配到192.168.0.0这个条目走wlp0s20f3网络接口，这个网络接口是wifi，则会直接发送数据包到wifi猫中，因为是局域网地址所以不会通过网关转发到外网，直接转发到局域网内的目标主机中
+如果我现在要访问121.196.169.248，则全部匹配不到会走默认路由，直接转发到网关上然后再转发到外网
+​
+route命令 route -n route add default gw 10.0.0.1 dev eth0 #指定默认路由 并且设置网关和出口设备 route add -net 10.2.0.0/24 dev eth1 #指定其它路由 route del -net 10.0.0.0/24 #删除路由 ​
+参考 掌握Linux路由这一篇就够了！</description></item><item><title>Nginx导论</title><link>/2021/06/10/nginx%E5%AF%BC%E8%AE%BA/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/nginx%E5%AF%BC%E8%AE%BA/</guid><description><![CDATA[Nginx命令 nginx #默认配置启动 nginx -c /etc/nginx.conf #指定配置文件启动 nginx -s reload #重载配置,热重启 kill -s SIGHUB &lt;pid&gt; nginx -s stop #关闭 kill -s SIGINT/SIGTERM &lt;pid&gt; nginx -s quit #优雅关闭 kill -s SIGQUIT &lt;pid&gt;  nginx -s reopen #重新打开日志文件(切割日志) nginx -t #检查默认配置文件语法是否正确 nginx -t -c /etc/nginx.conf #指定配置文件路径 ​
+Location匹配规则  寻找精确匹配，匹配成功则返回 精确匹配不成功则匹配非正则的，进行最长匹配(和顺序无关)，如果最长匹配以^~开头则返回 第二步匹配不到则进行正则匹配，正则匹配和配置文件的顺序有关，如果前面的正则匹配成功则会立即返回 正则匹配不成功则继续进行第二步的最长匹配并且返回  匹配的修饰符，对于正则匹配，是一定要加的
+^~ 开头匹配 用于不含正则表达式的前缀路径 ~ 大小写敏感 ~* 忽略大小写 ! 反向匹配，！后面可以连接以上的规则 案例一
+#访问/a/b/c 返回2 location /a/b/c { return 200 &#34;1&#34;; } location ~ ^/a{ return 200 &#34;2&#34;; } 案例二]]></description></item><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</guid><description>概览 bridge 虚拟网桥模式 host 宿主机共享模式 none 无网络模式 container 容器共享模式 ​
+bridge网桥模式 docker网络使用Linux提供的veth pair和virtual bridge技术来实现网桥模式
+在该模式下每个容器都有一个独立的局域网虚拟IP，通讯范围如下:
+跨网段的两个容器即使是在同一台宿主机上也不可以互通 （为什么？） 容器和宿主机可以互通 容器可以连接外界网络，外界网络连接容器的服务需要进行端口映射 创建虚拟网桥
+docker network create -d bridge --subnet 192.168.25.0/24 --gateway 192.168.25.1 mynetwork 创建容器，指定网络
+docker run -d --name pingip --net mynetwork biningo/pingip 如果想让外网访问容器的服务，可以指定端口映射，这样外网直接访问宿主机的端口就可以访问容器的服务了
+docker run -d --name pingip --net mynetwork -p 8080:9090 biningo/pingip docker-proxy进程负责进行内网穿透，物理网卡上对应映射端口的流量会转发到docker-proxy进程上，然后docker-proxy再转发到容器内，容器内响应数据包也见过docker-proxy进行转发到物理网卡对应的端口中
+如果容器想要访问外网则必须进过iptables的NAT网络地址转换才可以访问外网
+在自定义的网络中是可以直接通过容器名进行访问的，而在docker0网络下则只能通过IP进行访问同网段的主机
+​
+host宿主机共享模式 docker run --name busybox -it --net host busybox:1.32.0 sh 进入容器执行ifconfig命令可以看到和宿主机上的网络一模一样，容器没有自己的IP，外界直接访问宿主机即可访问容器的服务</description></item><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</guid><description><![CDATA[此Dockerfile来源: https://github.com/new-go/port-scan
+ FROMgolang:1.16-alpine3.13 as builder ENV GOPROXY=https://goproxy.ioWORKDIR/buildADD . /build/RUN CGO_ENABLED=0 go build -a -ldflags &#34;-s -w&#34; -o pscan /build/FROMscratchCOPY --from=builder /build/pscan /ENTRYPOINT [&#34;/pscan&#34;]CGO_ENABLED=0表示不使用cgo，可以编译为一个纯静态的二进制文件，这样就不需要依赖其他动态加载库了，方便部署到Docker中
+-ldflags表示链接的一些参数，-s 的作用是去掉符号信息，-w的作用是去掉调试信息，这样可以最大程度减少镜像的体积
+-a 强制重新构建]]></description></item><item><title>awk工具</title><link>/2021/06/05/awk%E5%B7%A5%E5%85%B7/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/awk%E5%B7%A5%E5%85%B7/</guid><description><![CDATA[awk和sed区别 他们都是Linux下的 流处理工具
  awk核心是格式化 sed 核心是 正则  ​
 print输出和格式化 BEGIN { username=&#34;lyer&#34; age=18 OFS=&#34;-&#34; #指定print分割符号，默认是\t print &#34;hello,&#34;,&#34;world&#34; print &#34;I&#39;m&#34;,username,age print &#34;a&#34;,&#34;b&#34;,&#34;c&#34; } # -16 不足的往右边填空格 # 16 不足的往左边填空格 { #printf &#34;%-16s %-16s %-16s\n&#34;,$1,$2,$3 printf &#34;%16s %16s %16s\n&#34;,$1,$2,$3 } END{ a = sprintf(&#34;%16s %16s&#34;,&#34;hello&#34;,&#34;world&#34;) print a } ​
 NR输出行 输出第1行
@@ -21,7 +46,7 @@ git restore #将暂存区文件恢复到工作区 git restore --staged #取消�
 git branch #查看本地所有分支 -v则显示commit信息 git branch -r # 查看远端分支 git branch -a # 查看所有分支 创建分支
 git branch &lt;new&gt; &lt;old&gt; git branch dev #基于当前分支,创建dev分支 git branch feat dev #基于本地的dev分支，创建feat git branch dev origin/dev #基于远程origin/dev分支，创建dev git checkout -b dev #基于当前分支创建新分支,同时切换到新创建的分支 git checkout -b dev origin/dev #基于远程分支origin/dev中创建dev分支,同时切换 切换分支
 git checkout - # 切换上一个分支 git switch dev #切换到一个已经存在的本地分支 git checkout dev #能切换到任意(本地分支/远程分支/某个commit/某个tag) 删除分支
-git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了 git branch -d -r origin/dev #删除本地保留的远端分支 git push origin -d dev #删除远端的dev分支 重命名分支]]></description></item><item><title>git配置</title><link>/2021/06/05/git%E9%85%8D%E7%BD%AE/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/git%E9%85%8D%E7%BD%AE/</guid><description>gitconfig配置文件 gitconfig配置文件优先级顺序如下
+git branch -d dev #删除分支 分支功能开发完毕之后就可以删除分支了 git branch -D dev #强制删除 git branch -d -r origin/dev #删除本地保留的远端分支 git push origin -d dev #删除远端的dev分支 重命名分支]]></description></item><item><title>git配置</title><link>/2021/06/05/git%E9%85%8D%E7%BD%AE/</link><pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/05/git%E9%85%8D%E7%BD%AE/</guid><description>gitconfig配置文件 gitconfig配置文件优先级顺序如下
 /etc/gitconfig ~/.gitconfig .git/config ​
 gitconfig作用域 global全局作用域，修改的是~/.gitconfig
 git config --global user.name lyer local 本地作用域，修改的是.git/config
@@ -33,83 +58,4 @@ git config --list --global 查看某个配置
 git config user.email ​
 配置git命令别名 git config alias.st status #git st</description></item><item><title>git优雅的commit和日志查看</title><link>/2021/06/04/git%E4%BC%98%E9%9B%85%E7%9A%84commit%E5%92%8C%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B/</link><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/04/git%E4%BC%98%E9%9B%85%E7%9A%84commit%E5%92%8C%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B/</guid><description><![CDATA[commit命令 git commit #进入vi界面编辑 git commit -m &#34;message&#34; #直接输入剪短信息 git commit --amend -m &#34;new a&#34; #修改最近一次的commit信息 git show ce05f93 #展示commit的变更详细信息 ​
 commit规范 &lt;type&gt;[optional scope]: &lt;description&gt; &lt;BLANK LINE&gt; [optional body] &lt;BLANK LINE&gt; [optional footer(s)]  标题行: 必填, 描述主要修改的type类型和desc简短描述 body内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路等详细注释，这是可选的 页脚注释: 放一些额外的信息，比如参考的issue、pr、review的人等  fix(dao): correct minor typos in code see the issue for details on typos fixed. Reviewed-by: Z Refs #133 type 提交类型
-   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 变更作用的层次和范围]]></description></item><item><title>submodule子模块</title><link>/2021/06/04/git%E5%AD%90%E6%A8%A1%E5%9D%97/</link><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/04/git%E5%AD%90%E6%A8%A1%E5%9D%97/</guid><description>git submodule子模块 子模块主要有如下几个作用:
-将多个分离的项目统一放在一个文件夹下进行管理 将另外一个独立的项目导入到当前项目中，但是导入的项目不需要你自己来管理，由别人来管理 一个git仓库下面某个文件夹的来源可以跟本库的来源不同，这个文件夹连接着别的库，这样你可以让这个文件夹通过别的库来管理，主库唯一需要知道的信息是这个子模块当前最新的 commit，如果别人的项目更新了，主库可以决定自己是否需要跟新还是继续用旧版本。如果你一直不更新子模块，那么就永远是老的版本，子模块的更新需要你主动进行，注意，主库是不追踪子模块的变化的，如果你修改了子模块，需要进子模块的目录下进行commit和push
-添加子模块到当前项目:
-git submodule add https://github.com/biningo/biningo 如果子模块发生更改，仓库不会察觉到，需要我们手动进到子模块里去commit和push，如果子模块执行了commit，那么主库就会察觉到子模块发生了commit，提示执行status的时候就会提示子模块发生了变化，此时主库需要执行一次commit来提交更新
-git submodule update #将子模块和远程仓库保持同步,也可以到子模块目录下手动merge或则rebase clone`带有子模块的仓库不会拉取子模块相关代码，需要加上`--recurse-submodules`参数，或则执行`git submodule update git clone --recurse-submodules https://github.com/chaconinc/MainProject</description></item><item><title>Linux权限和用户</title><link>/2021/06/03/linux%E7%94%A8%E6%88%B7%E5%92%8C%E6%9D%83%E9%99%90/</link><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/03/linux%E7%94%A8%E6%88%B7%E5%92%8C%E6%9D%83%E9%99%90/</guid><description>用户和用户组 一个用户必须属于某个组，创建新用户的时候如果没有指定用户组则会创建一个同名的默认用户组
-用户组和用户的关系是多对多的关系，一个组里可以有多个用户，同理一个用户也可以属于多个用户组，但是每个用户都会有一个默认组，而其他组则是附加组在/etc/passwd文件中记录的用户组就是用户所属的默认组，而在/etc/group中会记录每个用户组里面的其它用户成员列表(用户组的主成员不记录在此)
-/etc/passwd记录的是用户相关的一些信息，每个用户占用一行
-用户名:口令(都为x):用户ID:用户组ID:用户注释:用户家目录:shell解释器 testuser:x:1001:1001:TmpUser:/home/testuser:/bin/sh /etc/group记录的是用户组相关的信息，每个用户组占一行
-组名:口令(都为x):用户组ID:组内用户列表 audio:x:29:pulse,pb #主用户不会记录在这里 /etc/shadow 记录的是用户加密之后的密码信息
-/etc/default/useradd 新用户默认设置的配置文件
-SHELL=/bin/sh #新用户的默认shell EXPIRE=2020/06/08 #新用户的默认过期时间 不配置则永久 .... ​
-用户和用户组相关的Linux命令 我们直接修改配置文件也是可以的，但是Linux也为我们提供了一些命令，本质上都是修改底层的配置文件
-新建/删除/修改用户
-useradd/userdel/usermod 用户组增删改
-groupadd/groupdel/groupmod 修改用户密码
-passwd 为用户添加到指定的组中 (直接修改/etc/group命令也可)
-#添加用户到指定的用户组中 不加-a则表示替换 #这里需要注意: 用户的默认组是不会被修改掉的 这个操作只能修改附加组 usermod -a -G g1,g2,g3 查看用户信息
-id/who/users/whoami/last/lastb/groups ​
-sudo命令和sudoers配置 sudo的作用是一个用户借用其它用户的权限来执行相关命令，需要配置/etc/sudoers文件，Linux会判断是否符合sudo文件的配置才会决定是否能够借权
-用户名 主机=(用户:用户组) NOPASSWD:命令列表 #pb用户可以在 所有主机登入 执行 所有用户:所有组 的所有命令 并且不需要输入密码 pb ALL=(ALL:ALL) NOPASSWD:ALL #表示admin组内的用户规则 %admin ALL=(ALL:ALL) ALL 下面再来看几个案例
-#相当于(root:root) peter ALL=(root) NOPASSWD: ALL lucy ALL=(ALL) chown,chmod,useradd papi ALL=/usr/sbin/*,/sbin/*,!</description></item><item><title>性能指标QPS</title><link>/2021/06/03/%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87qps/</link><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/03/%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87qps/</guid><description>TPS每秒事务数 Transactions Per Second 每秒处理的事务数目，一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程
-比如我请求访问twitter页面，则twitter服务器会返回一个twitter完整的页面给我，这个页面可能还包括一些css、js、各种数据的请求，这一整个页面的访问和全部数据的响应就叫TPS
-TPS过程包括: 客户端请求服务端+服务端内部处理+服务端返回客户端
-tps=处理事务数/秒 ​
-QPS每秒查询率 Queries Per Second 每秒查询率，表示一台服务器每秒能够响应的查询次数，代表的是服务器的机器的性能最大吞吐能力
-qps基本类似于 tps，但是不同的是对于一个页面的一次访问，形成一个 TPS，但一次页面请求，可能产生多次对服务器的请求，服务器对这些请求就可计入QPS之中
-简单来说QPS就是对每个后端请求的度量，比如一个页面要请求多个接口，那么对每个接口的请求可以归结为QPS，当用户请求页面到页面完整的展示给用户这一个过程可以归结为TPS
-也就是说如果一个页面只会访问一个接口一个请求，则TPS=QPS
-qps=能处理的请求数/秒 ​
-PV页面浏览量 page view 页面浏览量，用户每次对页面的访问都计入PV，比如我对一个页面刷新了5次那么PV就加5
-​
-UV独立访客数 Unique Visitor 独立访客访问数，可以理解为IP访问次数，比如我对一个页面刷新了100次，但是UV还是只加1，因为IP还是我</description></item><item><title>缓存一致性</title><link>/2021/06/02/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/</link><pubDate>Wed, 02 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/02/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/</guid><description>什么是缓存一致性 操作缓存比操作Mysql数据库要快，如果流量大的话可以先将数据保存在缓存中，等空闲的时候再将缓存中的数据持久化到数据库中
-还有一些热点数据我们也可以预先从数据库中加载到缓存中，那样在流量大的时候就不需要每次都从数据库里面去读取数据了
-因为缓存和数据库是两个不同的地方，最容易出现的问题就是缓存的数据和数据库中的数据不一致问题: 可能从缓存中读取的数据是旧值，又或者我们保存在缓存中的数据还没有持久化到Mysql数据库中
-为了保证缓存一致性，减少数据不一致的情况，我们必须合理的使用缓存
-​
-不更新缓存，而是删除缓存 后端数据库如果改变的话，我们不应该更新缓存而应该删除缓存，直到下一次数据读取的时候再加载数据库中最新的缓存
-如果数据改变了，我们如果去更新缓存的话则会出现很多问题
-一、线程安全，脏数据问题
-下面有两个并发请求A、B同时更新了数据库
-A更新数据库 B更新数据库 B更新缓存 A更新缓存 由于网络原因，虽然A是先于B更新数据库，但是此时A却后于B更新缓存，此时的缓存的数据就是A的数据而不是最新的数据B，这样就造成了数据不一致的问题
-如果我们在更新数据时直接删除数据，此下次再来读取的时候加载一次数据库即可，那么加载的数据一定是最新的
-二、频繁更新缓存造成不必要的浪费
-如果在写多读少的场景下，缓存数据会进行频繁更新，但是读数据却很少，则会造成资源浪费，还不如直接将缓存删除，下次读的时候只需要一次cache miss的消耗
-同时如果数据需要进过复杂的运算和逻辑处理才能写入缓存，那么频繁的更新缓存也会造成不必要的消耗
-​
-先操作数据库，再删除缓存 在写数据的时候，我们一般是先写数据库，再删除缓存 这样才能减少数据不一致的问题
-先删除缓存，再操作数据库
-此方案在并发读写的时候也会造成数据不一致性的问题
-假设有线程A、B
-线程A请求写操作，于是线程A会删除缓存数据再进行数据库写操作 此时线程B在A写操作的过程中进行读操作，引发一次cache miss 由于B是在A写事务执行过程中来读取的，于是B加载到缓存中的数据还是之前的老数据 此时A写操作完成，这样就造成了缓存和数据库的数据不一致性，如果缓存的数据没有过期时间的话则其他客户端读取到的数据就一直都是脏数据直到下次 发生数据写操作删除缓存 先更新数据库，再删除缓存
-这种方案不会引发上面的缓存不一致的问题，一旦数据库的数据更新完毕之后就会立即删除缓存中的数据，则下次再读取时就会引发一次cache miss就能读取到最新的数据
-但是也会有很小的概率会发生数据不一致的状态
-假设有两个并发线程A、B
-A请求读取数据，此时缓存凑巧失效了，A引发cache miss之后读取数据 B请求在A读取数据的同时在写入新值到数据库中，并且写入完成之后删除了缓存 此时A又将读取到的旧值加载到了缓存中，引发数据不一致的问题 上面的情况发生的概率是比较小的
-​
-参考 缓存一致性问题</description></item><item><title>XSS和CSRF攻击</title><link>/2021/06/01/xss%E5%92%8Ccsrf%E6%94%BB%E5%87%BB/</link><pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/01/xss%E5%92%8Ccsrf%E6%94%BB%E5%87%BB/</guid><description><![CDATA[XSS攻击 Cross Site Script 跨站脚本攻击，为了不和CSS混淆，所以缩写为XSS
-在网页的输入框中最容易被XSS攻击，比如在一个评论框中，用户输入了以下内容
-&lt;script&gt;alert(“hello,XSS”)&lt;/script&gt; 那么网页在渲染这段数据的时候就相当于嵌入了一段js脚本代码，以后所有用户访问此网站都会被执行这段代码
-上面注入的只是简单的弹窗代码，但是如果注入的是一些恶意的js脚本，那么每个用户访问都会在后台默默的执行注入的恶意js代码
-恶意的js代码可以做啥呢
- 窃取用户的Cookie，如果Set-Cookie没有设置HttpOnly的话则可以被js代码读取并且通过网络转发给黑客，那么用户的Cookie数据就泄露了 伪造用户，通过js脚本使用用户的Cookie来请求网站，以此假冒用户登入 (利用浏览器的同源策略可以避免) 劫持流量实现恶意跳转，每当用户访问时js代码执行强行跳转劫持用户到另外的站点  预防XSS
-  过滤用户的输入
-  将用户的输入内容插入特殊符号进行转义
-  ​
-CSRF攻击 Cross Site Request Forgery 跨站请求伪造攻击
-攻击者诱导受害者进入第三方网站，在第三方网站中，向被攻击网站发送跨站请求
-利用受害者在被攻击网站已经获取的注册凭证Cookie，绕过后台的用户验证，达到冒充用户对被攻击的网站执行某项操作的目的
-下面是一个案例
- 小明登入了银行网站A，网站A设置Cookie来作为用户之后请求的Token 小明在登入银行A之后被诱导点击了网站B 网站B向A发送了一个转账请求，浏览器会携带上之前网站A设置的Cookie A收到请求之后就会验证通过，此时小明的钱就被网站B转走了  网站B在受害者不知情的情况下冒充受害者，通过Cookie让网站A执行了网站B定义的操作
-由于浏览器有同源策略，因此网站B向网站A发送请求会被浏览器认定为跨域，因此会被浏览器拦截
-但是有下面几种情况不会被拦截:
-  所有拥有src属性的 &lt;script&gt;、&lt;img&gt;、&lt;iframe&gt; 以及&lt;a&gt;标签等，是不会经过同源策略，因为浏览器认为这些标签肯定是网站主动引用外部资源所加入的的所以不需要规定同源策略，例如baidu.com引用了CDN的jquery
-  浏览器为了方便表单的提交，所以 &lt;form&gt; 中填的action 也不会限制同源策略，可以填写任意的URL，一旦用户提交表单那么就会请求URL发生跨域。如果用户在恶意网站里面填写并提交了表单则可能会被CSRF攻击
-  如何防止CSRF攻击？
- 服务端验证请求，比如验证HTTP请求头的Referer字段 浏览器同源策略，防止跨域请求 加入token，比如我们可以在请求参数后面附加一个token，每次请求都验证一下这个token，因为黑客并不知道这个token，则可以防止CSRF攻击  ​
-参考 如何防止XSS攻击？
-如何防止CSRF攻击？
-安全篇——如何预防CSRF攻击
-Cookie 的 SameSite 属性]]></description></item></channel></rss>
+   type desc     feat 新特性   fix 修复bug   refactor 代码重构   docs 文档修改   style 代码格式修改   test 测试相关，增加测试用例，修改测试用例   chore 杂项，其它修改，比如依赖管理、CICD等，当然还可以指出具体的比如ci: build   pref 代码优化，各种优化等   sync 同步主线分支   merge/rebase 合并分支    scope 变更作用的层次和范围]]></description></item></channel></rss>

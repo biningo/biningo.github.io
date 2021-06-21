@@ -1,10 +1,24 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>Go文件读写和IO操作</title><link>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</guid><description><![CDATA[IO接口 io.Reader 读IO接口
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Go - 标签 - lyer's blog</title><link>/tags/go/</link><description>Go - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 10 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/go/" rel="self" type="application/rss+xml"/><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</guid><description>概览 bridge 虚拟网桥模式 host 宿主机共享模式 none 无网络模式 container 容器共享模式 ​
+bridge网桥模式 docker网络使用Linux提供的veth pair和virtual bridge技术来实现网桥模式
+在该模式下每个容器都有一个独立的局域网虚拟IP，通讯范围如下:
+跨网段的两个容器即使是在同一台宿主机上也不可以互通 （为什么？） 容器和宿主机可以互通 容器可以连接外界网络，外界网络连接容器的服务需要进行端口映射 创建虚拟网桥
+docker network create -d bridge --subnet 192.168.25.0/24 --gateway 192.168.25.1 mynetwork 创建容器，指定网络
+docker run -d --name pingip --net mynetwork biningo/pingip 如果想让外网访问容器的服务，可以指定端口映射，这样外网直接访问宿主机的端口就可以访问容器的服务了
+docker run -d --name pingip --net mynetwork -p 8080:9090 biningo/pingip docker-proxy进程负责进行内网穿透，物理网卡上对应映射端口的流量会转发到docker-proxy进程上，然后docker-proxy再转发到容器内，容器内响应数据包也见过docker-proxy进行转发到物理网卡对应的端口中
+如果容器想要访问外网则必须进过iptables的NAT网络地址转换才可以访问外网
+在自定义的网络中是可以直接通过容器名进行访问的，而在docker0网络下则只能通过IP进行访问同网段的主机
+​
+host宿主机共享模式 docker run --name busybox -it --net host busybox:1.32.0 sh 进入容器执行ifconfig命令可以看到和宿主机上的网络一模一样，容器没有自己的IP，外界直接访问宿主机即可访问容器的服务</description></item><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</guid><description><![CDATA[此Dockerfile来源: https://github.com/new-go/port-scan
+ FROMgolang:1.16-alpine3.13 as builder ENV GOPROXY=https://goproxy.ioWORKDIR/buildADD . /build/RUN CGO_ENABLED=0 go build -a -ldflags &#34;-s -w&#34; -o pscan /build/FROMscratchCOPY --from=builder /build/pscan /ENTRYPOINT [&#34;/pscan&#34;]CGO_ENABLED=0表示不使用cgo，可以编译为一个纯静态的二进制文件，这样就不需要依赖其他动态加载库了，方便部署到Docker中
+-ldflags表示链接的一些参数，-s 的作用是去掉符号信息，-w的作用是去掉调试信息，这样可以最大程度减少镜像的体积
+-a 强制重新构建]]></description></item><item><title>Go文件读写和IO操作</title><link>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</link><pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/29/go%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%92%8Cio%E6%93%8D%E4%BD%9C/</guid><description><![CDATA[IO接口 io.Reader 读IO接口
 type Reader interface { Read(p []byte) (n int, err error) } io.Writer 写IO接口
 type Writer interface { Write(p []byte) (n int, err error) } io.Closer 关闭IO接口
 type Closer interface { Close() error } ​
 文件读取 方式一: 无缓冲直接读取
 func fileDemo1() { file, err := os.Open(&#34;/go-test-learn/io/t1.go&#34;) CheckError(&#34;&#34;, err) defer file.Close() content := []byte{} buf := make([]byte, 100) //每次读取的最大byte数组 	for { n, err := file.Read(buf) //返回真实读取的数据字节大小 (&lt;=len(buf)) 	if err == io.]]></description></item><item><title>Go处理error</title><link>/2021/05/23/go%E5%A4%84%E7%90%86error/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/23/go%E5%A4%84%E7%90%86error/</guid><description><![CDATA[大道至简的error go的错误处理就只有一个errors包和一个error接口，这个接口只包哈一个Error方法，该方法返回一个string，这个包的代码很少，只有两个文件：
- errors.go wrap.go  go的error也就是通过创建一个错误提示的字符串的方式，然后通过返回值来返回这个错误，除非这个函数能保证一定能执行成功，否则每个函数都必须返回一个error
+ errors.go wrap.go  go通过返回值来返回错误而不是通过try/catch，除非函数能保证一定能执行成功，否则每个函数都必须返回一个error
+并且go的error建议只处理一次，也就是说如果你处理过了错误那么就不需要返回给上层了，如果将已经处理过的错误继续返回给上层则这个错误可能会被重复处理
 func f() error{ return errors.New(&#34;error&#34;) //返回error接口 } 下面来看下errors/errors.go的源码，不过10行左右
 func New(text string) error { return &amp;errorString{text} //返回errorString指针 } //实现了error接口 type errorString struct { s string } //获取错误字符串的方法 func (e *errorString) Error() string { return e.s } ​
 自定义error 我们只需要实现error接口也就是重写Error()方法即可自定义错误
@@ -44,17 +58,4 @@ xxx_test.go测试文件中主要有如下几个部分:
 类型 格式 作用 单元测试 函数名前缀为Test 测试程序的一些逻辑行为是否正确 基准测试 函数名前缀为Benchmark 测试函数的性能 示例代码 函数名前缀为Example 为文档提供示例文档 ​
 单元测试 $ go test -v #扫描当前包下所有的测试文件进行测试 并且输出详细信息 $ go test -v -test.run A #测试包含 A 字母的单元测试函数 [只能运行单元测试] 单元测试函数必须以 t *testing为参数，t主要用于报告测试结果是否正确以及日志记录，主要有如下几个方法:
 Error Log 最常用
-//标记失败 func (c *T) Fail() //标记失败，但继续执行当前测试函数 func (c *T) FailNow() //标记失败，停止下面的执行 func (c *T) Failed() bool //日志信息 go test如果测试成功的话，不会打印这部分内容，加上 -v则测试成功也会显示 func (c *T) Log(args .</description></item><item><title>Go随机数用法</title><link>/2021/02/15/go%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%A8%E6%B3%95/</link><pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/15/go%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%A8%E6%B3%95/</guid><description><![CDATA[基本用法 go随机数在math/rand包下，go的随机数需要先给他一个Seed，Seed如果一样的话或则不设置的话每次生成的都是 伪随机数 ，多次执行生成的都是一样的随机数序列，所以必须设定Seed而且还是以 时间戳 的方式来设置，如下生成 [0,10)之间的随机整数：
-rand.Seed(time.Now().UnixNano()) r:=rand.Intn(10) //[0,10) 返回int类型 r=rand.Int63n(10) //返回int64 如果要生成指定范围的随机整数，如下生成[min,max)之间的随机整数：
-rand.Seed(time.Now().UnixNano()) max:=10;min:=-10 rand.Intn(max-min)+min //[-10,10) ​
-随机负载均衡实现 我们实战一下，实现一个 随机数负载均衡
-type RandomBalance struct { curIndex int hosts []string } func (r *RandomBalance) Add(host string) { r.hosts = append(r.hosts, host) } func (r *RandomBalance) Next() (string, error) { if len(r.hosts) == 0 { return &#34;&#34;, errors.New(&#34;no host&#34;) } rand.Seed(time.Now().UnixNano()) r.curIndex = rand.Intn(len(r.hosts)) return r.hosts[r.curIndex], nil } func main() { rb := RandomBalance{} for i := 1; i &lt; 10; i++ { rb.]]></description></item><item><title>GoModules包管理</title><link>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</link><pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/12/gomodules%E5%8C%85%E7%AE%A1%E7%90%86/</guid><description><![CDATA[Go Modules环境变量 要开启Go Modules管理，需要设置一个环境变量：
-GO111MODULE=&#34;on&#34; #默认是开启的 ​
-go.mod文件 //1、每个模块都有一个名字 通常通过 go mod init 指定 module github.com/biningo/go-play //2、指定go版本 go 1.15 //3、指定依赖的库地址 &lt;url&gt; &lt;version&gt; 形式 require ( github.com/gin-gonic/gin v1.6.3 ) //4、replace 替换 require 中声明的依赖，使用另外的依赖及其版本号 不经常使用 replace github.com/gin-gonic/gin v1.6.3 =&gt; github.com/gin-gonic/gin v1.6.3 //5、exclude 排除某些版本 exclude ithub.com/gin-gonic/gin v1.5.0 模块名字主要有如下几个作用：
-  作为模块的标识
-  作为模块的 import path
-当其他项目引用这个模块下的 package 时都会以该 import path 作为共同的前缀，自己的项目引用自己项目的包也必须是这个前缀，代表了这个项目，然后前缀下就可以根据路径来引入包了
-  开启mod模式之后，所有的go get命令拉取的包都会放到$GOPATH/pkg/mod路径下，如果是在项目下面执行go get则也会同时将响应的依赖信息记录到go.mod文件
-go mod的replace命令主要用来替换原来的包，使用场景有如下几个
-  单纯的替换包（用处不大）
-  替换无法下载的包]]></description></item></channel></rss>
+//标记失败 func (c *T) Fail() //标记失败，但继续执行当前测试函数 func (c *T) FailNow() //标记失败，停止下面的执行 func (c *T) Failed() bool //日志信息 go test如果测试成功的话，不会打印这部分内容，加上 -v则测试成功也会显示 func (c *T) Log(args .</description></item></channel></rss>

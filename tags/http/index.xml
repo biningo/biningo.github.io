@@ -50,8 +50,11 @@ func main() { r := gin.Default() r.GET(&#34;/ping&#34;, func(context *gin.Contex
 如果一个请求发送到服务器上的80端口，那么监听在80端口上的应用服务器会判断HTTP请求报文中的Host是不是自己的，如果是则接收并且响应，不是则丢弃。或则直接部署一个网关(Nginx)，网关捕获所有请求然后检查HTTP请求头的Host字段根据配置的 Host规则 转发到不同的后端服务器上即可
 当然也可以将多个应用分别部署到不同的端口上，只是这样比较麻烦并且占用了端口，有时候还违背了一些默认规则，比如HTTP应用的默认端口80，如果我有两个网站那么我就不得不将其他网站的端口给修改了，这样会造成用户访问不方便
 ​
-Nginx中的server_name 我们可以配置server_name规则来让Nginx检查Host字段并且转发到相应的服务器上
-server { listen 80; server_name www; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www&lt;/p&gt;&#34;) &#39;; } } server { listen 80; server_name www.lyer.com; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www.lyer.com&lt;/p&gt;&#34;) &#39;; } } server { listen 80; server_name www.lyer.*; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www.lyer.*&lt;/p&gt;&#34;) &#39;; } } server { listen 80; server_name ~\w+.]]></description></item><item><title>HTTP协议</title><link>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</guid><description>请求和响应报文 请求报文第一行必须指定 请求的方法、资源路径、HTTP协议版本
+一台主机多域名 我们可以配置server_name规则来让Nginx检查Host字段并且转发到相应的服务器上
+域名前缀
+server { listen 80; server_name www; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www&lt;/p&gt;&#34;) &#39;; } } 完整域名
+server { listen 80; server_name www.lyer.com; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www.lyer.com&lt;/p&gt;&#34;) &#39;; } } 域名正则匹配
+server { listen 80; server_name www.lyer.*; location / { default_type text/html; content_by_lua &#39; ngx.say(&#34;&lt;p&gt;www.lyer.*&lt;/p&gt;&#34;) &#39;; } } server { listen 80; server_name ~.]]></description></item><item><title>HTTP协议</title><link>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</link><pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/08/http%E5%8D%8F%E8%AE%AE/</guid><description>请求和响应报文 请求报文第一行必须指定 请求的方法、资源路径、HTTP协议版本
 紧接着就是请求头信息
 然后还需要一个空行
 紧接着如果有请求体的话就是请求体，注意如果没有请求体也必须加一个空行

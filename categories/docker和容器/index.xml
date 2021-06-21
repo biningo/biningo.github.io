@@ -1,5 +1,18 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker和容器 - 分类 - lyer's blog</title><link>/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/</link><description>Docker和容器 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 20 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>docker-compose https://github.com/docker/compose
-单机下的容器排编工具，使用Python编写
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker和容器 - 分类 - lyer's blog</title><link>/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/</link><description>Docker和容器 - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Thu, 10 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/docker%E5%92%8C%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/</guid><description>概览 bridge 虚拟网桥模式 host 宿主机共享模式 none 无网络模式 container 容器共享模式 ​
+bridge网桥模式 docker网络使用Linux提供的veth pair和virtual bridge技术来实现网桥模式
+在该模式下每个容器都有一个独立的局域网虚拟IP，通讯范围如下:
+跨网段的两个容器即使是在同一台宿主机上也不可以互通 （为什么？） 容器和宿主机可以互通 容器可以连接外界网络，外界网络连接容器的服务需要进行端口映射 创建虚拟网桥
+docker network create -d bridge --subnet 192.168.25.0/24 --gateway 192.168.25.1 mynetwork 创建容器，指定网络
+docker run -d --name pingip --net mynetwork biningo/pingip 如果想让外网访问容器的服务，可以指定端口映射，这样外网直接访问宿主机的端口就可以访问容器的服务了
+docker run -d --name pingip --net mynetwork -p 8080:9090 biningo/pingip docker-proxy进程负责进行内网穿透，物理网卡上对应映射端口的流量会转发到docker-proxy进程上，然后docker-proxy再转发到容器内，容器内响应数据包也见过docker-proxy进行转发到物理网卡对应的端口中
+如果容器想要访问外网则必须进过iptables的NAT网络地址转换才可以访问外网
+在自定义的网络中是可以直接通过容器名进行访问的，而在docker0网络下则只能通过IP进行访问同网段的主机
+​
+host宿主机共享模式 docker run --name busybox -it --net host busybox:1.32.0 sh 进入容器执行ifconfig命令可以看到和宿主机上的网络一模一样，容器没有自己的IP，外界直接访问宿主机即可访问容器的服务</description></item><item><title>打包一个最小的Go镜像</title><link>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</link><pubDate>Thu, 10 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/10/%E6%89%93%E5%8C%85%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E7%9A%84go%E9%95%9C%E5%83%8F/</guid><description><![CDATA[此Dockerfile来源: https://github.com/new-go/port-scan
+ FROMgolang:1.16-alpine3.13 as builder ENV GOPROXY=https://goproxy.ioWORKDIR/buildADD . /build/RUN CGO_ENABLED=0 go build -a -ldflags &#34;-s -w&#34; -o pscan /build/FROMscratchCOPY --from=builder /build/pscan /ENTRYPOINT [&#34;/pscan&#34;]CGO_ENABLED=0表示不使用cgo，可以编译为一个纯静态的二进制文件，这样就不需要依赖其他动态加载库了，方便部署到Docker中
+-ldflags表示链接的一些参数，-s 的作用是去掉符号信息，-w的作用是去掉调试信息，这样可以最大程度减少镜像的体积
+-a 强制重新构建]]></description></item><item><title>Docker实用小工具</title><link>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</link><pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/05/20/docker%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/</guid><description>docker-compose https://github.com/docker/compose
+单机容器排编工具，使用Python编写
 lazydocker https://github.com/jesseduffield/lazydocker
 终端界面管理Docker
 portainer https://github.com/portainer/portainer
@@ -14,9 +27,11 @@ podman、buildah、skopeo、podman-compose podman Docker命令兼容的Linux容�
 buildah 专注于构建符合OCI规范的镜像，相当于Dockerfile和docker build命令
 kopeo 镜像管理工具，负责从远程仓库中拉取镜像、推送镜像等
 podman-compose podman中的docker-compose
-cadvisor https://github.com/google/cadvisor
+cAdvisor https://github.com/google/cadvisor
 容器资源监控，监控容器的资源使用情况
 Prometheus + cAdvisor + grafana 容器应用监控和可视化三剑客
+rancher https://github.com/rancher/rancher
+k8s集群和容器管理平台
 参考 推荐5款好用的开源Docker工具</description></item><item><title>Docker的volumes踩坑</title><link>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/01/07/docker%E7%9A%84volumes%E8%B8%A9%E5%9D%91/</guid><description><![CDATA[挂载volume的行为 volume的挂载是 以宿主机为主 ，主要有如下几个行为可能：
    host container mount result     文件夹不存在/文件夹存在但为空 文件夹不存在/存在但为空/存在且不为空 container中文件被覆盖（清空）   文件夹存在且不为空 文件夹不存在/存在但为空/存在且不为空 container中文件夹内容被覆盖（原内容清空， 覆盖为host上文件夹内容）    ​
 将容器已经存在的文件挂载到宿主机 由上面可知，容器中原本存在的文件一旦进过挂载，就一定会被宿主机覆盖，但是有如下几个方法，可以曲线救国：
