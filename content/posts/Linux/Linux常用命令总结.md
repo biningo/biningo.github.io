@@ -3,6 +3,7 @@ title: Linux常用命令总结
 date: 2021-02-23
 categories: [Linux]
 tags: [Linux]
+draft: true
 ---
 
 > **持续跟新.....**

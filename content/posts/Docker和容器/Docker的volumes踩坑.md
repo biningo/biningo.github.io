@@ -23,7 +23,7 @@ tags: [docker,容器]
 - **docker cp命令先将容器内的数据copy到宿主机然后再进行挂载**
 - 在`docker-entrypoint.sh`等脚本中执行创建文件和文件夹等相关命令，**因为挂载行为先与脚本的执行行为，所以在脚本执行的时候已经挂载volume，当脚本创建相关文件的时候就可以反映到宿主机上了**
 
-​    
+​     
 
 ## volume相关命令
 
@@ -39,7 +39,17 @@ docker volume preun #清空没有容器挂载中的volume stop中的容器的vol
 #控制volume的读写权限
 -v <xxx>:容器内路径:ro #只读 在容器内只能读挂载的文件 
 -v <xxx>:容器内路径:rw  #读写 在容器内能读写挂载文件 默认
+```
 
+​    
+
+## 共享数据卷
+
+一个容器可以共享其它容器已经挂载了的数据卷，一旦共享那么只要在任意一个容器里面操作数据卷都相当于操作同一个，会影响所有容器和宿主机上的文件。并且容器删除并不会删除数据卷
+
+```bash
+docker run --name b1 -v $PWD:/v1  -it busybox:1.32.0 sh
+docker run --name b2 --volumes-from b1  -it busybox:1.32.0 sh
 ```
 
 ​    

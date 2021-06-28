@@ -3,7 +3,6 @@ title: iptables总结
 date: 2021-06-19
 categories: [Linux]
 tags: [Linux,iptables]
-draft: true
 ---
 
 ## iptables命令格式
@@ -155,6 +154,7 @@ nat表主要有如下控制类型
 | DNAT       | 目的IP转化，比如容器的端口映射可通过此来实现                 |
 | SNAT       | 源IP转化，比如容器需要访问外网则需要修改源IP为出口网卡的IP，数据包回来之后内核会自动转化回来 |
 | MASQUERADE | 动态SNAT，适用于动态IP，网卡IP会变化的场景。一般需要SNAT的场景都使用这个 |
+| REDIRECT   | 端口转发                                                     |
 
 ### SNAT
 

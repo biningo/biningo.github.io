@@ -37,6 +37,7 @@ label
 
 ```bash
 kubectl get pod/echo-ip 
+kubectl get pod --show-labels -L app,env #选取有指定标签的pod
 kubectl get pod --show-labels -l app=echo,env=test #筛选 &关系
 kubectl get pod --show-labels -l app!=echo
 kubectl get pod --show-labels -l 'env in (development,production)'

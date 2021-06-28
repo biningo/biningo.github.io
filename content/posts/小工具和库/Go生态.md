@@ -28,9 +28,13 @@ draft: true
 
 ## 工具
 
-`gdu` 磁盘分析工具，终端界面
+`gdu` 磁盘文件大小分析工具，终端界面
 
 > https://github.com/dundee/gdu
+
+duf和df命令功能差不多
+
+> https://github.com/muesli/duf
 
 `vault` 密码、安全、证书管理等
 
@@ -39,6 +43,18 @@ draft: true
 `goreman` 进程管理工具
 
 > https://github.com/mattn/goreman
+
+`goreleaser` github二进制release工具，go个平台二进制生成工具
+
+> https://github.com/goreleaser/goreleaser 
+
+`plow` HTTP基准测试工具，可视化
+
+> https://github.com/six-ddc/plow
+
+`slides` go写的终端PPT演示工具
+
+> https://github.com/maaslalani/slides
 
 ​    
 

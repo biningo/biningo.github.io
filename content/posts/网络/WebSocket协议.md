@@ -17,7 +17,7 @@ ws://www.chrono.com:8080/srv
 wss://www.chrono.com:445/im?user_id=xxx #加密的websocket协议
 ```
 
-​    
+​     
 
 ## WebSocket握手
 

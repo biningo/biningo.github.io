@@ -54,8 +54,6 @@ func initSqlXDB() *sqlx.DB {
 
 ### 1、SetMaxOpenConns
 
-
-
 ### 2、SetMaxIdleConns
 
 ### 3、SetConnMaxLifetime
@@ -103,11 +101,11 @@ type Tag struct {
 }
 ```
 
-​    
+​     
 
 ## 查询数据
 
-### 1、单挑查询
+### 1、单条查询
 
 `QueryRowx`  和 `sql.QueryRow`
 
@@ -115,6 +113,7 @@ type Tag struct {
 
 ```go
 rx := DBx.QueryRowx("select id,title from tag where title=?", "rust")
+rx := DBx.NamedQuery("select id,title from tag where title=:name", map[string]interface{}{"name":"go"})
 ```
 
 `Get` 则只能映射结构体
@@ -154,9 +153,25 @@ DBx.Select(&tags, "select id,title from tag")
 
 > 多条查询需要注意的就是查询完毕之后需要调用`Rows`的`Close`方法关闭连接，否则查询次数多了连接都被占满了就无法进行查询了
 
-​    
+​     
 
 ## 插入更新
+
+插入一条
+
+```go
+DBx.NamedExec(
+    "insert into tag(title) value(:title)",
+    map[string]interface{}{
+        "title": "go",
+    })
+```
+
+也可以使用占位符的方式
+
+```go
+DBx.Exec("insert into tag(title) value(?)","go")
+```
 
 这里只说明如何进行批量插入，如果我们使用官方的sql库的话我们就需要自己通过循环来破解sql语句，但是sqlx提供了方便的API让我们不需要自己拼接
 
@@ -175,6 +190,15 @@ func main(){
 	_, err := DBx.NamedExec("insert into tag(title) values(?)", tags)
 }
 ```
+
+​    
+
+## sql查询一些注意的点
+
+- 注意根据业务进行设置最大链接线程、空闲线程数等
+- 每次查询完毕之后注意关闭连接，否则会占用连接
+- 使用`?`占位符来进行查询可以避免SQL注入，而不是使用`Sprintf`进行破解SQL
+- 如果一个sql需要反复查询执行的可以使用SQL预编译可以提升查询的效率，还可以防止SQL注入
 
 ​    
 
