@@ -1,5 +1,17 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Linux - 分类 - lyer's blog</title><link>/categories/linux/</link><description>Linux - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/linux/" rel="self" type="application/rss+xml"/><item><title>tcpdump抓包</title><link>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</link><pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</guid><description>TODO
-巨人肩膀 超详细的网络抓包神器 tcpdump 使用指南</description></item><item><title>Linux静态路由表</title><link>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</link><pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</guid><description>查看路由表 route -n netstat -rn Destination是0.0.0.0表示是默认路由，只有其他路由都匹配不到时才会走这个路由
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Linux - 分类 - lyer's blog</title><link>/categories/linux/</link><description>Linux - 分类 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/linux/" rel="self" type="application/rss+xml"/><item><title>iptables总结</title><link>/2021/06/19/iptables%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/19/iptables%E6%80%BB%E7%BB%93/</guid><description>iptables命令格式 iptables命令格式
+iptables [-t 表名] 管理选项 [链名] [匹配条件] [-j 控制类型] 不加-t指定表名则默认操作的是filter表 不加指定的链名则会展示表的所有的链规则 ​
+四表和五链和数据流向 注意，在OUTPUT之后会通过route表进行路由选择，选择出口的网卡
+iptables匹配规则如下，按规则的排列顺序逐一匹配，只要匹配到了就不会再继续往下匹配，就传递给下一个链了，所以我们需要将优先级更高的规则防止在前面
+​
+查看iptables 查看主要是使用-L命令，表示list的意思
+查看nat表的OUTPUT链规则
+iptables -t nat -nvL OUTPUT n不解析域名，直接显示IP v显示详细信息 L 表示list展示的意思 一般都会加上-nvL来查看iptables规则
+查看filter表的OUTPUT规则
+iptables -nvL OUTPUT ​
+编写iptables规则 -A命令添加iptables规则
+-j后面加控制类型
+filter主要有如下控制类型
+控制类型 解释 ACCEPT 允许传递数据包 DROP 丢弃数据包，不响应 REJECT 拒绝数据包，响应RST LOG 在/var/log/messages文件中记录日志信息，然后再继续传递 iptables -A INPUT -j DROP #丢弃所有数据包 iptables -A INPUT -j ACCEPT #接受所有数据包 -I表示插入iptables规则，插入到指定的行，原来的行后移</description></item><item><title>Linux静态路由表</title><link>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</link><pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</guid><description>查看路由表 route -n netstat -rn Destination是0.0.0.0表示是默认路由，只有其他路由都匹配不到时才会走这个路由
 Gateway为0.0.0.0表示没有网关，静态路由表中的网关只能配置一个，配置多个则只会使用其中一个
 ​
 路由转发流程 工具目标IP个子网掩码匹配静态路由表中的条目 如果匹配到了则将数据包发送到路由表项对应的网卡上 如果路由表项都匹配不成功则走默认路由，也就是Destinaion为0.0.0.0的路由表项，因为默认路由配置了网关所以数据包会从网关发送出去，而在局域网内的通讯则不会走网关 比如我现在要访问172.17.0.10，则会匹配到docker0这个虚拟网桥，然后将数据包转发到docker0中由docker0进行转发
@@ -29,16 +41,14 @@ passwd 为用户添加到指定的组中 (直接修改/etc/group命令也可)
 id/who/users/whoami/last/lastb/groups ​
 sudo命令和sudoers配置 sudo的作用是一个用户借用其它用户的权限来执行相关命令，需要配置/etc/sudoers文件，Linux会判断是否符合sudo文件的配置才会决定是否能够借权
 用户名 主机=(用户:用户组) NOPASSWD:命令列表 #pb用户可以在 所有主机登入 执行 所有用户:所有组 的所有命令 并且不需要输入密码 pb ALL=(ALL:ALL) NOPASSWD:ALL #表示admin组内的用户规则 %admin ALL=(ALL:ALL) ALL 下面再来看几个案例
-#相当于(root:root) peter ALL=(root) NOPASSWD: ALL lucy ALL=(ALL) chown,chmod,useradd papi ALL=/usr/sbin/*,/sbin/*,!</description></item><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
- 全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
-readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
-name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
-   量 含义     $0 当前脚本的文件名   $&lt;n&gt; 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。   $# 传递给脚本或函数的参数个数。   $* 传递给脚本或函数的所有参数。   $@ 传递给脚本或函数的所有参数。被双引号&quot;&quot;包含时，与 $* 稍有不同   $? 上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功   $$ 当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。    ${@}和${*} 的区别]]></description></item><item><title>Linux常用命令总结</title><link>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/23/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</guid><description><![CDATA[持续跟新&hellip;..
- 进程相关 进程的信息都在/proc下
-ps ps 显示系统进程
-ps -ef ps -aux ps -ef | grep sshd jobs fg bg &amp; nohub &amp; jobs fg bg nohub
-./exe &amp; #后台运行 ./exe &gt; log.txt 2&gt;&amp;1 &amp; #0:标准输入 1:标准输出 2:标准错误 2&gt;&amp;1是将标准出错重定向到标准输出 最终结果就是`标准输出`和`错误`都被重定向到`log.txt`中 etcd &gt; /dev/null 2&gt;&amp;1 &amp; #后台运行 同时输出日志重定向到垃圾桶 nohup etcd &gt; /dev/null 2&gt;&amp;1 &amp; #以守护进程方式运行 不会随着终端退出而退出 jobs #查看后台运行中的进程 #ctrl+z暂停任务 ctrl+c终止任务 fg $1 #将后台任务放到前台执行 bg $1 #将一个暂停的任务放在后台执行 kill kill killall
-kill -9 1111 #强制终止 killall 1111 #杀死进程 以及所有子进程 pstree pstree 显示进程树]]></description></item><item><title>vim使用教程</title><link>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 21 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</guid><description>光标移动(命令模式)
+#相当于(root:root) peter ALL=(root) NOPASSWD: ALL lucy ALL=(ALL) chown,chmod,useradd papi ALL=/usr/sbin/*,/sbin/*,!</description></item><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[基本语法 如果一行命令太长的话可以加\来分割多行命令
+echo hello\ world 如果需要一行执行多条shell语句，则可以使用;分割，不管语句执行失败成功与否都会执行所有的语句
+echo hello; ls -al ; echo ok || 命令执行成功则不再继续执行
+cd /abc || echo &#34;dir is not exist&#34; &amp;&amp; 命令执行成功才会继续执行
+cd /etc &amp;&amp; ls ​
+快捷键 ctrl+a #光标到行首 ctrl+f #方向键-&gt; ctrl+b #方向键&lt;- ctrl+e #光标到行尾 ctrl+u #剪切光标到行首 ctrl+k #剪切光标位置到行尾 ctrl+w #删除光标前一个单词 ctrl+y #粘贴 ctrl+d #退出当前shell ctrl+z #暂停任务 bg fg可以恢复 ctrl+c #终止前台进程 ctrl+r #搜索历史命令 ctrl+p #上一条命令 ctrl+n #下一条命令 ​
+模式扩展 ? * 通配符
+ls ?.txt #只列出 a.txt b.]]></description></item><item><title>vim使用教程</title><link>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 21 Feb 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/02/21/vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</guid><description>光标移动(命令模式)
 n+空格 #在当前行中移动n个字符 n+Enter #移动到距离当前行后n行 H/M/L #移动到屏幕第一行/中间行/最后一行 gg/G/#移动到当前文件第一行/最后一行 nG/ngg #移动到特定的第n行 w/nw #向前 移动1个单词/移动n个单词 b/nb #向后 移动1个单词/移动n个单词 0/$ #移动到行的开头/结尾 h/j/k/l #左/下/上/右 文本编辑删除复制粘贴(命令模式)
 i/a/I/A #在 光标前/光标后/行首/行尾 插入文本 o/O(字母O) #在光标下/上方新开一行 x/X #命令模式下删除光标后/前的单个字符 r/R #替换字符/复写模式,连续替换 d0/d$ #删除到 行首/行尾 dgg/dG #删除到 文件头/文件尾 dd/ndd #删除该行/删除该行下的n行 yy/nyy #复制该行/n行 p/P #当前行下/上面粘贴 u/ctrl+r #撤销上次操作/撤销反悔,重做上次撤销 . #复制前一个动作 文档检索
 /search_text #在文档后面的部分搜索 ?search_text #在文档前面的部分搜索 n/N #往前/后移动检索到的关键字 :noh #取消检索的高亮 :%s/abc/aaa #检索第一个 “abc” 字符串并将其替换成“aaa” :%s/abc/aaa/g #检索并将所有的“abc”,替换为“aaa” :%s/original/replacement/gc #替换前先询问 :%n1,n2s/A/B/g #在n1-n2行之间检索替换 :!command #暂时离开执行命令 :set nu #设置行号 :set nonu#取消行号 可视模式</description></item></channel></rss>
