@@ -29,12 +29,11 @@ MAC地址 24:41:8c:28:e2:ea MAC地址由:分割，每个单元都由一个16进�
 1对1信道，比如 PPP协议 广播信道，比如以太网 链路层主要解决下列3个问题:
 封装成帧: 比如 Ehthernet || 数据帧 ，并且需要对一些特殊字符(比如报文信息中出现了和数据帧控制字符一样的字节)进行转义处理，并且需要加入一些头部控制信息，比如目标的MAC地址和源地址，以及数据帧内容的类型，是IP数据报还是ARP报文、ICMP报文等其他类型的数据帧 差错检测: 如果数据帧在传输过程被干扰出现错误，那么就需要丢弃这个数据帧，所以在接受到之前需要进行检测 透明传输: 因为之前插入了一些转义处理的字节，所以在接受到时需要去除这些冗余的字节，这些多余的字节必须不影响原来数据包的传播，看起来就像是透明的 ​
 Ehthernet ||帧格式 没有VLAN的格式
-有VLAN格式</div><div class=post-footer><a href=/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>,&nbsp;<a href=/tags/%E4%BB%A5%E5%A4%AA%E7%BD%91/>以太网</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/03/03/arp%E5%8D%8F%E8%AE%AE/>ARP协议</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-03-03>2021-03-03</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BD%91%E7%BB%9C/><i class="far fa-folder fa-fw"></i>网络</a></span></div><div class=content>什么是ARP协议 ARP协议 是一种位于 网络层 和 IP协议 同级的协议，用于 根据IP获取MAC地址
-由于最终数据要到达目标主机，以太网/局域网中必须通过MAC地址来唯一识别一台主机，所以在链路层发送数据包必须知道目标主机的MAC地址以此封装一个个链路层的以太网格式的数据帧来传递，ARP在发送请求的时候也会被封装为以太网格式的数据链路帧，目的MAC地址为局域网的广播地址，在局域网中找到对应IP地址的MAC地址
-也有RARP协议，根据MAC获取IP，用的不多
+有VLAN格式</div><div class=post-footer><a href=/2021/03/04/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91/>阅读全文</a><div class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>,&nbsp;<a href=/tags/%E4%BB%A5%E5%A4%AA%E7%BD%91/>以太网</a></div></div></article><article class="single summary" itemscope itemtype=http://schema.org/Article><h1 class=single-title itemprop="name headline"><a href=/2021/03/03/arp%E5%8D%8F%E8%AE%AE/>ARP协议</a></h1><div class=post-meta><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-publish>发布于 <time datetime=2021-03-03>2021-03-03</time></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E7%BD%91%E7%BB%9C/><i class="far fa-folder fa-fw"></i>网络</a></span></div><div class=content>什么是ARP协议 ARP协议是一种位于网络层的协议，用于 根据IP获取MAC地址
+由于最终数据要到达目标主机，以太网/局域网中必须通过MAC地址来唯一识别一台主机，所以在链路层发送数据包必须知道目标主机的MAC地址以此封装一个个链路层的以太网格式的数据帧来传递。ARP在发送请求的时候也会被封装为以太网格式的数据链路帧，目的MAC地址为局域网的广播地址全f，交换机收到广播MAC地址时就会进行广播
 ​
-ARP协议过程 源主机要发送数据时会先检查本机的 ARP映射缓存(记录了IP地址和MAC地址的映射关系,方便快速查找,该缓存有一个失效时间,因为IP地址和目标主机的映射可能会变所以必须设置失效时间)
-如果本地缓存有则直接获取到目标主机的MAC地址
+ARP协议过程 源主机要发送数据时会先检查本机的ARP映射缓存，ARP缓存记录了IP地址和MAC地址的映射关系方便快速查找，ARP缓存有一个失效时间，因为IP地址和目标主机的映射可能会变所以必须设置失效时间
+如果本地缓存有则直接获取到目标主机的MAC地址进行封装数据包
 如果本地缓存没有则需要广播发送一个局域网内的ARP请求包，所有的局域网内的主机都会收到，如果目标IP是自己则响应这个ARP请求，将自己的MAC地址响应回去，如果不是则丢弃ARP包 (这里会有一个ARP欺骗问题)
 收到到ARP响应之后就获取了目标机器的MAC地址，则本机就会将映射关系缓存起来然后就可以将IP数据报封装为以太网中的 MAC数据帧(包含源MAC地址和目的MAC地址的数据帧) 然后再发送数据包给目标机器了
 ​

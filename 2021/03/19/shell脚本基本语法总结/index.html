@@ -1,68 +1,122 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Shell脚本基本语法总结 - lyer's blog</title><meta name=Description content><meta property="og:title" content="Shell脚本基本语法总结"><meta property="og:description" content="变量 变量类型分为:
- 全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
-readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
-name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
-   量 含义     $0 当前脚本的文件名   $<n> 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。   $# 传递给脚本或函数的参数个数。   $* 传递给脚本或函数的所有参数。   $@ 传递给脚本或函数的所有参数。被双引号&#34;&#34;包含时，与 $* 稍有不同   $? 上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功   $$ 当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。    ${@}和${*} 的区别"><meta property="og:type" content="article"><meta property="og:url" content="/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/"><meta property="article:published_time" content="2021-03-19T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-19T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Shell脚本基本语法总结"><meta name=twitter:description content="变量 变量类型分为:
- 全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
-readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
-name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
-   量 含义     $0 当前脚本的文件名   $<n> 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。   $# 传递给脚本或函数的参数个数。   $* 传递给脚本或函数的所有参数。   $@ 传递给脚本或函数的所有参数。被双引号&#34;&#34;包含时，与 $* 稍有不同   $? 上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功   $$ 当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。    ${@}和${*} 的区别"><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/><link rel=prev href=/2021/03/19/spring%E6%80%BB%E7%BB%93/><link rel=next href=/2021/03/20/java%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Shell脚本基本语法总结","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/03\/19\/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93\/"},"genre":"posts","keywords":"Linux, Shell","wordcount":709,"url":"\/2021\/03\/19\/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93\/","datePublished":"2021-03-19T00:00:00+00:00","dateModified":"2021-03-19T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Shell脚本基本语法总结 - lyer's blog</title><meta name=Description content><meta property="og:title" content="Shell脚本基本语法总结"><meta property="og:description" content="基本语法 如果一行命令太长的话可以加\来分割多行命令
+echo hello\ world 如果需要一行执行多条shell语句，则可以使用;分割，不管语句执行失败成功与否都会执行所有的语句
+echo hello; ls -al ; echo ok || 命令执行成功则不再继续执行
+cd /abc || echo &#34;dir is not exist&#34; && 命令执行成功才会继续执行
+cd /etc && ls ​
+快捷键 ctrl+a #光标到行首 ctrl+f #方向键-> ctrl+b #方向键<- ctrl+e #光标到行尾 ctrl+u #剪切光标到行首 ctrl+k #剪切光标位置到行尾 ctrl+w #删除光标前一个单词 ctrl+y #粘贴 ctrl+d #退出当前shell ctrl+z #暂停任务 bg fg可以恢复 ctrl+c #终止前台进程 ctrl+r #搜索历史命令 ctrl+p #上一条命令 ctrl+n #下一条命令 ​
+模式扩展 ? * 通配符
+ls ?.txt #只列出 a.txt b."><meta property="og:type" content="article"><meta property="og:url" content="/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/"><meta property="article:published_time" content="2021-03-19T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-19T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Shell脚本基本语法总结"><meta name=twitter:description content="基本语法 如果一行命令太长的话可以加\来分割多行命令
+echo hello\ world 如果需要一行执行多条shell语句，则可以使用;分割，不管语句执行失败成功与否都会执行所有的语句
+echo hello; ls -al ; echo ok || 命令执行成功则不再继续执行
+cd /abc || echo &#34;dir is not exist&#34; && 命令执行成功才会继续执行
+cd /etc && ls ​
+快捷键 ctrl+a #光标到行首 ctrl+f #方向键-> ctrl+b #方向键<- ctrl+e #光标到行尾 ctrl+u #剪切光标到行首 ctrl+k #剪切光标位置到行尾 ctrl+w #删除光标前一个单词 ctrl+y #粘贴 ctrl+d #退出当前shell ctrl+z #暂停任务 bg fg可以恢复 ctrl+c #终止前台进程 ctrl+r #搜索历史命令 ctrl+p #上一条命令 ctrl+n #下一条命令 ​
+模式扩展 ? * 通配符
+ls ?.txt #只列出 a.txt b."><meta name=application-name content="lyer's blog"><meta name=apple-mobile-web-app-title content="lyer's blog"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/><link rel=prev href=/2021/03/19/spring%E6%80%BB%E7%BB%93/><link rel=next href=/2021/03/20/java%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Shell脚本基本语法总结","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"\/2021\/03\/19\/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93\/"},"genre":"posts","keywords":"Linux, Shell","wordcount":839,"url":"\/2021\/03\/19\/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93\/","datePublished":"2021-03-19T00:00:00+00:00","dateModified":"2021-03-19T00:00:00+00:00","publisher":{"@type":"Organization","name":"lyer"},"author":{"@type":"Person","name":"lyer"},"description":""}</script></head><body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':(''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>archive </a><a class=menu-item href=/tags/>tag </a><a class=menu-item href=/categories/>category </a><a class=menu-item href=/book>book </a><a class=menu-item href=/about>about </a><a class=menu-item href=/study>study </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="lyer's blog">lyer's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>archive</a><a class=menu-item href=/tags/>tag</a><a class=menu-item href=/categories/>category</a><a class=menu-item href=/book>book</a><a class=menu-item href=/about>about</a><a class=menu-item href=/study>study</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Shell脚本基本语法总结</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/linux/><i class="far fa-folder fa-fw"></i>Linux</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-03-19>2021-03-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 709 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Shell脚本基本语法总结</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://icepan.cloud title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>lyer</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/linux/><i class="far fa-folder fa-fw"></i>Linux</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-03-19>2021-03-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 839 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#变量>变量</a></li><li><a href=#模式扩展>模式扩展</a></li><li><a href=#算术运算>算术运算</a></li><li><a href=#字符串>字符串</a></li><li><a href=#数组>数组</a></li><li><a href=#if判断>IF判断</a></li><li><a href=#循环>循环</a></li><li><a href=#case>case</a></li><li><a href=#函数>函数</a></li><li><a href=#引入脚本和export变量>引入脚本和export变量</a></li><li><a href=#echo和printf>echo和printf</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h2 id=变量>变量</h2><p>变量类型分为:</p><ul><li>全局 (<code>declare</code>或则直接写)</li><li>局部(函数内部) <code>local</code>声明</li><li>环境变量</li></ul><p>只读变量</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>readonly</span> <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;AAA&#34;</span> <span class=c1>#之后再次赋值会报错</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#只读变量也可以后来才设置</span>
-<span class=nv>name</span><span class=o>=</span><span class=s2>&#34;BBB&#34;</span>
-<span class=nb>readonly</span> name
-</code></pre></div><p>删除变量 (<strong>只读变量不能删除</strong>)</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>name</span><span class=o>=</span><span class=s2>&#34;AA&#34;</span>
-<span class=nb>unset</span> name
-<span class=k>if</span> <span class=o>[</span> -z <span class=nv>$name</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
-	<span class=nb>echo</span> <span class=s2>&#34;null&#34;</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#基本语法>基本语法</a></li><li><a href=#快捷键>快捷键</a></li><li><a href=#模式扩展>模式扩展</a></li><li><a href=#引号转义>引号转义</a></li><li><a href=#变量>变量</a></li><li><a href=#算术运算>算术运算</a></li><li><a href=#字符串>字符串</a></li><li><a href=#数组>数组</a></li><li><a href=#if判断>IF判断</a></li><li><a href=#循环>循环</a></li><li><a href=#case>case</a></li><li><a href=#函数>函数</a></li><li><a href=#引入脚本和export变量>引入脚本和export变量</a></li><li><a href=#echo和printf>echo和printf</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h2 id=基本语法>基本语法</h2><p>如果一行命令太长的话可以加<code>\</code>来分割多行命令</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> hello<span class=se>\
+</span><span class=se></span>world
+</code></pre></div><p>如果需要一行执行多条shell语句，则可以使用<code>;</code>分割，不管语句执行失败成功与否都会执行所有的语句</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> hello<span class=p>;</span> ls -al <span class=p>;</span> <span class=nb>echo</span> ok
+</code></pre></div><p><code>||</code> 命令执行成功则不再继续执行</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> /abc <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;dir is not exist&#34;</span>
+</code></pre></div><p><code>&&</code> 命令执行成功才会继续执行</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> /etc <span class=o>&amp;&amp;</span> ls
+</code></pre></div><p>​</p><h2 id=快捷键>快捷键</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ctrl+a <span class=c1>#光标到行首</span>
+ctrl+f <span class=c1>#方向键-&gt;</span>
+ctrl+b <span class=c1>#方向键&lt;-</span>
+ctrl+e <span class=c1>#光标到行尾</span>
+ctrl+u <span class=c1>#剪切光标到行首</span>
+ctrl+k <span class=c1>#剪切光标位置到行尾</span>
+ctrl+w <span class=c1>#删除光标前一个单词</span>
+ctrl+y <span class=c1>#粘贴</span>
+ctrl+d <span class=c1>#退出当前shell</span>
+ctrl+z <span class=c1>#暂停任务 bg fg可以恢复</span>
+ctrl+c <span class=c1>#终止前台进程</span>
+ctrl+r <span class=c1>#搜索历史命令</span>
+ctrl+p <span class=c1>#上一条命令</span>
+ctrl+n <span class=c1>#下一条命令</span>
+</code></pre></div><p>​</p><h2 id=模式扩展>模式扩展</h2><p><code>?</code> <code>*</code> 通配符</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls ?.txt <span class=c1>#只列出 a.txt b.txt 等一个单词的文件</span>
+ls ??.txt <span class=c1>#列出两个 ab.txt ...</span>
+ls * <span class=c1>#列出所有文件</span>
+ls a*.txt <span class=c1>#列出所有a开头的</span>
+</code></pre></div><p>列出所有隐藏文件</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls .*
+</code></pre></div><p>匹配任意目录层级的文件</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls **/*.sh
+</code></pre></div><p><code>[]</code>方括号扩展 (和正则表达式类似)</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls <span class=o>[</span>ab<span class=o>]</span>.txt <span class=c1>#列出 a.txt 或则 b.txt</span>
+ls *<span class=o>[</span>^abc<span class=o>]</span>* <span class=c1>#或*[!abc]* 不包含a、b、c的</span>
+ls <span class=o>[</span>0-9<span class=o>]</span>.txt
+ls <span class=o>[</span>a-z<span class=o>]</span>.txt
+ls <span class=o>[</span>a-zA-Z0-9<span class=o>]</span>.txt
+</code></pre></div><p><code>{}</code>大括号扩展</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> d<span class=o>{</span>a,e,i,u,o<span class=o>}</span>g <span class=c1>#dag deg dig dug dog</span>
+<span class=nb>echo</span> <span class=o>{</span>a,b,c<span class=o>}</span>.txt
+<span class=nb>echo</span> <span class=o>{</span>a..c<span class=o>}</span> <span class=c1># a b c</span>
+<span class=nb>echo</span> <span class=o>{</span>c..a<span class=o>}</span> <span class=c1># c b a</span>
+<span class=nb>echo</span> <span class=o>{</span>1..5<span class=o>}</span> / <span class=o>{</span>5..1<span class=o>}</span>
+<span class=nb>echo</span> <span class=o>{</span>j<span class=o>{</span>p,pe<span class=o>}</span>g,png<span class=o>}</span> <span class=c1>#嵌套 jpg jpeg png</span>
+<span class=nb>echo</span> <span class=o>{</span>01..5<span class=o>}</span> <span class=c1>#有0 则每个都会输出0</span>
+mkdir <span class=o>{</span>2007..2009<span class=o>}</span>-<span class=o>{</span>01..12<span class=o>}</span> <span class=c1>#建立时间目录 2007-01 ~ 2009-12</span>
+<span class=nb>echo</span> a<span class=o>{</span>,b,c,d<span class=o>}</span> <span class=c1>#逗号前面可以为空 a ab ac ad</span>
+<span class=nb>echo</span> <span class=o>{</span>a..d<span class=o>}{</span>1..10<span class=o>}</span> <span class=c1># a1,a2.....d10</span>
+<span class=nb>echo</span> <span class=o>{</span>0..10..2<span class=o>}</span> <span class=c1>#设置step 0,2,4,6,8,10</span>
+</code></pre></div><p><code>{}</code>用于for循环</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#用于for循环</span>
+<span class=k>for</span> i in <span class=o>{</span>1..4<span class=o>}</span><span class=p>;</span><span class=k>do</span>
+  <span class=nb>echo</span> <span class=nv>$i</span>
+<span class=k>done</span>
+
+<span class=k>for</span> i in <span class=o>{</span>1..10..2<span class=o>}</span><span class=p>;</span><span class=k>do</span>
+  <span class=nb>echo</span> <span class=nv>$i</span>
+<span class=k>done</span>
+</code></pre></div><p><code>()</code> 命令扩展、算数扩展</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=k>$(</span>date +%F<span class=k>)</span>
+<span class=nb>echo</span> <span class=k>$((</span><span class=m>1</span><span class=o>+</span><span class=m>2</span><span class=k>))</span>
+</code></pre></div><p>​</p><h2 id=引号转义>引号转义</h2><p>单引号不会转义，双引号会解释变量为值，反引号相当于<code>()</code></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SHELL</span><span class=si>}</span><span class=s2>&#34;</span> <span class=c1>#输出变量的值</span>
+<span class=nb>echo</span> <span class=s1>&#39;${SHELL}&#39;</span> <span class=c1>#原样输出</span>
+<span class=nb>echo</span> <span class=sb>`</span>date +%F<span class=sb>`</span>
+</code></pre></div><p>​</p><h2 id=变量>变量</h2><p>变量类型分为:</p><ul><li>全局 (<code>declare</code>或则直接写)</li><li>局部(函数内部) <code>local</code>声明</li><li>环境变量</li></ul><p>全局变量可以被当前脚本所有范围内都访问到</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span>hello<span class=o>(){</span>
+        <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;lyer&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;hello&#34;</span>
+<span class=o>}</span>
+hello
+<span class=nb>echo</span> <span class=nv>$name</span> <span class=c1># lyer</span>
+</code></pre></div><p>如果想要让当前shell脚本的变量能让子shell都能访问到则需要<code>export</code>变量</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>name</span><span class=o>=</span><span class=s2>&#34;lyer&#34;</span>
+<span class=nb>export</span> name
+</code></pre></div><p>local函数局部变量只能被当前函数访问到</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span>hello<span class=o>(){</span>
+        <span class=nb>local</span> <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;lyer&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;hello&#34;</span>
+<span class=o>}</span>
+hello
+<span class=nb>echo</span> <span class=nv>$name</span> <span class=c1># NULL</span>
+</code></pre></div><p>环境变量能被所有脚本访问到</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span><span class=nb>echo</span> <span class=nv>$PWD</span>
+</code></pre></div><p>只读变量</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>readonly</span> <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;AAA&#34;</span> <span class=c1>#之后再次赋值会报错</span>
+<span class=c1>#只读变量也可以后来才设置</span>
+<span class=nv>age</span><span class=o>=</span><span class=s2>&#34;18&#34;</span>
+<span class=nb>readonly</span> age
+</code></pre></div><p>删除变量（只读变量不能被删除）</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span>hello<span class=o>(){</span>
+        <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;lyer&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;hello&#34;</span>
+        <span class=nb>unset</span> name
+<span class=o>}</span>
+hello
+<span class=k>if</span> <span class=o>[</span> -z <span class=nv>$name</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span> <span class=c1>#如果变量为空则为true</span>
+	<span class=nb>echo</span> <span class=s2>&#34;name is not exist.&#34;</span>
 <span class=k>else</span>
  	<span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>name</span><span class=si>}</span><span class=s2>&#34;</span>
 <span class=k>fi</span>
-</code></pre></div><p>特殊变量有如下几个类型:</p><table><thead><tr><th>量</th><th>含义</th></tr></thead><tbody><tr><td><code>$0</code></td><td>当前脚本的文件名</td></tr><tr><td><code>$&lt;n></code></td><td>传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。</td></tr><tr><td><code>$#</code></td><td>传递给脚本或函数的参数个数。</td></tr><tr><td><code>$*</code></td><td>传递给脚本或函数的所有参数。</td></tr><tr><td><code>$@</code></td><td>传递给脚本或函数的所有参数。被双引号<code>""</code>包含时，与 $* 稍有不同</td></tr><tr><td><code>$?</code></td><td>上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功</td></tr><tr><td><code>$$</code></td><td>当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。</td></tr></tbody></table><p><strong><code>${@}</code>和<code>${*}</code> 的区别</strong></p><p>两个都是用于获取所有入参，区别在于<code>"${@}"</code>被双引号包裹会展开里面的所有的值，而<code>"${*}"</code>则会将所有值当做一个，如果不加双引号那么他们就没有区别</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#下面只会执行一次循环</span>
+</code></pre></div><p>直接赋值空字符串也可以删除</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>name</span><span class=o>=</span>
+<span class=nv>name</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+</code></pre></div><p>特殊变量有如下几个类型</p><table><thead><tr><th>量</th><th>含义</th></tr></thead><tbody><tr><td><code>$0</code></td><td>当前脚本的文件名</td></tr><tr><td><code>$&lt;n></code></td><td>传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。</td></tr><tr><td><code>$#</code></td><td>传递给脚本或函数的参数个数。</td></tr><tr><td><code>$*</code></td><td>传递给脚本或函数的所有参数。</td></tr><tr><td><code>$@</code></td><td>传递给脚本或函数的所有参数。被双引号<code>""</code>包含时，与 $* 稍有不同</td></tr><tr><td><code>$?</code></td><td>上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功</td></tr><tr><td><code>$$</code></td><td>当前Shell进程ID，对于 Shell 脚本，就是这些脚本所在的进程ID。</td></tr></tbody></table><p><code>${@}</code>和<code>${*}</code> 的区别，两个都是用于获取所有入参，区别在于<code>"${@}"</code>被双引号包裹会展开里面的所有的值，而<code>"${*}"</code>则会将所有值当做一个</p><blockquote><p>如果不加双引号那么他们就没有区别，都能够被for循环读取</p></blockquote><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#下面只会执行一次循环</span>
 <span class=k>for</span> i in <span class=s2>&#34;</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span><span class=k>do</span>
    <span class=nb>echo</span> <span class=nv>$i</span>    
 <span class=k>done</span>
 
 <span class=c1>#下面会输出每个参数</span>
 <span class=k>for</span> i in <span class=s2>&#34;</span><span class=si>${</span><span class=p>@</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span><span class=k>do</span>
-   <span class=nb>echo</span> <span class=nv>$i</span>    
+   <span class=nb>echo</span> <span class=nv>$i</span>  
 <span class=k>done</span>
-</code></pre></div><p>变量替换</p><table><thead><tr><th>形式</th><th>说明</th></tr></thead><tbody><tr><td><code>${var}</code></td><td>变量本来的值</td></tr><tr><td><code>${var:-word}</code></td><td>如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。</td></tr><tr><td><code>${var:=word}</code></td><td>如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。</td></tr><tr><td><code>${var:?message}</code></td><td>如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。 若此替换出现在Shell脚本中，那么脚本将停止运行。</td></tr><tr><td><code>${var:+word}</code></td><td>如果变量 var 被定义，那么返回 word，但不改变 var 的值。</td></tr></tbody></table><p>另外 <strong>反引号</strong> 或则<code>()</code>用于替将命令执行结果保存到变量中</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>files</span><span class=o>=</span><span class=sb>`</span>ls /bin<span class=sb>`</span>
-<span class=nv>files</span><span class=o>=</span><span class=k>$(</span>ls /bin<span class=k>)</span>
-</code></pre></div><p>​</p><h2 id=模式扩展>模式扩展</h2><p><code>~</code> 扩展</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>pwd</span> ~ <span class=c1>#家目录</span>
-</code></pre></div><p><code>?</code> <code>*</code> 扩展</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls ?.txt <span class=c1>#只列出 a.txt b.txt 等一个单词的文件</span>
-ls ??.txt <span class=c1>#列出两个 ab.txt ...</span>
-ls * <span class=c1>#列出所有文件</span>
-ls a*.txt <span class=c1>#列出所有a开头的</span>
-</code></pre></div><p>方括号、大括号扩展 (和正则表达式类似)</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls <span class=o>[</span>ab<span class=o>]</span>.txt <span class=c1>#列出 a.txt 或则 b.txt</span>
-ls *<span class=o>[</span>^abc<span class=o>]</span>* <span class=c1>#或*[!abc]* 不包含a、b、c的</span>
-ls <span class=o>[</span>0-9<span class=o>]</span>.txt
-ls <span class=o>[</span>a-z<span class=o>]</span>.txt
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> d<span class=o>{</span>a,e,i,u,o<span class=o>}</span>g <span class=c1>#dag deg dig dug dog</span>
-touch <span class=o>{</span>a,b,c<span class=o>}</span>.txt
-rm <span class=o>{</span>a,b,c<span class=o>}</span>.txt
-<span class=nb>echo</span> a<span class=o>{</span>A<span class=o>{</span>1,2<span class=o>}</span>,B<span class=o>{</span>3,4<span class=o>}}</span>b <span class=c1>#嵌套</span>
-<span class=nb>echo</span> <span class=o>{</span>a..c<span class=o>}</span> <span class=c1># a b c</span>
-<span class=nb>echo</span> <span class=o>{</span>c..a<span class=o>}</span> <span class=c1># c b a</span>
-<span class=nb>echo</span> Number_<span class=o>{</span>1..5<span class=o>}</span>
-<span class=nb>echo</span> <span class=o>{</span>j<span class=o>{</span>p,pe<span class=o>}</span>g,png<span class=o>}</span> <span class=c1>#嵌套</span>
-<span class=nb>echo</span> <span class=o>{</span>01..5<span class=o>}</span> <span class=c1>#有0 则每个都会输出0</span>
-mkdir <span class=o>{</span>2007..2009<span class=o>}</span>-<span class=o>{</span>01..12<span class=o>}</span> <span class=c1>#建立目录</span>
-<span class=c1>#用于for循环</span>
-<span class=k>for</span> i in <span class=o>{</span>1..4<span class=o>}</span>
-<span class=k>do</span>
-  <span class=nb>echo</span> <span class=nv>$i</span>
-<span class=k>done</span>
-<span class=c1>#cp</span>
-cp a.log<span class=o>{</span>,.bak<span class=o>}</span> <span class=c1>#逗号前面可以为空，相当于 cp a.log a.log.bak</span>
-<span class=c1>#每个都会变量 a1 a2... b1 b2...</span>
-<span class=nb>echo</span> <span class=o>{</span>a..d<span class=o>}{</span>1..10<span class=o>}</span>
-</code></pre></div><p>字符扩展</p><table><thead><tr><th>符号</th><th>含义</th></tr></thead><tbody><tr><td><code>[[:alnum:]]</code></td><td>匹配任意英文字母与数字</td></tr><tr><td><code>[[:alpha:]]</code></td><td>匹配任意英文字母</td></tr><tr><td><code>[[:blank:]]</code></td><td>空格和 Tab 键</td></tr><tr><td><code>[[:cntrl:]]</code></td><td>ASCII 码 0-31 的不可打印字符</td></tr><tr><td><code>[[:digit:]]</code></td><td>匹配任意数字 0-9</td></tr><tr><td><code>[[:graph:]]</code></td><td>A-Z、a-z、0-9 和标点符号</td></tr><tr><td><code>[[:lower:]]</code></td><td>匹配任意小写字母 a-z</td></tr><tr><td><code>[[:print:]]</code></td><td>ASCII 码 32-127 的可打印字符</td></tr><tr><td><code>[[:punct:]]</code></td><td>标点符号（除了 A-Z、a-z、0-9 的可打印字符）</td></tr><tr><td><code>[[:upper:]]</code></td><td>匹配任意大写字母 A-Z</td></tr><tr><td><code>[[:xdigit:]]</code></td><td>16进制字符（A-F、a-f、0-9）</td></tr></tbody></table><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>ls <span class=o>[[</span>:alnum:<span class=o>]]</span>.txt
-</code></pre></div><p>​</p><h2 id=算术运算>算术运算</h2><p>进行数学运算有如下四种方式</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>a</span><span class=o>=</span><span class=m>10</span>
+</code></pre></div><p>变量替换</p><table><thead><tr><th>形式</th><th>说明</th></tr></thead><tbody><tr><td><code>${var}</code></td><td>变量本来的值</td></tr><tr><td><code>${var:-word}</code></td><td>如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。</td></tr><tr><td><code>${var:+word}</code></td><td>如果变量 var 存在，那么返回 word但不改变 var 的值</td></tr><tr><td><code>${var:=word}</code></td><td>如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word</td></tr><tr><td><code>${var:?message}</code></td><td>如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。 若此替换出现在Shell脚本中，那么脚本将停止运行</td></tr></tbody></table><p>​</p><h2 id=算术运算>算术运算</h2><p>进行数学运算有如下四种方式</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>a</span><span class=o>=</span><span class=m>10</span>
 <span class=nv>b</span><span class=o>=</span><span class=m>20</span>
 <span class=nv>val</span><span class=o>=</span><span class=sb>`</span>expr <span class=nv>$a</span> + <span class=nv>$b</span><span class=sb>`</span>
 <span class=nb>echo</span> <span class=s2>&#34;a + b : </span><span class=nv>$val</span><span class=s2>&#34;</span>
@@ -74,7 +128,8 @@ cp a.log<span class=o>{</span>,.bak<span class=o>}</span> <span class=c1>#逗号
 <span class=nv>b</span><span class=o>=</span><span class=m>20</span>
 <span class=nb>let</span> <span class=nv>val</span><span class=o>=</span><span class=si>${</span><span class=nv>a</span><span class=si>}</span>*<span class=si>${</span><span class=nv>b</span><span class=si>}</span>
 <span class=nb>echo</span> <span class=s2>&#34;a + b : </span><span class=nv>$val</span><span class=s2>&#34;</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>
+</code></pre></div><p>注意<code>let</code>表示式如果有空格则需要用双引号</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>let</span> <span class=nv>a</span><span class=o>=</span>1+2
+<span class=nb>let</span> <span class=s2>&#34;b=1 + 2&#34;</span>
 </code></pre></div><p>​</p><h2 id=字符串>字符串</h2><p><code>''</code>和 <code>""</code> 的区别</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>name</span><span class=o>=</span><span class=s2>&#34;lyer&#34;</span>
 <span class=nv>s1</span><span class=o>=</span><span class=s1>&#39;hello,${name}\n&#39;</span> <span class=c1>#不会转义,原样输出</span>
 <span class=nv>s2</span><span class=o>=</span><span class=s2>&#34;hello,</span><span class=si>${</span><span class=nv>name</span><span class=si>}</span><span class=s2>\n&#34;</span> <span class=c1>#转义</span>
@@ -86,20 +141,27 @@ cp a.log<span class=o>{</span>,.bak<span class=o>}</span> <span class=c1>#逗号
 </code></pre></div><p>获取子串</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=si>${</span><span class=nv>username</span><span class=p>:</span><span class=nv>1</span><span class=si>}</span> <span class=c1>#[1,]</span>
 <span class=si>${</span><span class=nv>username</span><span class=p>:</span><span class=nv>1</span><span class=p>:</span><span class=nv>2</span><span class=si>}</span> <span class=c1>#1开始获取2个 包括1</span>
 <span class=si>${</span><span class=nv>username</span><span class=p>:</span><span class=nv>1</span><span class=k>:-</span><span class=nv>2</span><span class=si>}</span> <span class=c1>#[1,-2)</span>
-<span class=si>${</span><span class=nv>username</span><span class=p>::</span><span class=nv>2</span><span class=si>}</span> <span class=c1>#截取0-2 </span>
-<span class=si>${</span><span class=nv>username</span><span class=p>: 2</span><span class=si>}</span>
-<span class=si>${</span><span class=nv>username</span><span class=p>: -3</span><span class=si>}</span>：提取最后3个字符，注意冒号后面添加一个空格：txt
-</code></pre></div><p>​</p><h2 id=数组>数组</h2><p>数组和字符串操作有很多相识的地方</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>arr</span><span class=o>=(</span><span class=s2>&#34;a&#34;</span> <span class=s2>&#34;b&#34;</span> <span class=s2>&#34;c&#34;</span> <span class=s2>&#34;d&#34;</span> <span class=s2>&#34;e&#34;</span><span class=o>)</span>
+<span class=si>${</span><span class=nv>username</span><span class=k>:-</span><span class=nv>5</span><span class=p>:</span><span class=nv>2</span><span class=si>}</span> <span class=c1>#从末尾-5位开始提取2位</span>
+<span class=si>${</span><span class=nv>username</span><span class=p>: -3</span><span class=si>}</span> <span class=c1>#提取最后3个字符，注意冒号后面添加一个空格：txt</span>
+</code></pre></div><p>改变大小写</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=si>${</span><span class=nv>username</span><span class=p>^^</span><span class=si>}</span> <span class=c1>#upper</span>
+<span class=si>${</span><span class=nv>username</span><span class=p>,,</span><span class=si>}</span> <span class=c1>#lower</span>
+</code></pre></div><p>​</p><h2 id=数组>数组</h2><p>数组可以当map使用</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span>arr<span class=o>[</span>0<span class=o>]=</span><span class=s2>&#34;a&#34;</span>
+arr<span class=o>[</span>1<span class=o>]=</span><span class=s2>&#34;b&#34;</span>
+arr<span class=o>[</span><span class=s2>&#34;name&#34;</span><span class=o>]=</span><span class=s2>&#34;lyer&#34;</span>
+<span class=nb>echo</span> <span class=si>${</span><span class=nv>arr</span><span class=p>[1]</span><span class=si>}</span> <span class=si>${</span><span class=nv>arr</span><span class=si>}</span> <span class=c1>#默认打印第0个</span>
+<span class=nb>echo</span> <span class=si>${</span><span class=nv>arr</span><span class=p>[</span><span class=s2>&#34;name&#34;</span><span class=p>]</span><span class=si>}</span> <span class=c1># lyer</span>
+</code></pre></div><p>可以一次定义多个元素，对于数组的操作和字符串切割操作类似</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>arr</span><span class=o>=(</span><span class=s2>&#34;a&#34;</span> <span class=s2>&#34;b&#34;</span> <span class=s2>&#34;c&#34;</span> <span class=s2>&#34;d&#34;</span> <span class=s2>&#34;e&#34;</span><span class=o>)</span>
 <span class=nb>echo</span> <span class=s2>&#34;size: </span><span class=si>${#</span><span class=nv>arr</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#34;</span>  
-<span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>arr</span><span class=si>}</span><span class=s2> | </span><span class=si>${</span><span class=nv>arr</span><span class=p>[*]:</span><span class=nv>2</span><span class=p>:</span><span class=nv>2</span><span class=si>}</span><span class=s2>&#34;</span> <span class=c1>#a | c d</span>
-</code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=k>for</span> i in <span class=si>${</span><span class=nv>arr</span><span class=p>[*]</span><span class=si>}</span><span class=p>;</span><span class=k>do</span>
-   <span class=nb>echo</span> <span class=nv>$i</span>          
+<span class=nb>echo</span> <span class=si>${</span><span class=nv>arr</span><span class=si>}</span> <span class=si>${</span><span class=nv>arr</span><span class=p>[*]:</span><span class=nv>2</span><span class=p>:</span><span class=nv>2</span><span class=si>}</span> <span class=c1>#a | c d</span>
+</code></pre></div><p>数组用户for循环</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>#依次打印数组元素</span>
+<span class=k>for</span> i in <span class=si>${</span><span class=nv>arr</span><span class=p>[*]</span><span class=si>}</span><span class=p>;</span><span class=k>do</span>
+   <span class=nb>echo</span> <span class=nv>$i</span>     
 <span class=k>done</span>
-<span class=nb>echo</span> <span class=s2>&#34;2:&#34;</span><span class=si>${</span><span class=nv>arr</span><span class=p>[2]</span><span class=si>}</span> <span class=c1>#获取指定元素</span>
 </code></pre></div><p>数组的copy</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>arr2</span><span class=o>=(</span><span class=si>${</span><span class=nv>arr</span><span class=p>[*]</span><span class=si>}</span><span class=o>)</span>
 <span class=nv>arr2</span><span class=o>=(</span><span class=si>${</span><span class=nv>arr</span><span class=p>[*]</span><span class=si>}</span> a b c <span class=o>)</span> <span class=c1>#也可以添加新的成员</span>
 <span class=nv>arr2</span><span class=o>+=(</span>d e f<span class=o>)</span>
-</code></pre></div><p>​</p><h2 id=if判断>IF判断</h2><p>逻辑判断</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>-eq</code> <code>==</code></td><td>检测两个数是否相等，相等返回 true</td></tr><tr><td><code>-ne</code> <code>!=</code></td><td>检测两个数是否相等，不相等返回 true</td></tr><tr><td><code>-gt</code></td><td>检测左边的数是否大于右边的，如果是，则返回 true</td></tr><tr><td><code>-lt</code></td><td>检测左边的数是否小于右边的，如果是，则返回 true</td></tr><tr><td><code>-ge</code></td><td>检测左边的数是否大等于右边的，如果是，则返回 true</td></tr><tr><td><code>-le</code></td><td>检测左边的数是否小于等于右边的，如果是，则返回 true</td></tr></tbody></table><p>布尔判断</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>!</code></td><td>非运算，表达式为 true 则返回 false，否则返回 true</td></tr><tr><td><code>-o</code></td><td>或运算，有一个表达式为 true 则返回 true</td></tr><tr><td><code>-a</code></td><td>与运算，两个表达式都为 true 才返回 true</td></tr></tbody></table><p>字符串</p><table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td><code>=</code></td><td>检测两个字符串是否相等，相等返回 true</td><td>[ $a = $b ] 返回 false</td></tr><tr><td><code>!=</code></td><td>检测两个字符串是否相等，不相等返回 true ,注意字符串不能使用<code>eq ne</code>等判断是否相等</td><td>[ $a != $b ] 返回 true</td></tr><tr><td><code>-z</code></td><td>检测字符串长度是否为0，为0返回 true</td><td>[ -z $a ] 返回 false</td></tr><tr><td>直接写字符串</td><td>检测字符串是否为空，不为空返回 true</td><td>[ $a ] 返回 true</td></tr></tbody></table><p>文件相关</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>-d</code></td><td>检测文件是否是目录，如果是，则返回 true</td></tr><tr><td><code>-f</code></td><td>检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true</td></tr><tr><td><code>-r</code></td><td>检测文件是否可读，如果是，则返回 true</td></tr><tr><td><code>-w</code></td><td>检测文件是否可写，如果是，则返回 true</td></tr><tr><td><code>-x</code></td><td>检测文件是否可执行，如果是，则返回 true</td></tr><tr><td><code>-s</code></td><td>检测文件是否为空（文件大小是否大于0），不为空返回 true</td></tr><tr><td><code>-e</code></td><td>检测文件（包括目录）是否存在，如果是，则返回 true</td></tr></tbody></table><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>file</span><span class=o>=</span><span class=s2>&#34;/tmp/a.txt&#34;</span>
+</code></pre></div><p>​</p><h2 id=if判断>IF判断</h2><p>逻辑判断</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>-eq</code> <code>==</code></td><td>检测两个数是否相等，相等返回 true</td></tr><tr><td><code>-ne</code> <code>!=</code></td><td>检测两个数是否相等，不相等返回 true</td></tr><tr><td><code>-gt</code></td><td>检测左边的数是否大于右边的，如果是，则返回 true</td></tr><tr><td><code>-lt</code></td><td>检测左边的数是否小于右边的，如果是，则返回 true</td></tr><tr><td><code>-ge</code></td><td>检测左边的数是否大等于右边的，如果是，则返回 true</td></tr><tr><td><code>-le</code></td><td>检测左边的数是否小于等于右边的，如果是，则返回 true</td></tr></tbody></table><p>布尔判断</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>!</code></td><td>非运算，表达式为 true 则返回 false，否则返回 true</td></tr><tr><td><code>-o</code></td><td>或运算，有一个表达式为 true 则返回 true</td></tr><tr><td><code>-a</code></td><td>与运算，两个表达式都为 true 才返回 true</td></tr></tbody></table><p>字符串</p><table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td><code>=</code></td><td>检测两个字符串是否相等，相等返回 true</td><td>[ $a = $b ] 返回 false</td></tr><tr><td><code>!=</code></td><td>检测两个字符串是否相等，不相等返回 true ,注意字符串不能使用<code>eq ne</code>等判断是否相等</td><td>[ $a != $b ] 返回 true</td></tr><tr><td><code>-z</code></td><td>变量是否存在，检测字符串长度是否为0，为0返回 true</td><td>[ -z $a ] 返回 false</td></tr><tr><td>直接写字符串</td><td>检测字符串是否为空，不为空返回 true</td><td>[ $a ] 返回 true</td></tr></tbody></table><p>文件相关</p><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td><code>-d</code></td><td>检测文件是否是目录，如果是，则返回 true</td></tr><tr><td><code>-f</code></td><td>检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true</td></tr><tr><td><code>-r</code></td><td>检测文件是否可读，如果是，则返回 true</td></tr><tr><td><code>-w</code></td><td>检测文件是否可写，如果是，则返回 true</td></tr><tr><td><code>-x</code></td><td>检测文件是否可执行，如果是，则返回 true</td></tr><tr><td><code>-s</code></td><td>检测文件是否为空（文件大小是否大于0），不为空返回 true</td></tr><tr><td><code>-e</code></td><td>检测文件（包括目录）是否存在，如果是，则返回 true</td></tr></tbody></table><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>file</span><span class=o>=</span><span class=s2>&#34;/tmp/a.txt&#34;</span>
 <span class=k>if</span> <span class=o>[</span> -e <span class=nv>$file</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
 	<span class=nb>echo</span> <span class=s2>&#34;文件存在&#34;</span>
 <span class=k>else</span>
@@ -116,7 +178,7 @@ cp a.log<span class=o>{</span>,.bak<span class=o>}</span> <span class=c1>#逗号
 	xxx
 <span class=k>fi</span>
 </code></pre></div><p>和<code>test</code>命令配合</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=k>if</span> <span class=nb>test</span> $<span class=o>[</span>2*3<span class=o>]</span> -eq $<span class=o>[</span>1+5<span class=o>]</span><span class=p>;</span> <span class=k>then</span> <span class=nb>echo</span> <span class=s1>&#39;The two numbers are equal!&#39;</span><span class=p>;</span> <span class=k>fi</span><span class=p>;</span>
-</code></pre></div><p>​</p><h2 id=循环>循环</h2><p>Shell里面有三种循环:</p><ul><li>while</li><li>until 和<code>while</code>差不多,只是条件为false则循环,while是条件为真则循环</li><li>for</li></ul><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=k>for</span> i in <span class=o>{</span>1..5<span class=o>}</span><span class=p>;</span><span class=k>do</span>
+</code></pre></div><p>​</p><h2 id=循环>循环</h2><p>Shell里面有三种循环</p><ul><li>while</li><li>until 和<code>while</code>差不多,只是条件为false则循环,while是条件为真则循环</li><li>for</li></ul><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=k>for</span> i in <span class=o>{</span>1..5<span class=o>}</span><span class=p>;</span><span class=k>do</span>
 	<span class=nb>echo</span> <span class=nv>$i</span>
 <span class=k>done</span>
 </code></pre></div><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>count</span><span class=o>=</span><span class=m>5</span>
@@ -128,6 +190,10 @@ cp a.log<span class=o>{</span>,.bak<span class=o>}</span> <span class=c1>#逗号
 <span class=k>until</span> <span class=o>[</span> count -le <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>do</span>
 	<span class=nb>echo</span> <span class=nv>$count</span>
 	<span class=nb>let</span> <span class=nv>count</span><span class=o>+=</span><span class=m>1</span>
+<span class=k>done</span>
+</code></pre></div><p>shift能将每次参数往前移动，shift后面可以加数字比如 <code>shift 4</code> 则这个时候$4就变成了$1</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=k>while</span> <span class=o>[</span> ! -z <span class=nv>$1</span> <span class=o>]</span><span class=p>;</span><span class=k>do</span>
+	<span class=nb>echo</span> <span class=nv>$1</span>
+	<span class=nb>shift</span>
 <span class=k>done</span>
 </code></pre></div><p>​</p><h2 id=case>case</h2><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=s1>&#39;输入 1 到 4 之间的数字:&#39;</span>
 <span class=nb>echo</span> <span class=s1>&#39;你输入的数字为:&#39;</span>

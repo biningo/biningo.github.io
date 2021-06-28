@@ -1,5 +1,17 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>tcpdump抓包</title><link>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</link><pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/19/tcpdump%E6%8A%93%E5%8C%85/</guid><description>TODO
-巨人肩膀 超详细的网络抓包神器 tcpdump 使用指南</description></item><item><title>Linux静态路由表</title><link>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</link><pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</guid><description>查看路由表 route -n netstat -rn Destination是0.0.0.0表示是默认路由，只有其他路由都匹配不到时才会走这个路由
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>lyer's blog</title><link>/</link><description>lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>iptables总结</title><link>/2021/06/19/iptables%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/19/iptables%E6%80%BB%E7%BB%93/</guid><description>iptables命令格式 iptables命令格式
+iptables [-t 表名] 管理选项 [链名] [匹配条件] [-j 控制类型] 不加-t指定表名则默认操作的是filter表 不加指定的链名则会展示表的所有的链规则 ​
+四表和五链和数据流向 注意，在OUTPUT之后会通过route表进行路由选择，选择出口的网卡
+iptables匹配规则如下，按规则的排列顺序逐一匹配，只要匹配到了就不会再继续往下匹配，就传递给下一个链了，所以我们需要将优先级更高的规则防止在前面
+​
+查看iptables 查看主要是使用-L命令，表示list的意思
+查看nat表的OUTPUT链规则
+iptables -t nat -nvL OUTPUT n不解析域名，直接显示IP v显示详细信息 L 表示list展示的意思 一般都会加上-nvL来查看iptables规则
+查看filter表的OUTPUT规则
+iptables -nvL OUTPUT ​
+编写iptables规则 -A命令添加iptables规则
+-j后面加控制类型
+filter主要有如下控制类型
+控制类型 解释 ACCEPT 允许传递数据包 DROP 丢弃数据包，不响应 REJECT 拒绝数据包，响应RST LOG 在/var/log/messages文件中记录日志信息，然后再继续传递 iptables -A INPUT -j DROP #丢弃所有数据包 iptables -A INPUT -j ACCEPT #接受所有数据包 -I表示插入iptables规则，插入到指定的行，原来的行后移</description></item><item><title>Linux静态路由表</title><link>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</link><pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/06/17/linux%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8/</guid><description>查看路由表 route -n netstat -rn Destination是0.0.0.0表示是默认路由，只有其他路由都匹配不到时才会走这个路由
 Gateway为0.0.0.0表示没有网关，静态路由表中的网关只能配置一个，配置多个则只会使用其中一个
 ​
 路由转发流程 工具目标IP个子网掩码匹配静态路由表中的条目 如果匹配到了则将数据包发送到路由表项对应的网卡上 如果路由表项都匹配不成功则走默认路由，也就是Destinaion为0.0.0.0的路由表项，因为默认路由配置了网关所以数据包会从网关发送出去，而在局域网内的通讯则不会走网关 比如我现在要访问172.17.0.10，则会匹配到docker0这个虚拟网桥，然后将数据包转发到docker0中由docker0进行转发

@@ -1,5 +1,8 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shell - 标签 - lyer's blog</title><link>/tags/shell/</link><description>Shell - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/shell/" rel="self" type="application/rss+xml"/><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[变量 变量类型分为:
- 全局 (declare或则直接写) 局部(函数内部) local声明 环境变量  只读变量
-readonly name=&#34;AAA&#34; #之后再次赋值会报错 #只读变量也可以后来才设置 name=&#34;BBB&#34; readonly name 删除变量 (只读变量不能删除)
-name=&#34;AA&#34; unset name if [ -z $name ];then echo &#34;null&#34; else echo &#34;${name}&#34; fi 特殊变量有如下几个类型:
-   量 含义     $0 当前脚本的文件名   $&lt;n&gt; 传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。   $# 传递给脚本或函数的参数个数。   $* 传递给脚本或函数的所有参数。   $@ 传递给脚本或函数的所有参数。被双引号&quot;&quot;包含时，与 $* 稍有不同   $? 上个命令的退出状态，或函数的返回值，用于判断上一个函数或则命令是否执行成功   $$ 当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。    ${@}和${*} 的区别]]></description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shell - 标签 - lyer's blog</title><link>/tags/shell/</link><description>Shell - 标签 - lyer's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>icepan@aliyun.com (lyer)</managingEditor><webMaster>icepan@aliyun.com (lyer)</webMaster><lastBuildDate>Fri, 19 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/shell/" rel="self" type="application/rss+xml"/><item><title>Shell脚本基本语法总结</title><link>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</link><pubDate>Fri, 19 Mar 2021 00:00:00 +0000</pubDate><author>作者</author><guid>/2021/03/19/shell%E8%84%9A%E6%9C%AC%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</guid><description><![CDATA[基本语法 如果一行命令太长的话可以加\来分割多行命令
+echo hello\ world 如果需要一行执行多条shell语句，则可以使用;分割，不管语句执行失败成功与否都会执行所有的语句
+echo hello; ls -al ; echo ok || 命令执行成功则不再继续执行
+cd /abc || echo &#34;dir is not exist&#34; &amp;&amp; 命令执行成功才会继续执行
+cd /etc &amp;&amp; ls ​
+快捷键 ctrl+a #光标到行首 ctrl+f #方向键-&gt; ctrl+b #方向键&lt;- ctrl+e #光标到行尾 ctrl+u #剪切光标到行首 ctrl+k #剪切光标位置到行尾 ctrl+w #删除光标前一个单词 ctrl+y #粘贴 ctrl+d #退出当前shell ctrl+z #暂停任务 bg fg可以恢复 ctrl+c #终止前台进程 ctrl+r #搜索历史命令 ctrl+p #上一条命令 ctrl+n #下一条命令 ​
+模式扩展 ? * 通配符
+ls ?.txt #只列出 a.txt b.]]></description></item></channel></rss>
