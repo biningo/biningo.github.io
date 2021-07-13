@@ -1,20 +1,85 @@
 ---
-title: SQL总结
+title: MySql和SQL总结
 date: 2021-02-16
-categories: [Mysql]
+categories: [MySql]
 tags: [数据库,MySql] 
 draft: true
 ---
 
-## 表操作
+## ok系统变量相关操作
+
+查看系统变量和配置
+
+```sql
+show variables like 'default_storage_engine'; #session级别
+show global  variables like 'default_storage_engine' #global级别
+```
+
+设置系统变量和配置
+
+```sql
+set default_storage_engine=MyISAM;
+set global default_storage_engine=InnoDB;
+set @@default_storage_engine=MyISAM;
+set @@global.default_storage_engine=MyISAM;
+```
+
+查看系统状态变量
+
+```sql
+SHOW STATUS LIKE 'threads_connected'
+```
+
+查看字符集
+
+```sql
+SHOW CHARACTER SET #查看字符集字符集 CHARSET
+SHOW COLLATION #查看字符集所有比较规则
+```
+
+​     
+
+## ok数据库操作
+
+创建数据库指定字符集和比较规则
+
+```sql
+create database db2 charset utf8 collate utf8_bin;
+```
+
+修改数据库的字符集和比较规则
+
+```sql
+alter database db1 charset utf8;
+```
+
+删除数据库
+
+```sql
+drop database db1;
+```
+
+​     
+
+## ok表操作
+
+创建表指定字符集、比较规则、存储引擎
 
 ```mysql
-CREATE TABLE test
-(
+CREATE TABLE test(
+    id int
 ) ENGINE = InnoDB #设置表的存储引擎
   DEFAULT CHARSET = utf8 #设置表的字符集、
   COLLATE=utf8_bin #设置字符集比较规则
 ```
+
+修改表
+
+```sql
+alter table t1 charset=gbk;
+```
+
+其他建表语句
 
 ```mysql
 DROP TABLE IF EXISTS category,article,tag,article_tag; #删除表
@@ -61,15 +126,32 @@ CREATE TABLE article_tag
 );
 ```
 
+展示建表语句
+
 ```mysql
-#展示建表语句
-SHOW CREATE TABLE test #展示test表的建表语句
-DESC test #展示字段信息
-#修改表
-ALTER TABLE test ENGINE=MyISAM #修改存储引擎
+SHOW CREATE TABLE t1 #展示test表的建表语句
 ```
 
-​        
+展示字段信息
+
+```sql
+DESC t1 #展示表的字段信息
+```
+
+修改表字段信息，只会部分修改不会全部修改
+
+```sql
+alter table t1 modify id varchar(10) primary key auto_increment;
+```
+
+在表中删除/添加字段
+
+```sql
+alter table t1 add column name varchar(20);
+alter table t1 drop column name;
+```
+
+​     
 
 ## 索引
 

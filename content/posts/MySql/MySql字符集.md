@@ -17,7 +17,7 @@ SHOW CHARACTER SET LIKE  'utf8%'
 
 其中`Default collation` 表示默认的 **比较规则** `MAXlen`表示最大长度（单位byte）
 
-下面是几个重要的字符集的最大长度:
+下面是几个重要的字符集的最大长度
 
 | 字符集名称                                     | Maxlen |
 | ---------------------------------------------- | ------ |
@@ -32,17 +32,13 @@ SHOW CHARACTER SET LIKE  'utf8%'
 
 `utf8`是`utf8mb3`的别名，只支持最大长度是`3byte`，属于 **阉割版** 的UTF8字符集
 
-`utf8mb4` 是完整的UTF8字符集，最大支持`4byte`，包含所有UTF8字符集
-
-**所以如果文本里面有特殊符号或则表情符号，比如存博客等就需要修改表的字符集为utf8mb4**
+`utf8mb4` 是完整的UTF8字符集，最大支持`4byte`，包含所有UTF8字符集，所以如果文本里面有特殊符号或则表情符号，比如评论的内容附带表情的就需要修改表的字符集为utf8mb4
 
 ​    
 
 ## 字符集比较规则
 
-字符集比较规则用于字符集比较，比如`a、A`两个比较，是按照二进制大小来比较还是忽略大小写进行比较
-
-可以使用如下命令显示支持的比较规则
+字符集比较规则用于字符集比较，比如`a、A`两个比较是按照ASCII码大小来比较还是忽略大小写进行比较，可以使用如下命令显示支持的比较规则
 
 ```mysql
 SHOW COLLATION #显示所有比较规则
@@ -53,20 +49,20 @@ SHOW COLLATION LIKE '%utf8%'
 
 `utf8mb4`默认是`utf8mb4_0900_ai_ci`
 
-> 以ci结尾的比较规则都是忽略大小写的
+> **以ci结尾的比较规则都是忽略大小写的，如果需要区分大小写则使用utf8_bin比较规则**
 
-​    
+​     
 
 ## 字符集和比较规则应用范围
 
-分别有3个应用范围:
+### 1、字符集的三大范围
 
 - 服务器级别
 - 数据库级别
 - 表级别
 - 列级别
 
-### 1、服务器级别
+### 2、服务器级别
 
 | 系统变量             | 描述                 |
 | -------------------- | -------------------- |
@@ -81,7 +77,7 @@ character_set_server=gbk
 collation_server=gbk_chinese_ci
 ```
 
-### 2、数据库、表、字段级别
+### 3、数据库、表、字段级别
 
 数据库级别的字符集和比较规则可以在建库的时候指定，**如果没有指定则默认和服务器级别的字符集一样**
 
@@ -111,11 +107,14 @@ CHARACTER SET=utf8
 COLLATE=utf8_general_ci
 ```
 
+### 4、查看Mysql中的字符集
+
+查看数据库中表的字符集等其他信息
+
 ```mysql
-#要查看表的字符集和其他信息
 SHOW TABLE STATUS from lyer like 'article' #lyer库   article表
 #修改表的字符集
-ALTER TABLE article CHARACTER SET gbk
+ALTER TABLE article CHARACTER SET gbk COLLATE utf8_bin;
 ```
 
 列级别则是直接在字段里面指定，不指定默认和表级别一样
@@ -125,6 +124,8 @@ CREATE TABLE tb(
 	username varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci
 )
 ```
+
+查看表中所有列的信息
 
 ```mysql
 #要查看表所有的列信息

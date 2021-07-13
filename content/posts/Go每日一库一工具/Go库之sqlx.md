@@ -12,7 +12,7 @@ draft: true
 
 > https://github.com/jmoiron/sqlx
 
-由于sqlx是依赖sql库的，所以也需要加载数据库驱动，sqlx方便的是能更好的帮我们将查询出来的数据库和struct对应起来，这样就不需要我们一个个去`Scan`了，减少了代码量
+由于sqlx是依赖sql库的，所以也需要加载数据库驱动，sqlx方便的是能更好的帮我们将查询出来的数据库和struct对应起来，这样就不需要我们一个个去`Scan`了，减少了重复的代码量
 
 ​    
 
@@ -114,6 +114,7 @@ type Tag struct {
 ```go
 rx := DBx.QueryRowx("select id,title from tag where title=?", "rust")
 rx := DBx.NamedQuery("select id,title from tag where title=:name", map[string]interface{}{"name":"go"})
+rx.Scan(&tag);
 ```
 
 `Get` 则只能映射结构体
@@ -188,6 +189,20 @@ func main(){
 	}
     //一下子插入全部
 	_, err := DBx.NamedExec("insert into tag(title) values(?)", tags)
+}
+```
+
+如果是in查询的话则需要处理一下
+
+```go
+func main(){
+    //args是处理之后拼接起来的参数，bidss数组
+    bids:=[]int{1,2,3,4}
+    boilsSql, args, err := sqlx.In(
+		"SELECT id,tag_id,user_id,create_time,content FROM boil_boil WHERE id in (?) ORDER BY create_time DESC", bids)
+	if err = global.G_DB.Select(&boils, boilsSql, args); err != nil {
+		return []model.Boil{}, err
+	}
 }
 ```
 

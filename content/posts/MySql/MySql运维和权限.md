@@ -1,5 +1,5 @@
 ---
-title: MySql运维
+title: MySql运维和权限
 date: 2021-05-09
 categories: [Mysql]
 tags: [数据库,MySql] 

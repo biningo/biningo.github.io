@@ -145,7 +145,7 @@ ls -l | awk 'NR>1 && $9 ~ /.c/ {sum+=$5} END{print sum}'
 ls -l | awk '$9 ~ /.c/ {sum+=1} END{print sum}'
 ```
 
-​    
+​     
 
 ## 分割符号
 
@@ -167,7 +167,7 @@ awk 'BEGIN{FS=":"} {print $0}' a.txt
 awk 'BEGIN{RS=","} {print $0}' a.txt
 ```
 
-`OFS`指定awk展示的分割符号，默认是`\t`
+`OFS`指定awk展示的分割符号，默认是`\t` ，也可以在Begin中指定
 
 ```bash
 awk '{print $1,$2,$3}' OFS="-" net.txt
@@ -211,6 +211,27 @@ awk 'NR!=1 {print $1,$6 > $6}' net.txt
 
 ```bash
 awk '{print $0,ENVIRON["JAVA_HOME"]}' net.txt
+```
+
+​    
+
+## 字符串相关操作
+
+字符串拼接
+
+```bash
+END{
+	s1="hello" "lyer"
+	print s1
+}
+```
+
+`length`获取字符串长度
+
+```bash
+END{
+	print length(s1)
+}
 ```
 
 ​    
@@ -306,7 +327,9 @@ switch(1){
 }
 ```
 
-​        
+​     
+
+## 其他
 
 ## cut
 

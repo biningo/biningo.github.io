@@ -78,7 +78,7 @@ func F(ctx context.Context, /* other arguments */) {}
 使用`crypto/rand`代替`math/rand`生成密钥
 
 ```go
-unc Key() string {
+func Key() string {
     buf := make([]byte, 16)
     _, err := rand.Read(buf)
     if err != nil {

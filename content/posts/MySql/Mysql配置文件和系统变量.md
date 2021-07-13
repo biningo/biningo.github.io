@@ -6,43 +6,26 @@ tags: [数据库,MySql]
 draft: true
 ---
 
-## 配置文件
+## 配置文件查找
 
-MySql配置文件的作用就是给`mysqld`服务器进程提供启动参数，设置一些变量，也可以通过命令行方式设置参数，但是这样太麻烦了而且不是永久的，所以一般都将这些参数写在配置文件中，`mysqld`进程启动的时候会按照如下方式去寻找配置文件:
+MySql配置文件的作用就是给`mysqld`服务器进程提供启动参数，设置一些变量，也可以通过命令行方式设置参数，但是这样太麻烦了而且不是永久的，所以一般都将这些参数写在配置文件中
 
-```bash
-$ mysql --help | grep my.cnf
-/etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf 
-```
-
-- `/etc/my.cnf`
-- `/etc/mysql/my.cnf`
-- `$MYSQL_HOME/my.cnf`
-- `~/.my.cnf`
-
-可以指定配置文件路径:
+可以使用如下命令查看mysqld服务器查找配置文件的顺序
 
 ```bash
-$ mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件
-$ mysqld --defaults-extra-file=/my.cnf #添加额外的配置文件路径加入默认的搜索路径，也就是说其他路径包括这个也会被搜索到
+mysql --help | grep my.cnf
 ```
 
-**另外注意：命令行参数优先级高于配置文件，搜索路径前面的配置高于后面的，并且有些命令行参数是只属于命令行的，不属于配置文件，配置文件都可以用命令行替代**
+也可以手动添加配置文件路径
 
-配置文件分为如下几组:
-
-```toml
-[server]
-...
-[mysqld]
-...
-[mysqld_safe]
-[client]
-[mysql]
-[mysqladmin]
+```bash
+mysqld --defaults-file=/etc/my.cnf #只读取这一个配置文件
+mysqld --defaults-extra-file=/my.cnf #添加额外的配置文件路径加入默认的搜索路径，也就是说其他路径包括这个也会被搜索到
 ```
 
-​    
+命令行参数优先级高于配置文件，配置文件是相互叠加的过程，相同参数下搜索路径后面的配置文件会覆盖前面的
+
+​     
 
 ## [mysqld]配置
 
@@ -67,6 +50,8 @@ TODO
 ## [mysqladmin]配置
 
 TODO
+
+​    
 
 ## 系统变量
 
@@ -115,7 +100,7 @@ SET @@default_storage_engine = MyISAM; #默认就是SESSION
 - 有些系统变量只有`GLOBAL`或`SESSION`作用域，有些两种都可以设置
 - 有的系统变量是 **readonly** 的，比如`version` MySql的版本
 
-​    
+​      
 
 ## 状态变量
 

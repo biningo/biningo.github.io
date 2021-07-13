@@ -1,7 +1,7 @@
 ---
 title: MySql备份与恢复
 date: 2021-05-09
-categories: [Mysql]
+categories: [MySQL]
 tags: [数据库,MySql,备份] 
 ---
 
